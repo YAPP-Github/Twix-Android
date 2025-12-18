@@ -1,0 +1,12 @@
+plugins {
+    alias(libs.plugins.twix.data)
+}
+
+android {
+    namespace = "com.twix.data"
+}
+
+dependencies {
+    implementation(projects.domain)
+    implementation(projects.core.network)
+}
