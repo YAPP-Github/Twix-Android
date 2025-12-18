@@ -173,6 +173,7 @@ android-library = { id = "com.android.library", version.ref = "agp" }
 twix-android-application = { id = "twix.android.application", version = "unspecified" }
 twix-android-library = { id = "twix.android.library", version = "unspecified" }
 twix-android-compose = { id = "twix.android.compose", version = "unspecified" }
+twix-android-test = { id = "twix.android.test", version = "unspecified" }
 twix-feature = { id = "twix.feature", version = "unspecified" }
 twix-koin = { id = "twix.koin", version = "unspecified" }
 twix-java-library = { id = "twix.java.library", version = "unspecified" }

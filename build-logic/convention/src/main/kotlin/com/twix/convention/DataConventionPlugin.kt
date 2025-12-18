@@ -1,7 +1,6 @@
 package com.twix.convention
 
 import com.twix.convention.extension.*
-import org.gradle.kotlin.dsl.dependencies
 
 class DataConventionPlugin : BuildLogicConventionPlugin({
     applyPlugins(
@@ -9,8 +8,6 @@ class DataConventionPlugin : BuildLogicConventionPlugin({
         "org.jetbrains.kotlin.plugin.serialization",
         "twix.koin"
     )
-
-    dependencies {
-        implementation(libs.library("kotlinx-coroutines-core"))
-    }
+    
+    // kotlinx-coroutines-core는 twix.android.library에서 이미 추가됨
 })

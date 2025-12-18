@@ -18,8 +18,7 @@ class AndroidLibraryConventionPlugin : BuildLogicConventionPlugin({
     }
 
     dependencies {
+        // 기본 코루틴 의존성 (Android 모듈 공통)
         implementation(libs.library("kotlinx-coroutines-core"))
-        testImplementation(libs.bundle("test-unit"))
-        androidTestImplementation(libs.library("androidx-test-ext-junit"))
     }
 })

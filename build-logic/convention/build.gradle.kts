@@ -35,6 +35,10 @@ gradlePlugin {
             id = "twix.android.compose"
             implementationClass = "com.twix.convention.AndroidComposeConventionPlugin"
         }
+        register("androidTest"){
+            id = "twix.android.test"
+            implementationClass = "com.twix.convention.AndroidTestConventionPlugin"
+        }
         register("feature"){
             id = "twix.feature"
             implementationClass = "com.twix.convention.FeatureConventionPlugin"
