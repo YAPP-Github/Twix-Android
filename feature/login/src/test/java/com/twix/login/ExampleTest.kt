@@ -9,20 +9,18 @@ import org.junit.jupiter.api.extension.ExtendWith
 @OptIn(ExperimentalCoroutinesApi::class)
 @ExtendWith(CoroutinesTestExtension::class)
 class ExampleTest {
-    
     @Test
-    fun `코루틴 테스트 예제`() = runTest {
-        // Given
-        val expected = "Hello, Coroutines!"
-        
-        // When
-        val actual = suspendFunction()
-        
-        // Then
-        assert(actual == expected)
-    }
-    
-    private suspend fun suspendFunction(): String {
-        return "Hello, Coroutines!"
-    }
+    fun `코루틴 테스트 예제`() =
+        runTest {
+            // Given
+            val expected = "Hello, Coroutines!"
+
+            // When
+            val actual = suspendFunction()
+
+            // Then
+            assert(actual == expected)
+        }
+
+    private suspend fun suspendFunction(): String = "Hello, Coroutines!"
 }

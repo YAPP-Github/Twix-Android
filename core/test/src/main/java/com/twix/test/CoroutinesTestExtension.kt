@@ -12,9 +12,9 @@ import org.junit.jupiter.api.extension.ExtensionContext
 
 @ExperimentalCoroutinesApi
 class CoroutinesTestExtension(
-    private val testDispatcher: TestDispatcher = UnconfinedTestDispatcher()
-) : BeforeEachCallback, AfterEachCallback {
-
+    private val testDispatcher: TestDispatcher = UnconfinedTestDispatcher(),
+) : BeforeEachCallback,
+    AfterEachCallback {
     override fun beforeEach(context: ExtensionContext?) {
         Dispatchers.setMain(testDispatcher)
     }

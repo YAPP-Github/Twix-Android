@@ -8,6 +8,4 @@ class DataConventionPlugin : BuildLogicConventionPlugin({
         "org.jetbrains.kotlin.plugin.serialization",
         "twix.koin"
     )
-    
-    // kotlinx-coroutines-core는 twix.android.library에서 이미 추가됨
 })
