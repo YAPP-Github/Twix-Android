@@ -9,6 +9,7 @@ class FeatureConventionPlugin : BuildLogicConventionPlugin({
     applyPlugins(
         "twix.android.library",
         "twix.android.compose",
+        "twix.android.test",
         "twix.koin",
     )
 
