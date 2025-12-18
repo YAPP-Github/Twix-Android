@@ -1,0 +1,179 @@
+[versions]
+# Build Tools
+agp = "8.13.1"
+minSdk = "26"
+targetSdk = "36"
+compileSdk = "36"
+packageName = "com.yapp.twix"
+java = "17"
+
+# Kotlin
+kotlin = "2.2.21"
+kotlinx-coroutines-core = "1.10.2"
+kotlinx-serialization-json = "1.9.0"
+
+# AndroidX
+androidx-core-ktx = "1.17.0"
+androidx-lifecycle-runtime-ktx = "2.10.0"
+
+# Google
+material = "1.13.0"
+
+# Compose
+activity-compose = "1.12.0"
+compose-bom = "2025.12.01"
+compose-coil = "3.3.0"
+compose-navigation = "2.9.4"
+
+# Network
+retrofit = "3.0.0"
+retrofit-kotlinx-serialization-converter = "1.0.0"
+okhttp = "5.3.2"
+logging-interceptor = "5.3.2"
+
+# Compose Test
+compose-ui-test = "1.7.8"
+
+# Ktlint
+ktlint = "14.0.1"
+
+# ksp
+ksp = "2.3.1"
+
+# Koin
+koin-bom = "4.0.1"
+
+# Test
+junit-jupiter = "5.12.0"
+android-junit5 = "1.12.0.0"
+mannodermaus-junit5 = "1.7.0"
+assertj-core = "3.27.3"
+androidx-test-ext-junit = "1.3.0"
+turbine = "1.2.1"
+jetbrains-kotlin-jvm = "2.1.0"
+
+[libraries]
+# AndroidX
+androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "androidx-core-ktx" }
+androidx-lifecycle-runtime-ktx = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "androidx-lifecycle-runtime-ktx" }
+android-gradle-plugin = { group = "com.android.tools.build", name = "gradle-api", version.ref = "agp" }
+compose-gradle-plugin = { module = "org.jetbrains.kotlin:compose-compiler-gradle-plugin", version.ref = "kotlin" }
+kotlin-gradle-plugin = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-plugin", version.ref = "kotlin" }
+ksp-gradle-plugin = { group = "com.google.devtools.ksp", name = "com.google.devtools.ksp.gradle.plugin", version.ref = "ksp" }
+android-junit5-gradle-plugin = { group = "de.mannodermaus.gradle.plugins", name = "android-junit5", version.ref = "android-junit5" }
+
+# Google
+material = { group = "com.google.android.material", name = "material", version.ref = "material" }
+
+# Kotlin
+kotlinx-coroutines-core = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core", version.ref = "kotlinx-coroutines-core" }
+kotlinx-coroutines-core-jvm = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core-jvm", version.ref = "kotlinx-coroutines-core" }
+kotlinx-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "kotlinx-serialization-json" }
+
+# Network
+retrofit = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofit" }
+retrofit-kotlinx-serialization-converter = { group = "com.jakewharton.retrofit", name = "retrofit2-kotlinx-serialization-converter", version.ref = "retrofit-kotlinx-serialization-converter" }
+okhttp = { group = "com.squareup.okhttp3", name = "okhttp", version.ref = "okhttp" }
+logging-interceptor = { group = "com.squareup.okhttp3", name = "logging-interceptor", version.ref = "logging-interceptor" }
+
+# Compose
+compose-activity = { group = "androidx.activity", name = "activity-compose", version.ref = "activity-compose" }
+compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "compose-bom" }
+compose-ui = { group = "androidx.compose.ui", name = "ui" }
+compose-ui-graphics = { group = "androidx.compose.ui", name = "ui-graphics" }
+compose-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling" }
+compose-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-tooling-preview" }
+compose-material3 = { group = "androidx.compose.material3", name = "material3" }
+compose-viewmodel = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-compose", version.ref = "androidx-lifecycle-runtime-ktx" }
+compose-coil = { module = "io.coil-kt.coil3:coil-compose", version.ref = "compose-coil" }
+compose-navigation = { module = "androidx.navigation:navigation-compose", version.ref = "compose-navigation" }
+
+# Koin
+koin-bom = { module = "io.insert-koin:koin-bom", version.ref = "koin-bom" }
+koin-core = { module = "io.insert-koin:koin-core" }
+koin-android = { module = "io.insert-koin:koin-android" }
+koin-androidx-compose = { module = "io.insert-koin:koin-androidx-compose" }
+koin-compose = { module = "io.insert-koin:koin-compose" }
+koin-compose-viewmodel = { module = "io.insert-koin:koin-compose-viewmodel" }
+
+# Compose Test
+compose-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-manifest", version.ref = "compose-ui-test" }
+compose-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4", version.ref = "compose-ui-test" }
+
+# Test
+junit-jupiter = { group = "org.junit.jupiter", name = "junit-jupiter", version.ref = "junit-jupiter" }
+assertj-core = { group = "org.assertj", name = "assertj-core", version.ref = "assertj-core" }
+androidx-test-ext-junit = { group = "androidx.test.ext", name = "junit", version.ref = "androidx-test-ext-junit" }
+kotlinx-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "kotlinx-coroutines-core" }
+turbine = { module = "app.cash.turbine:turbine", version.ref = "turbine" }
+kotlin-test = { group = "org.jetbrains.kotlin", name = "kotlin-test", version.ref = "kotlin" }
+
+[bundles]
+androidx = [
+    "androidx-core-ktx",
+    "androidx-lifecycle-runtime-ktx",
+]
+
+network = [
+    "retrofit",
+    "retrofit-kotlinx-serialization-converter",
+    "kotlinx-serialization-json",
+    "okhttp",
+    "logging-interceptor"
+]
+
+compose = [
+    "compose-activity",
+    "compose-ui",
+    "compose-ui-graphics",
+    "compose-ui-tooling-preview",
+    "compose-material3",
+    "compose-viewmodel",
+    "compose-coil",
+    "compose-navigation"
+]
+
+compose-test = [
+    "compose-ui-test-manifest",
+    "compose-ui-test-junit4"
+]
+
+compose-debug = [
+    "compose-ui-tooling",
+    "compose-ui-test-manifest"
+]
+
+test-unit = [
+    "junit-jupiter",
+    "assertj-core",
+    "kotlinx-coroutines-test",
+    "turbine",
+    "kotlin-test",
+]
+
+koin = [
+    "koin-android",
+    "koin-androidx-compose",
+    "koin-core",
+    "koin-compose",
+    "koin-compose-viewmodel",
+]
+
+[plugins]
+android-application = { id = "com.android.application", version.ref = "agp" }
+kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
+android-junit5 = { id = "de.mannodermaus.android-junit5", version.ref = "android-junit5" }
+ktlint = { id = "org.jlleitschuh.gradle.ktlint", version.ref = "ktlint" }
+serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
+jetbrains-kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "jetbrains-kotlin-jvm" }
+android-library = { id = "com.android.library", version.ref = "agp" }
+
+# Convention Plugins
+twix-android-application = { id = "twix.android.application", version = "unspecified" }
+twix-android-library = { id = "twix.android.library", version = "unspecified" }
+twix-android-compose = { id = "twix.android.compose", version = "unspecified" }
+twix-feature = { id = "twix.feature", version = "unspecified" }
+twix-koin = { id = "twix.koin", version = "unspecified" }
+twix-java-library = { id = "twix.java.library", version = "unspecified" }
+twix-data = { id = "twix.data", version = "unspecified" }
