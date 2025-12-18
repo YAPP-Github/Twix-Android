@@ -2,6 +2,7 @@ package com.twix.convention
 
 import com.twix.convention.extension.applyPlugins
 import com.twix.convention.extension.implementation
+import com.twix.convention.extension.testImplementation
 import org.gradle.kotlin.dsl.dependencies
 
 class FeatureConventionPlugin : BuildLogicConventionPlugin({
@@ -16,5 +17,6 @@ class FeatureConventionPlugin : BuildLogicConventionPlugin({
         implementation(project(":core:navigation"))
         implementation(project(":core:ui"))
         implementation(project(":domain"))
+        testImplementation(project(":core:test"))
     }
 })
