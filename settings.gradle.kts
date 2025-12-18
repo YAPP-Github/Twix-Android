@@ -1,4 +1,5 @@
 pluginManagement {
+    includeBuild("build-logic")
     repositories {
         google {
             content {
@@ -22,4 +23,14 @@ dependencyResolutionManagement {
 
 rootProject.name = "Twix"
 
+enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
+
 include(":app")
+include(":domain")
+include(":data")
+include(":feature:login")
+include(":core:util")
+include(":core:ui")
+include(":core:navigation")
+include(":core:design-system")
+include(":core:network")
