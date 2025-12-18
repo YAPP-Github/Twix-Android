@@ -20,6 +20,10 @@ fun DependencyHandlerScope.androidTestImplementation(provider: Provider<*>) {
     "androidTestImplementation"(provider)
 }
 
+fun DependencyHandlerScope.testImplementation(project: Project) {
+    "testImplementation"(project)
+}
+
 fun DependencyHandlerScope.testImplementation(provider: Provider<*>) {
     "testImplementation"(provider)
 }
