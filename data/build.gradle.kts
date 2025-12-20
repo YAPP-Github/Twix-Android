@@ -5,8 +5,3 @@ plugins {
 android {
     namespace = "com.twix.data"
 }
-
-dependencies {
-    implementation(projects.domain)
-    implementation(projects.core.network)
-}

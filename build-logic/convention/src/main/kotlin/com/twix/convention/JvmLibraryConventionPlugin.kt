@@ -12,13 +12,16 @@ import org.jetbrains.kotlin.gradle.dsl.KotlinProjectExtension
 class JvmLibraryConventionPlugin : BuildLogicConventionPlugin({
     applyPlugins("org.jetbrains.kotlin.jvm")
 
+    val javaVersionInt = libs.version("java").requiredVersion.toInt()
+    val javaVersion = JavaVersion.toVersion(javaVersionInt)
+
     extensions.configure<JavaPluginExtension> {
-        sourceCompatibility = JavaVersion.VERSION_17
-        targetCompatibility = JavaVersion.VERSION_17
+        sourceCompatibility = javaVersion
+        targetCompatibility = javaVersion
     }
 
     extensions.configure<KotlinProjectExtension> {
-        jvmToolchain(libs.version("java").requiredVersion.toInt())
+        jvmToolchain(javaVersionInt)
     }
 
     tasks.withType<Test> {
