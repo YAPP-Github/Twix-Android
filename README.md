@@ -1,1 +1,1 @@
-# Twix-Android
+# Twix - Android Multi-Module Project
