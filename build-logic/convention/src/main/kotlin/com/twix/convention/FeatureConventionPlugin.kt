@@ -8,6 +8,7 @@ class FeatureConventionPlugin : BuildLogicConventionPlugin({
     apply<AndroidLibraryConventionPlugin>()
     apply<KoinConventionPlugin>()
     apply<AndroidComposeConventionPlugin>()
+    apply<AndroidTestConventionPlugin>()
 
     dependencies {
         implementation(project(":core:design-system"))
