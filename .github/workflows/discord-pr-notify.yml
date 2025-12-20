@@ -20,7 +20,7 @@ jobs:
           PR_NUMBER: ${{ github.event.pull_request.number }}
         run: |
           case "$REQUESTED_REVIEWER" in
-            "chanho0908")
+            "chanho0908"|"JoungPeto0908")
               DISCORD_MENTION="<@1451876971540774912>"
               ;;
             "dogmania")
@@ -51,7 +51,7 @@ jobs:
           REVIEW_STATE: ${{ github.event.review.state }}
         run: |
           case "$AUTHOR" in
-            "chanho0908")
+            "chanho0908"|"JoungPeto0908")
               AUTHOR_MENTION="<@1451876971540774912>"
               ;;
             "dogmania")
@@ -105,7 +105,7 @@ jobs:
           BASE_BRANCH: ${{ github.event.pull_request.base.ref }}
         run: |
           case "$AUTHOR" in
-            "chanho0908")
+            "chanho0908"|"JoungPeto0908")
               AUTHOR_MENTION="<@1451876971540774912>"
               ;;
             "dogmania")
