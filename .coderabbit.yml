@@ -1,12 +1,29 @@
-# CodeRabbit이 사용할 언어 설정 (한국어)
+# CodeRabbit이 사용할 언어 설정
 language: ko-KR
 
-# AI 코치의 성격과 리뷰 스타일을 정의하는 지침
+# AI 코치의 성격과 리뷰 스타일 (자유 텍스트 영역)
 tone_instructions: >
-  우아한테크코스 코치처럼 문제의 원인과 개선 방법을 명확히 제시하고, 교육적 관점에서 리뷰하세요. 
-  비판보다 개선 중심이며, 관련 문서 추천과 위트 있는 칭찬
+  우아한테크코스 코치처럼 문제의 원인과 개선 방법을 명확히 제시하고,
+  교육적 관점에서 리뷰하세요.
+  비난보다는 개선 방향을 제안하며, 가능한 경우 근거와 예시를 함께 제공합니다.
+  특별한 문제가 없다면 칭찬도 적극적으로 남깁니다.
 
-# 코드 리뷰 설정
+  [리뷰 기본 원칙]
+  - 피드백은 코드, 프로세스, 사양만을 대상으로 합니다.
+  - 리뷰이는 존중하며, 언어 폭력이나 단정적인 표현을 사용하지 않습니다.
+  - 리뷰는 개인이 아닌 팀과 서비스 품질을 위한 것입니다.
+
+  [리뷰 스타일]
+  - 왜 문제가 되는지 → 어떻게 개선할 수 있는지 순서로 설명합니다.
+  - 토론이 필요한 부분은 질문형 코멘트로 제안합니다.
+  - 전체 맥락을 고려해 리뷰합니다.
+
+  [작업 가이드라인]
+  - PR은 가능하면 800라인 이하로 유지합니다.
+  - 큰 작업은 여러 개의 작은 PR로 나누는 방향을 권장합니다.
+  - 새로운 패턴이나 아키텍처 도입 시 사전 논의를 권장합니다.
+
+# 코드 리뷰 전반 설정
 reviews:
   profile: chill                      # 리뷰 스타일: 편안하고 친근한 톤
   request_changes_workflow: false     # Request Change 요청시 병합 비활성화 해제
@@ -20,307 +37,132 @@ reviews:
   auto_apply_labels: false            # 자동 라벨 적용 비활성화
   suggested_reviewers: false          # 리뷰어 추천 비활성화
   auto_assign_reviewers: false        # 자동 리뷰어 할당 비활성화
-  poem: false                         # 리뷰 완료 후 시 작성 비활성화
+  poem: true                          # 리뷰 완료 후 시 작성 활성화 (재미 요소)
 
-  # 특정 경로별 상세 리뷰 지침 설정
+  # 경로별 상세 리뷰 가이드
   path_instructions:
-    # Feature 모듈 - MVI 패턴 적용
+    # Feature 모듈 - MVI 패턴
     - path: feature/**
       instructions: |
-        **Feature 모듈 (MVI 패턴) 리뷰 가이드라인**
+        [Feature 모듈 - MVI 패턴 리뷰 가이드]
 
-        1. **MVI 패턴 준수**
-           - Intent: 사용자 액션이 명확하게 정의되어 있는가?
-           - State: UI 상태가 불변(immutable) 데이터 클래스로 정의되어 있는가?
-           - SideEffect: 일회성 이벤트(네비게이션, 토스트 등)가 적절히 분리되어 있는가?
-           - 단방향 데이터 플로우가 유지되는가? (Intent → ViewModel → State → View)
+        1. MVI 구조
+        - Intent가 사용자 액션 단위로 명확히 정의되어 있는가?
+        - State가 불변(immutable) 데이터 클래스로 정의되어 있는가?
+        - SideEffect가 일회성 이벤트로 분리되어 있는가?
+        - 단방향 데이터 플로우(Intent → ViewModel → State → View)가 유지되는가?
 
-        2. **Compose UI**
-           - Composable 함수가 순수 함수인가? (부수 효과 없음)
-           - State Hoisting이 적절히 적용되었는가?
-           - 불필요한 recomposition이 발생하지 않는가?
-           - remember, LaunchedEffect 등 사이드 이펙트 API가 적절히 사용되었는가?
-           - Preview Composable이 제공되는가?
+        2. Compose UI
+        - Composable 함수가 순수 함수인가?
+        - State Hoisting이 적절히 적용되었는가?
+        - 불필요한 recomposition 가능성은 없는가?
+        - remember, LaunchedEffect 등 사이드 이펙트 API가 적절히 사용되었는가?
+        - Preview Composable이 제공되는가?
 
-        5. **의존성 주입**
-           - Koin을 통한 DI가 적절히 구성되어 있는가?
+        3. 의존성 주입
+        - Koin을 통한 DI가 책임에 맞게 구성되었는가?
 
     # Domain 모듈 - Pure Kotlin
     - path: domain/**
       instructions: |
-        **Domain 모듈 (Pure Kotlin) 리뷰 가이드라인**
+        [Domain 모듈 리뷰 가이드]
 
-        1. **클린 아키텍처 원칙**
-           - Android/외부 프레임워크 의존성이 전혀 없는가?
-           - 비즈니스 로직이 명확하게 표현되어 있는가?
-           - 도메인 모델이 불변 객체로 설계되어 있는가?
+        1. 아키텍처
+        - Android 및 외부 프레임워크 의존성이 없는가?
+        - 비즈니스 로직이 명확히 표현되어 있는가?
+        - 도메인 모델이 불변 객체로 설계되었는가?
 
-        2. **모델 설계**
-           - 값 객체(Value Object) 패턴이 적절히 활용되었는가?
-           - 도메인 규칙이 모델 내부에 캡슐화되어 있는가?
-           - 유효성 검증 로직이 도메인 모델에 포함되어 있는가?
-
-        3. **Repository 인터페이스**
-           - 인터페이스가 도메인 요구사항을 표현하는가?
-           - 반환 타입이 도메인 모델인가? (DTO/Entity가 아닌)
-           - 코루틴 Flow/suspend 함수가 적절히 활용되었는가?
-
-        4. **UseCase 패턴 (선택적)**
-           - 단일 책임 원칙이 지켜지는가?
-           - 비즈니스 로직 재사용성이 확보되는가?
-
-    # Data 모듈 - Repository 구현체
+    # Data 모듈
     - path: data/**
       instructions: |
-        **Data 모듈 리뷰 가이드라인**
+        [Data 모듈 리뷰 가이드]
 
-        1. **Repository 구현**
-           - Domain 인터페이스를 정확히 구현하고 있는가?
-           - 데이터 소스(Remote/Local) 조합 로직이 적절한가?
-           - 에러 핸들링이 도메인 예외로 변환되는가?
+        1. Repository 구현
+        - Domain 인터페이스를 정확히 구현하는가?
+        - Remote / Local 데이터 소스 조합 로직이 명확한가?
+        - 에러가 도메인 레벨로 적절히 변환되는가?
 
-        2. **Mapper 패턴**
-           - DTO → Domain 모델 변환이 명확한가?
-           - Mapper가 단순하고 테스트 가능한가?
-           - null safety 처리가 적절한가?
+        2. Mapper
+        - DTO → Domain 변환 책임이 명확한가?
+        - null safety가 충분히 고려되었는가?
 
-        3. **데이터 캐싱**
-           - 캐싱 전략이 명확한가? (메모리/디스크)
-           - 캐시 무효화 로직이 있는가?
-
-    # Core:Network 모듈
-    - path: core/network/**
-      instructions: |
-        **Network 모듈 리뷰 가이드라인**
-
-        1. **Retrofit 설정**
-           - Converter/Adapter가 적절히 구성되었는가?
-           - Timeout 설정이 합리적인가?
-           - 로깅 인터셉터가 디버그 빌드에만 적용되는가?
-
-        2. **API 정의**
-           - RESTful 원칙이 준수되는가?
-           - suspend 함수 또는 Flow로 비동기 처리되는가?
-           - 에러 응답 처리가 명확한가?
-
-        3. **보안**
-           - API 키가 하드코딩되지 않았는가?
-           - HTTPS가 사용되는가?
-           - Certificate Pinning 고려가 필요한가?
-
-    # Core:UI 모듈
+    # 공통 UI 모듈
     - path: core/ui/**
       instructions: |
-        **공통 UI 모듈 리뷰 가이드라인**
+        [공통 UI 모듈 리뷰 가이드]
+        - 재사용 가능한 Composable로 설계되었는가?
+        - 커스터마이징 포인트가 적절한가?
+        - 다양한 상태에 대한 Preview가 제공되는가?
 
-        1. **재사용 가능한 Composable**
-           - 컴포넌트가 충분히 일반화되어 있는가?
-           - 커스터마이징 옵션이 적절한가?
-           - Preview가 다양한 상태를 커버하는가?
-
-        2. **MVI 베이스 클래스**
-           - State, StateHolder, SideEffect 인터페이스가 명확한가?
-           - 제네릭 타입이 적절히 활용되었는가?
-
-        3. **Formatter 유틸리티**
-           - 포맷팅 로직이 순수 함수인가?
-           - 다국어/로케일 처리가 고려되었는가?
-
-    # Core:Design-System 모듈
+    # 디자인 시스템
     - path: core/design-system/**
       instructions: |
-        **디자인 시스템 리뷰 가이드라인**
+        [디자인 시스템 리뷰 가이드]
+        - Material Design 3 가이드라인 준수 여부
+        - Dark Mode 지원 여부
+        - 접근성(Accessibility) 고려 여부
 
-        1. **테마 구성**
-           - Material Design 3 가이드라인 준수
-           - Dark Mode 지원
-           - 색상/타이포그래피/간격 체계가 일관적인가?
-
-        2. **컴포넌트 라이브러리**
-           - 디자인 시스템이 프로젝트 전반에 적용 가능한가?
-           - 접근성(Accessibility) 고려
-
-    # Build Logic Convention Plugins
+    # Build Logic
     - path: build-logic/**
       instructions: |
-        **Convention Plugin 리뷰 가이드라인**
-
-        1. **플러그인 설계**
-           - 각 Convention Plugin이 명확한 책임을 가지는가?
-           - 중복 설정이 제거되었는가?
-           - 버전 카탈로그(libs.versions.toml) 활용이 적절한가?
-
-        2. **빌드 성능**
-           - 불필요한 의존성이 포함되지 않았는가?
-           - Configuration Cache 호환성
-           - Build Cache 최적화
-
-        3. **유지보수성**
-           - 확장 함수가 가독성을 높이는가?
-           - DSL이 직관적인가?
+        [Convention Plugin 리뷰 가이드]
+        - 각 플러그인이 단일 책임을 가지는가?
+        - 중복 설정이 제거되었는가?
+        - Version Catalog 활용이 적절한가?
+        - Configuration Cache에 안전한가?
 
     # 테스트 코드
     - path: "**/test/**"
       instructions: |
-        **테스트 코드 리뷰 가이드라인**
+        [테스트 코드 리뷰 가이드]
+        - Given-When-Then 구조를 따르는가?
+        - 테스트 메서드명이 의도를 잘 드러내는가?
+        - Happy / Sad Path가 모두 커버되는가?
+        - 코루틴 테스트에 TestDispatcher를 사용하는가?
 
-        1. **테스트 구조**
-           - Given-When-Then 패턴 준수
-           - 테스트 메서드명이 명확한가? (should_When_Given 형식)
-           - Arrange-Act-Assert 구조가 명확한가?
-
-        2. **테스트 커버리지**
-           - 핵심 비즈니스 로직 테스트 완료 여부
-           - Edge Case 및 예외 상황 테스트
-           - Happy Path와 Sad Path 모두 커버
-
-        3. **코루틴 테스트**
-           - TestDispatcher 활용
-           - Flow 테스트가 적절한가?
-
-        **누락된 테스트 케이스 제안:**
-        - ViewModel: Intent 처리 및 State 변화 테스트
-        - Repository: 데이터 조회/변환 테스트
-        - Domain Model: 비즈니스 로직 및 유효성 검증 테스트
-        - Mapper: DTO → Domain 변환 테스트
-
-    # Gradle 빌드 파일
+    # Gradle 파일
     - path: "**/*.gradle.kts"
       instructions: |
-        **Gradle 빌드 파일 리뷰 가이드라인**
+        [Gradle 빌드 파일 리뷰 가이드]
+        - Convention Plugin이 적절히 사용되었는가?
+        - 불필요한 의존성이 없는가?
+        - implementation / api 구분이 명확한가?
+        - 모듈 간 의존성 방향이 올바른가?
 
-        1. **Convention Plugin 활용**
-           - 중복 설정이 Convention Plugin으로 추출되었는가?
-           - 모듈별로 적절한 Convention Plugin이 적용되었는가?
-
-        2. **의존성 관리**
-           - Version Catalog (libs.versions.toml) 사용
-           - 불필요한 의존성 제거
-           - 의존성 범위가 적절한가? (implementation/api/compileOnly)
-
-        3. **모듈 구조**
-           - 순환 의존성이 없는가?
-           - 의존성 방향이 올바른가? (domain ← data, feature → domain)
-
-    # 리소스 파일
+    # 리소스
     - path: "**/res/**"
       instructions: |
-        **리소스 파일 리뷰 가이드라인**
+        [리소스 리뷰 가이드]
+        - 하드코딩 문자열이 없는가?
+        - 다국어 지원을 고려했는가?
+        - 색상과 테마가 디자인 시스템에 포함되는가?
 
-        1. **문자열 리소스**
-           - 하드코딩 문자열 제거
-           - 다국어 지원 고려
-           - 포맷팅 문자열 활용
-
-        2. **색상/테마**
-           - Design System 모듈로 이동 검토
-           - Dark Mode 대응
-
-  # 자동 리뷰 기능 설정
-  abort_on_close: true                # PR이 닫히면 리뷰 중지
-  disable_cache: false                # 캐시 기능 활성화
+  abort_on_close: true
+  disable_cache: false
   auto_review:
-    enabled: true                     # 자동 리뷰 활성화
-    auto_incremental_review: false    # 증분 리뷰 비활성화
+    enabled: true
+    auto_incremental_review: false
     base_branches:
-      - main                          # 기본 브랜치
-      - develop                       # 개발 브랜치
+      - main
+      - develop
 
-# 채팅 및 상호작용 설정
+# 채팅 설정
 chat:
-  auto_reply: true                    # 질문 시 자동 응답 활성화
+  auto_reply: true
 
-# 지식 베이스 설정
+# 지식 베이스
 knowledge_base:
-  opt_out: false                      # 지식베이스 사용 허용
-
+  opt_out: false
   web_search:
-    enabled: true                     # 웹 검색을 통한 최신 정보 활용
-
+    enabled: true
   code_guidelines:
-    enabled: true                     # 팀 코드 가이드라인 참조 활성화
-    filePatterns:                     # 참조할 팀 문서들
-      - README.md                     # 프로젝트 구조 및 아키텍처
-      - docs/**/*.md                  # 추가 문서 (생성 시)
-
+    enabled: true
+    filePatterns:
+      - README.md
+      - docs/**/*.md
   learnings:
-    scope: local                      # 학습 데이터를 현재 저장소로 제한
-
+    scope: local
   issues:
-    scope: local                      # 이슈 참조를 현재 저장소로 제한
-
+    scope: local
   pull_requests:
-    scope: local                      # PR 참조를 현재 저장소로 제한
-
-# 작업 가이드라인
-work_guidelines:
-  goal_setting:                       # 작업 계획 및 범위 설정
-    - "이슈 티켓 발행 시 목표 명확히 설정"
-    - "큰 작업은 여러 개의 작은 티켓으로 분할"
-    - "PR은 최대 800 Line 제한"
-    - "주요 변경사항이나 새로운 패턴 도입 시 반드시 사전 논의"
-
-  # 안드로이드 멀티모듈 프로젝트 특화 가이드라인
-  multimodule_rules:
-    - "모듈 간 의존성 방향 준수 (feature → domain ← data, feature → core)"
-    - "Pure Kotlin 모듈(domain)에 Android 의존성 금지"
-    - "Convention Plugin을 통한 일관된 빌드 설정"
-    - "공통 코드는 적절한 core 모듈로 추출"
-
-  mvi_pattern_rules:
-    - "단방향 데이터 플로우 유지"
-    - "State는 불변 데이터 클래스"
-    - "SideEffect는 일회성 이벤트만"
-    - "ViewModel에서 View 참조 금지"
-
-# 리뷰어 원칙
-reviewer_principles:
-  basic_rules:
-    - "피드백은 코드, 프로세스, 사양만을 대상으로 함"
-    - "리뷰이와 리뷰어의 인격과는 분리"
-    - "언어 폭력이나 비난이 섞인 지적 금지"
-    - "시간에 쫓겨 리뷰 품질을 낮추지 말 것"
-
-  reviewer_attitude:
-    - "리뷰는 모두를 위한 것 (나 자신, 팀, 서비스)"
-    - "적절한 시간 분배로 피드백 마감기한 준수"
-    - "우선순위를 정해 필요한 부분만 간단히 리뷰"
-
-  feedback_method:
-    constructive:
-      good: "이 부분을 다음과 같이 개선할 수 있을 것 같습니다"
-      bad: "이 코드는 잘못되었다"
-    specific:
-      good: "StateFlow 대신 MutableStateFlow를 private으로 캡슐화하면 불변성이 보장됩니다"
-      bad: "이 코드는 문제가 있다"
-    discussion:
-      - "토론을 하되, 납득할 수 있는 이유와 근거 충분히 제시"
-
-  mindset:
-    - "리뷰는 모두를 위한 것"
-    - "사람은 누구나 실수한다 - 빠르게 인정하고 열린 마음으로 토론"
-    - "칭찬도 좋은 코드 리뷰 - 특별한 의견이 없다면 칭찬하기"
-    - "실수 지적받았을 때 방어적이 되지 않기"
-    - "리뷰를 위한 리뷰는 자제 - 의미 있는 피드백에 집중"
-
-# 코드 생성 (자동 문서화 및 테스트)
-code_generation:
-  docstrings:
-    language: ko-KR
-    path_instructions:
-      - path: "**/*.kt"
-        instructions: |
-          - 모든 public 함수/클래스에 대해 KDoc 양식을 따라 한글로 간결하게 작성해주세요.
-          - 함수 목적, 파라미터, 반환값, 예외를 명확하게 기술해 주세요.
-          - Composable 함수는 UI 설명과 파라미터 역할을 명시해주세요.
-          - 샘플 코드/사용 예시는 필요한 경우에만 포함해 주세요.
-
-  unit_tests:
-    path_instructions:
-      - path: "**/*.kt"
-        instructions: |
-          - ViewModel: Given-When-Then 패턴으로 Intent 처리 및 State 변화 테스트
-          - Repository: 데이터 조회/변환 로직 테스트 (Fake 활용)
-          - Domain Model: 비즈니스 로직 및 유효성 검증 단위 테스트
-          - Mapper: DTO → Domain 변환 테스트 (모든 필드 검증)
-          - UseCase: 비즈니스 로직 조합 및 예외 처리 테스트
+    scope: local
