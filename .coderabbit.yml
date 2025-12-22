@@ -15,7 +15,7 @@ tone_instructions: >
 reviews:
   profile: chill                      # 리뷰 스타일: 편안하고 친근한 톤
   request_changes_workflow: false     # Request Change 요청시 병합 비활성화 해제
-  high_level_summary: true            # PR 전체 요약 제공
+  high_level_summary: false           # PR 전체 요약 제공
   changed_files_summary: false        # 개별 파일 요약은 비활성화 (중복 방지)
   sequence_diagrams: false            # 시퀀스 다이어그램 생성 비활성화
   assess_linked_issues: true          # 연결된 이슈 분석 활성화
@@ -25,7 +25,7 @@ reviews:
   auto_apply_labels: false            # 자동 라벨 적용 비활성화
   suggested_reviewers: false          # 리뷰어 추천 비활성화
   auto_assign_reviewers: false        # 자동 리뷰어 할당 비활성화
-  poem: true                          # 리뷰 완료 후 시 작성 활성화 (재미 요소)
+  poem: false                         # 리뷰 완료 후 시 작성 활성화 (재미 요소)
 
   # 경로별 상세 리뷰 가이드
   path_instructions:
