@@ -18,6 +18,9 @@ androidx-lifecycle-runtime-ktx = "2.10.0"
 
 # Google
 material = "1.13.0"
+google-services = "4.4.4"
+google-firebase-bom = "34.0.0"
+google-firebase-crashlytics = "3.0.2"
 
 # Compose
 activity-compose = "1.12.0"
@@ -64,6 +67,10 @@ android-junit5-gradle-plugin = { group = "de.mannodermaus.gradle.plugins", name 
 
 # Google
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
+google-firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "google-firebase-bom" }
+google-firebase-crashlytics = { module = "com.google.firebase:firebase-crashlytics" }
+google-firebase-analytics = { module = "com.google.firebase:firebase-analytics" }
+google-firebase-messaging = { module = "com.google.firebase:firebase-messaging" }
 
 # Kotlin
 kotlinx-coroutines-core = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core", version.ref = "kotlinx-coroutines-core" }
@@ -168,6 +175,8 @@ ktlint = { id = "org.jlleitschuh.gradle.ktlint", version.ref = "ktlint" }
 serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 jetbrains-kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "jetbrains-kotlin-jvm" }
 android-library = { id = "com.android.library", version.ref = "agp" }
+google-services = { id = "com.google.gms.google-services", version.ref = "google-services" }
+google-firebase-crashlytics = { id = "com.google.firebase.crashlytics", version.ref = "google-firebase-crashlytics" }
 
 # Convention Plugins
 twix-android-application = { id = "twix.android.application", version = "unspecified" }
