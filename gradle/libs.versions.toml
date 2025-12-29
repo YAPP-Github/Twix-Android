@@ -19,8 +19,8 @@ androidx-lifecycle-runtime-ktx = "2.10.0"
 # Google
 material = "1.13.0"
 google-services = "4.4.4"
-google-firebase-bom = "34.0.0"
-google-firebase-crashlytics = "3.0.2"
+google-firebase-bom = "34.7.0"
+google-firebase-crashlytics = "3.0.6"
 
 # Compose
 activity-compose = "1.12.0"
