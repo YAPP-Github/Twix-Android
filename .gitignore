@@ -82,3 +82,6 @@ lint/tmp/
 
 # macOS
 .DS_Store
+
+# Cursor IDE
+.cursorrules
