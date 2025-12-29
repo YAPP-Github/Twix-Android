@@ -37,7 +37,8 @@ jobs:
                $DISCORD_WEBHOOK
 
   review-completed-notify:
-    if: github.event_name == 'pull_request_review'
+    if: github.event_name == 'pull_request_review' &&
+        github.event.review.user.login != 'coderabbitai'
     runs-on: ubuntu-latest
     steps:
       - name: Send Review Completed Notification
