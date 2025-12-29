@@ -2,7 +2,7 @@ plugins {
     alias(libs.plugins.twix.android.application)
     alias(libs.plugins.twix.koin)
     alias(libs.plugins.google.firebase.crashlytics)
-    id("com.google.gms.google-services")
+    alias(libs.plugins.google.services)
 }
 
 android {
