@@ -10,6 +10,7 @@ class FeatureConventionPlugin : BuildLogicConventionPlugin({
     apply<AndroidComposeConventionPlugin>()
 
     dependencies {
+        implementation(project(":core:analytics"))
         implementation(project(":core:design-system"))
         implementation(project(":core:navigation"))
         implementation(project(":core:ui"))
