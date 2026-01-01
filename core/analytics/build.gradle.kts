@@ -9,5 +9,5 @@ android {
 
 dependencies {
     implementation(platform(libs.google.firebase.bom))
-    api(libs.google.firebase.analytics)
+    implementation(libs.google.firebase.analytics)
 }
