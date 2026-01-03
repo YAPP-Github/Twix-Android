@@ -1,6 +1,8 @@
 plugins {
     alias(libs.plugins.twix.android.application)
     alias(libs.plugins.twix.koin)
+    alias(libs.plugins.google.firebase.crashlytics)
+    alias(libs.plugins.google.services)
 }
 
 android {
@@ -32,4 +34,8 @@ dependencies {
     implementation(projects.data)
     implementation(projects.domain)
     implementation(projects.feature.login)
+
+    // Firebase
+    implementation(platform(libs.google.firebase.bom))
+    implementation(libs.google.firebase.crashlytics)
 }
