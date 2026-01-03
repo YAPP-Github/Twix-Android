@@ -1,16 +1,14 @@
 package com.yapp.twix
 
 import android.app.Application
-import org.koin.android.ext.koin.androidContext
-import org.koin.core.context.startKoin
+import com.yapp.twix.di.initKoin
 
 class TwixApplication : Application() {
     override fun onCreate() {
         super.onCreate()
 
-        startKoin {
-            androidContext(this@TwixApplication)
-            modules()
-        }
+        initKoin(
+            context = this
+        )
     }
 }
