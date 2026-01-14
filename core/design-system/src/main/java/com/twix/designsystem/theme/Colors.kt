@@ -15,7 +15,7 @@ object CommonColor {
     val White = Color(0xFFFFFFFF)
 }
 
-object DimedColor {
+object DimmedColor {
     val D070 = Color(0x0D000000).copy(alpha = 0.7f)
     val D020 = Color(0x0D000000).copy(alpha = 0.2f)
 }
