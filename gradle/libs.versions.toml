@@ -192,3 +192,4 @@ twix-feature = { id = "twix.feature", version = "unspecified" }
 twix-koin = { id = "twix.koin", version = "unspecified" }
 twix-java-library = { id = "twix.java.library", version = "unspecified" }
 twix-data = { id = "twix.data", version = "unspecified" }
+twix-kermit = { id = "twix.kermit", version = "unspecified" }
