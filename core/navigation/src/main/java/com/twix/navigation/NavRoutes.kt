@@ -7,14 +7,18 @@ package com.twix.navigation
  * · navigation argument가 필요한 경우 createRoute()를 통해 route를 생성합니다.
  * · Graph의 경우 _graph로 네이밍하고 Screen의 경우에는 Composable명에서 Screen을 제외한 앞부분을 활용합니다. ex) HomeScreen -> home
  * */
-sealed class NavRoutes(val route: String) {
-    object LoginGraph: NavRoutes("login_graph")
-    object Login: NavRoutes("login")
+sealed class NavRoutes(
+    val route: String,
+) {
+    object LoginGraph : NavRoutes("login_graph")
 
-    object HomeGraph: NavRoutes("home_graph")
-    object Home: NavRoutes("home")
+    object Login : NavRoutes("login")
 
-    object HomeDetail: NavRoutes("home_detail/{id}") {
+    object HomeGraph : NavRoutes("home_graph")
+
+    object Home : NavRoutes("home")
+
+    object HomeDetail : NavRoutes("home_detail/{id}") {
         fun createRoute(id: String) = "home_detail/$id"
     }
 }

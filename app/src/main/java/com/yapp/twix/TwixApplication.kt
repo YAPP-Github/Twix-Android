@@ -8,7 +8,7 @@ class TwixApplication : Application() {
         super.onCreate()
 
         initKoin(
-            context = this
+            context = this,
         )
     }
 }

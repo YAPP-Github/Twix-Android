@@ -17,13 +17,15 @@ import org.koin.compose.getKoin
 fun AppNavHost() {
     val navController = rememberNavController()
     val koin = getKoin()
-    val contributors = remember {
-        koin.getAll<NavGraphContributor>().sortedBy { it.priority }
-    }
-    val start = contributors
-        .firstOrNull { it.graphRoute == NavRoutes.LoginGraph }
-        ?.graphRoute
-        ?: error("해당 Graph를 찾을 수 없습니다.")
+    val contributors =
+        remember {
+            koin.getAll<NavGraphContributor>().sortedBy { it.priority }
+        }
+    val start =
+        contributors
+            .firstOrNull { it.graphRoute == NavRoutes.LoginGraph }
+            ?.graphRoute
+            ?: error("해당 Graph를 찾을 수 없습니다.")
     val duration = 300
 
     NavHost(
@@ -32,28 +34,28 @@ fun AppNavHost() {
         enterTransition = {
             slideInHorizontally(
                 initialOffsetX = { fullWidth -> fullWidth },
-                animationSpec = tween(duration, easing = FastOutSlowInEasing)
+                animationSpec = tween(duration, easing = FastOutSlowInEasing),
             )
         },
         exitTransition = {
             slideOutHorizontally(
                 targetOffsetX = { fullWidth -> -fullWidth },
-                animationSpec = tween(duration, easing = FastOutSlowInEasing)
+                animationSpec = tween(duration, easing = FastOutSlowInEasing),
             )
         },
         popEnterTransition = {
             slideInHorizontally(
                 initialOffsetX = { fullWidth -> -fullWidth },
-                animationSpec = tween(duration, easing = FastOutSlowInEasing)
+                animationSpec = tween(duration, easing = FastOutSlowInEasing),
             )
         },
         popExitTransition = {
             slideOutHorizontally(
                 targetOffsetX = { fullWidth -> fullWidth },
-                animationSpec = tween(duration, easing = FastOutSlowInEasing)
+                animationSpec = tween(duration, easing = FastOutSlowInEasing),
             )
         },
-        modifier = Modifier.fillMaxSize()
+        modifier = Modifier.fillMaxSize(),
     ) {
         contributors.forEach { with(it) { registerGraph(navController) } }
     }

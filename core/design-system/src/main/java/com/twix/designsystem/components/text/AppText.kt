@@ -21,7 +21,7 @@ fun AppText(
     color: Color,
     textAlign: TextAlign? = null,
     maxLines: Int = Int.MAX_VALUE,
-    overflow: TextOverflow = TextOverflow.Clip
+    overflow: TextOverflow = TextOverflow.Clip,
 ) {
     val typo = LocalAppTypography.current
     val baseStyle = style.toTextStyle(typo)
@@ -34,7 +34,7 @@ fun AppText(
             color = color,
             textAlign = textAlign,
             maxLines = maxLines,
-            overflow = overflow
+            overflow = overflow,
         )
     }
 }
