@@ -1,0 +1,8 @@
+<resources>
+
+    <!-- 단어 -->
+    <string name="word_home">홈</string>
+    <string name="word_stats">통계</string>
+    <string name="word_couple_page">커플페이지</string>
+
+</resources>
