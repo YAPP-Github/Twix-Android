@@ -1,0 +1,64 @@
+name: Android CI
+
+on:
+  pull_request:
+    branches:
+      - develop
+
+  push:
+    branches:
+      - develop
+      - main
+
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.head_ref || github.run_id }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        shell: bash
+
+    permissions:
+      contents: read
+      pull-requests: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+          
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+          cache: gradle
+      
+      - name: Grant execute permission to gradlew
+        run: chmod +x gradlew
+
+      - name: Create google-services.json
+        env:
+          GOOGLE_SERVICES_JSON_DEBUG: ${{ secrets.GOOGLE_SERVICES_JSON_DEBUG }}
+        run: |
+          mkdir -p ./app/src/debug
+          echo "${GOOGLE_SERVICES_JSON_DEBUG}" > ./app/src/debug/google-services.json
+
+      - name: Clean Project
+        run: ./gradlew clean
+
+      - name: Run ktlint Check
+        run: ./gradlew ktlintCheck --build-cache --parallel
+
+      - name: Run Unit Tests
+        run: ./gradlew test --build-cache --parallel
+
+      - name: Assemble Debug
+        run: ./gradlew assembleDebug --build-cache --parallel          
