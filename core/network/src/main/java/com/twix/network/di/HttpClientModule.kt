@@ -6,18 +6,12 @@ import de.jensklingenberg.ktorfit.Ktorfit
 import io.ktor.client.HttpClient
 import org.koin.dsl.module
 
-internal val HttpClientModule =
+internal val httpClientModule =
     module {
-        val baseUrl =
-            if (BuildConfig.DEBUG) {
-                BuildConfig.DEV_BASE_URL
-            } else {
-                BuildConfig.PROD_BASE_URL
-            }
 
         single<HttpClient> {
             HttpClientProvider.createHttpClient(
-                baseUrl = baseUrl,
+                baseUrl = BuildConfig.BASE_URL,
                 isDebug = BuildConfig.DEBUG,
             )
         }
@@ -25,7 +19,7 @@ internal val HttpClientModule =
         single {
             Ktorfit
                 .Builder()
-                .baseUrl(baseUrl)
+                .baseUrl(BuildConfig.BASE_URL)
                 .httpClient(get<HttpClient>())
                 .build()
         }

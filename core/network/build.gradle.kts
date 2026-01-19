@@ -23,16 +23,19 @@ android {
         buildConfig = true
     }
 
-    defaultConfig {
-        val devBaseUrl =
-            localProperties.getProperty("dev_base_url")
-                ?: error("dev_base_url is missing in local.properties")
-        val prodBaseUrl =
-            localProperties.getProperty("prod_base_url")
-                ?: error("prod_base_url is missing in local.properties")
-
-        buildConfigField("String", "DEV_BASE_URL", "\"$devBaseUrl\"")
-        buildConfigField("String", "PROD_BASE_URL", "\"$prodBaseUrl\"")
+    buildTypes {
+        debug {
+            val devBaseUrl =
+                localProperties.getProperty("dev_base_url")
+                    ?: error("dev_base_url is missing in local.properties")
+            buildConfigField("String", "BASE_URL", "\"$devBaseUrl\"")
+        }
+        release {
+            val prodBaseUrl =
+                localProperties.getProperty("prod_base_url")
+                    ?: error("prod_base_url is missing in local.properties")
+            buildConfigField("String", "BASE_URL", "\"$prodBaseUrl\"")
+        }
     }
 }
 
