@@ -1,6 +1,5 @@
 package com.twix.domain.model.enums
 
-
 enum class AppTextStyle {
     H1,
     H2,

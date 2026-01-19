@@ -28,11 +28,11 @@ compose-bom = "2025.12.01"
 compose-coil = "3.3.0"
 compose-navigation = "2.9.4"
 
-# Network
-retrofit = "3.0.0"
-retrofit-kotlinx-serialization-converter = "1.0.0"
-okhttp = "5.3.2"
-logging-interceptor = "5.3.2"
+# Ktor
+ktor = "3.3.3"
+
+# Ktrofit
+ktorfit = "2.7.2"
 
 # Compose Test
 compose-ui-test = "1.7.8"
@@ -77,11 +77,17 @@ kotlinx-coroutines-core = { group = "org.jetbrains.kotlinx", name = "kotlinx-cor
 kotlinx-coroutines-core-jvm = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core-jvm", version.ref = "kotlinx-coroutines-core" }
 kotlinx-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "kotlinx-serialization-json" }
 
-# Network
-retrofit = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofit" }
-retrofit-kotlinx-serialization-converter = { group = "com.jakewharton.retrofit", name = "retrofit2-kotlinx-serialization-converter", version.ref = "retrofit-kotlinx-serialization-converter" }
-okhttp = { group = "com.squareup.okhttp3", name = "okhttp", version.ref = "okhttp" }
-logging-interceptor = { group = "com.squareup.okhttp3", name = "logging-interceptor", version.ref = "logging-interceptor" }
+# Ktor
+ktor-client-okhttp = { group = "io.ktor", name = "ktor-client-okhttp", version.ref = "ktor" }
+ktor-client-content-negotiation = { module = "io.ktor:ktor-client-content-negotiation", version.ref = "ktor" }
+ktor-client-core = { module = "io.ktor:ktor-client-core", version.ref = "ktor" }
+ktor-auth = { module = "io.ktor:ktor-client-auth", version.ref = "ktor" }
+ktor-serialization-kotlinx-json = { module = "io.ktor:ktor-serialization-kotlinx-json", version.ref = "ktor" }
+ktor-logging = { module = "io.ktor:ktor-client-logging", version.ref = "ktor" }
+
+# Ktorfit
+ktorfit-lib = { module = "de.jensklingenberg.ktorfit:ktorfit-lib", version.ref = "ktorfit" }
+ktorfit-ksp = { module = "de.jensklingenberg.ktorfit:ktorfit-ksp", version.ref = "ktorfit" }
 
 # Compose
 compose-activity = { group = "androidx.activity", name = "activity-compose", version.ref = "activity-compose" }
@@ -121,12 +127,13 @@ androidx = [
     "androidx-lifecycle-runtime-ktx",
 ]
 
-network = [
-    "retrofit",
-    "retrofit-kotlinx-serialization-converter",
-    "kotlinx-serialization-json",
-    "okhttp",
-    "logging-interceptor"
+ktor = [
+    "ktor-client-okhttp",
+    "ktor-client-content-negotiation",
+    "ktor-client-core",
+    "ktor-auth",
+    "ktor-serialization-kotlinx-json",
+    "ktor-logging"
 ]
 
 compose = [
@@ -177,6 +184,8 @@ jetbrains-kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "jetbrai
 android-library = { id = "com.android.library", version.ref = "agp" }
 google-services = { id = "com.google.gms.google-services", version.ref = "google-services" }
 google-firebase-crashlytics = { id = "com.google.firebase.crashlytics", version.ref = "google-firebase-crashlytics" }
+ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
+ktorfit = { id = "de.jensklingenberg.ktorfit", version.ref = "ktorfit" }
 
 # Convention Plugins
 twix-android-application = { id = "twix.android.application", version = "unspecified" }

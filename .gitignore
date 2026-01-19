@@ -85,3 +85,6 @@ lint/tmp/
 
 # Cursor IDE
 .cursorrules
+/scripts/install-hooks.sh
+/scripts/pre-push
+/scripts/uninstall-hooks.sh

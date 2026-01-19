@@ -10,16 +10,17 @@ import androidx.compose.ui.Modifier
 import com.twix.designsystem.theme.TwixTheme
 import com.twix.navigation.AppNavHost
 
-class MainActivity: ComponentActivity() {
+class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         setContent {
             TwixTheme {
                 Box(
-                    modifier = Modifier
-                        .safeContentPadding()
-                        .fillMaxSize()
+                    modifier =
+                        Modifier
+                            .safeContentPadding()
+                            .fillMaxSize(),
                 ) {
                     AppNavHost()
                 }
