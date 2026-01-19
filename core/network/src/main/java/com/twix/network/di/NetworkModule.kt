@@ -1,6 +1,6 @@
 package com.twix.network.di
 
-val NetworkModule =
+val networkModule =
     listOf(
-        HttpClientModule,
+        httpClientModule,
     )

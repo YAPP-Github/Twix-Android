@@ -1,7 +1,7 @@
 package com.yapp.twix.di
 
 import android.content.Context
-import com.twix.network.di.NetworkModule
+import com.twix.network.di.networkModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
 import org.koin.core.module.Module
@@ -17,7 +17,7 @@ fun initKoin(
             buildList {
                 addAll(extraModules)
                 addAll(featureModules)
-                addAll(NetworkModule)
+                addAll(networkModule)
             },
         )
     }
