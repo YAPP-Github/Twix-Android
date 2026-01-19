@@ -53,7 +53,7 @@ render.experimental.xml
 .cxx/
 
 # Google Services (e.g. APIs or Firebase)
-# google-services.json
+google-services.json
 
 # Freeline
 freeline.zip
@@ -82,3 +82,9 @@ lint/tmp/
 
 # macOS
 .DS_Store
+
+# Cursor IDE
+.cursorrules
+/scripts/install-hooks.sh
+/scripts/pre-push
+/scripts/uninstall-hooks.sh

@@ -6,3 +6,7 @@ plugins {
 android {
     namespace = "com.twix.designsystem"
 }
+
+dependencies {
+    implementation(projects.domain)
+}

@@ -39,7 +39,9 @@ jobs:
   review-completed-notify:
     if: |
       github.event_name == 'pull_request_review' &&
-      github.event.review.user.type != 'Bot'
+      github.event.review.user.type != 'Bot' &&
+      github.event.review.user.login != github.event.pull_request.user.login &&
+      github.event.review.state != 'commented'
     runs-on: ubuntu-latest
     steps:
       - name: Send Review Completed Notification
