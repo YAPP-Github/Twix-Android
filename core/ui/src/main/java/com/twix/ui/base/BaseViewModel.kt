@@ -19,7 +19,7 @@ abstract class BaseViewModel<S : State, I : Intent, SE : SideEffect>(
 
     // State
     private val stateHolder = StateHolder(initialState)
-    val state: StateFlow<S> = stateHolder.state
+    val uiState: StateFlow<S> = stateHolder.state
     protected val currentState: S get() = stateHolder.current
 
     // SideEffect
