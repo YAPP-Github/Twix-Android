@@ -9,5 +9,5 @@ val featureModules: List<Module> =
     listOf(
         loginModule,
         mainModule,
-        homeModule
+        homeModule,
     )
