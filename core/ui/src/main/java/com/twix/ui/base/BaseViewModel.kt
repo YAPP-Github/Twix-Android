@@ -11,10 +11,9 @@ import kotlinx.coroutines.flow.consumeAsFlow
 import kotlinx.coroutines.launch
 import kotlin.coroutines.cancellation.CancellationException
 
-abstract class BaseViewModel<S: State, I: Intent, SE: SideEffect>(
-    initialState: S
-): ViewModel() {
-
+abstract class BaseViewModel<S : State, I : Intent, SE : SideEffect>(
+    initialState: S,
+) : ViewModel() {
     protected open val logger: Logger =
         Logger.withTag(this::class.simpleName ?: "BaseViewModel")
 
@@ -73,34 +72,34 @@ abstract class BaseViewModel<S: State, I: Intent, SE: SideEffect>(
      * */
     protected abstract suspend fun handleIntent(intent: I)
 
-
     /**
      * 서버 통신 메서드 호출 및 응답을 처리하는 헬퍼 메서드
      * */
     protected fun <D> launchResult(
-        onStart: (() -> Unit)? = null,              // 비동기 시작 전 처리해야 할 로직 ex) 로딩
-        onFinally: (() -> Unit)? = null,            // 비동기 종료 후 리소스 정리
-        onSuccess: (D) -> Unit,                     // 비동기 메서드 호출이 성공했을 때 처리해야 할 로직
-        onError: ((Throwable) -> Unit)? = null,     // 비동기 메서드 호출에 실패했을 때 처리해야 할 로직
-        block: suspend () -> Result<D>              // 비동기 메서드 ex) 서버 통신 메서드
-    ): Job = viewModelScope.launch {
-        try {
-            onStart?.invoke()
+        onStart: (() -> Unit)? = null, // 비동기 시작 전 처리해야 할 로직 ex) 로딩
+        onFinally: (() -> Unit)? = null, // 비동기 종료 후 리소스 정리
+        onSuccess: (D) -> Unit, // 비동기 메서드 호출이 성공했을 때 처리해야 할 로직
+        onError: ((Throwable) -> Unit)? = null, // 비동기 메서드 호출에 실패했을 때 처리해야 할 로직
+        block: suspend () -> Result<D>, // 비동기 메서드 ex) 서버 통신 메서드
+    ): Job =
+        viewModelScope.launch {
+            try {
+                onStart?.invoke()
 
-            val result = block.invoke()
-            result.fold(
-                onSuccess = { data -> onSuccess(data) },
-                onFailure = { t ->
-                    if (t is CancellationException) throw t
+                val result = block.invoke()
+                result.fold(
+                    onSuccess = { data -> onSuccess(data) },
+                    onFailure = { t ->
+                        if (t is CancellationException) throw t
 
-                    handleError(t)
-                    onError?.invoke(t)
-                }
-            )
-        } finally {
-            onFinally?.invoke()
+                        handleError(t)
+                        onError?.invoke(t)
+                    },
+                )
+            } finally {
+                onFinally?.invoke()
+            }
         }
-    }
 
     /**
      * 에러 핸들링 메서드
