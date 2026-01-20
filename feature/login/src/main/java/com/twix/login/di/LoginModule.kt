@@ -6,6 +6,7 @@ import com.twix.navigation.base.NavGraphContributor
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
 
-val loginModule = module {
-    single<NavGraphContributor>(named(NavRoutes.LoginGraph.route)) { LoginNavGraph }
-}
+val loginModule =
+    module {
+        single<NavGraphContributor>(named(NavRoutes.LoginGraph.route)) { LoginNavGraph }
+    }

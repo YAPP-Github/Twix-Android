@@ -8,7 +8,7 @@ import com.twix.login.LoginScreen
 import com.twix.navigation.NavRoutes
 import com.twix.navigation.base.NavGraphContributor
 
-object LoginNavGraph: NavGraphContributor {
+object LoginNavGraph : NavGraphContributor {
     override val graphRoute: NavRoutes
         get() = NavRoutes.LoginGraph
     override val startDestination: String
@@ -17,7 +17,7 @@ object LoginNavGraph: NavGraphContributor {
     override fun NavGraphBuilder.registerGraph(navController: NavHostController) {
         navigation(
             route = graphRoute.route,
-            startDestination = startDestination
+            startDestination = startDestination,
         ) {
             composable(NavRoutes.Login.route) {
                 LoginScreen()

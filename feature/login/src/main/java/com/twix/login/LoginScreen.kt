@@ -16,7 +16,7 @@ fun LoginScreen() {
 private fun LoginContent() {
     Box(
         modifier = Modifier.fillMaxSize(),
-        contentAlignment = Alignment.Center
+        contentAlignment = Alignment.Center,
     ) {
         Text("임시 화면입니다.")
     }
