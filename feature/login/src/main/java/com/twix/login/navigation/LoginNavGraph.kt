@@ -12,14 +12,14 @@ object LoginNavGraph : NavGraphContributor {
     override val graphRoute: NavRoutes
         get() = NavRoutes.LoginGraph
     override val startDestination: String
-        get() = NavRoutes.Login.route
+        get() = NavRoutes.LoginRoute.route
 
     override fun NavGraphBuilder.registerGraph(navController: NavHostController) {
         navigation(
             route = graphRoute.route,
             startDestination = startDestination,
         ) {
-            composable(NavRoutes.Login.route) {
+            composable(NavRoutes.LoginRoute.route) {
                 LoginScreen()
             }
         }
