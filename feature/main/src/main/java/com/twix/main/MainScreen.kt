@@ -10,6 +10,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.twix.designsystem.theme.CommonColor
+import com.twix.home.HomeRoute
 import com.twix.main.component.MainBottomBar
 import com.twix.main.model.MainTab
 import org.koin.androidx.compose.koinViewModel
@@ -23,7 +24,7 @@ fun MainRoute(viewModel: MainViewModel = koinViewModel()) {
         onTabClick = { tab -> viewModel.dispatch(MainIntent.SelectTab(tab)) },
         content = { tab ->
             when (tab) {
-                MainTab.HOME -> Box(modifier = Modifier.fillMaxSize())
+                MainTab.HOME -> HomeRoute()
                 MainTab.STATS -> Box(modifier = Modifier.fillMaxSize())
                 MainTab.COUPLE -> Box(modifier = Modifier.fillMaxSize())
             }
