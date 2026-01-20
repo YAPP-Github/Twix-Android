@@ -1,0 +1,114 @@
+package com.twix.home.component
+
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
+import com.twix.designsystem.R
+import com.twix.designsystem.components.text.AppText
+import com.twix.designsystem.theme.GrayColor
+import com.twix.domain.model.enums.AppTextStyle
+
+@Composable
+fun HomeTopBar(
+    monthYearText: String,
+    onNotificationClick: () -> Unit,
+    onSettingClick: () -> Unit,
+) {
+    Row(
+        modifier =
+            Modifier
+                .fillMaxWidth()
+                .padding(start = 20.dp, end = 10.dp),
+        verticalAlignment = Alignment.Bottom,
+    ) {
+        Column(
+            horizontalAlignment = Alignment.Start,
+        ) {
+            Spacer(Modifier.height(12.dp))
+
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                AppText(
+                    text = monthYearText,
+                    style = AppTextStyle.T3,
+                    color = GrayColor.C400,
+                )
+
+                Image(
+                    painter = painterResource(R.drawable.ic_drop_down_arrow),
+                    contentDescription = "drop down arrow",
+                    modifier = Modifier.size(20.dp),
+                    colorFilter = ColorFilter.tint(GrayColor.C400),
+                )
+            }
+
+            Spacer(Modifier.height(4.dp))
+
+            AppText(
+                text = stringResource(R.string.home_today_goal),
+                style = AppTextStyle.H3,
+                color = GrayColor.C400,
+            )
+
+            Spacer(Modifier.height(2.dp))
+        }
+
+        Spacer(Modifier.weight(1f))
+
+        TopBarButton(
+            icon = painterResource(id = R.drawable.ic_alert),
+            contentDescription = "notification",
+            onClick = onNotificationClick,
+        )
+
+        TopBarButton(
+            icon = painterResource(id = R.drawable.ic_setting),
+            contentDescription = "setting",
+            onClick = onSettingClick,
+        )
+    }
+}
+
+@Composable
+private fun TopBarButton(
+    icon: Painter,
+    contentDescription: String,
+    onClick: () -> Unit,
+) {
+    val interactionSource = remember { MutableInteractionSource() }
+
+    Box(
+        modifier =
+            Modifier
+                .size(40.dp)
+                .clickable(
+                    indication = null,
+                    interactionSource = interactionSource,
+                    onClick = onClick,
+                ),
+        contentAlignment = Alignment.Center,
+    ) {
+        Image(
+            painter = icon,
+            contentDescription = contentDescription,
+        )
+    }
+}
