@@ -5,4 +5,7 @@
     <string name="word_stats">통계</string>
     <string name="word_couple_page">커플페이지</string>
 
+    <!-- 홈 화면 -->
+    <string name="home_today_goal">오늘 우리 목표</string>
+    
 </resources>
