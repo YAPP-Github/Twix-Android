@@ -46,6 +46,7 @@ internal object HttpClientProvider {
                 } else {
                     LogLevel.NONE
                 }
+            logger = Logger.ANDROID
 
             sanitizeHeader { header -> header == SANITIZE_HEADER }
         }
