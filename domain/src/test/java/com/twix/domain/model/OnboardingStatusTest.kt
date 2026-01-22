@@ -13,12 +13,12 @@ class OnboardingStatusTest {
         "COUPLE_CONNECTION,COUPLE_CONNECTION",
         "PROFILE_SETUP,PROFILE_SETUP",
         "ANNIVERSARY_SETUP,ANNIVERSARY_SETUP",
-        "COMPLETED,COMPLETED"
+        "COMPLETED,COMPLETED",
     )
     @DisplayName("올바른 OnboardingStatus enum을 반환한다")
     fun `유효한 상태 문자열이 주어지면 올바른 OnboardingStatus enum을 반환한다`(
         input: String,
-        expected: OnboardingStatus
+        expected: OnboardingStatus,
     ) {
         // when
         val result = OnboardingStatus.from(input)
