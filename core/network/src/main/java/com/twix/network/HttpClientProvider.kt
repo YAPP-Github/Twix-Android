@@ -5,7 +5,9 @@ import io.ktor.client.HttpClientConfig
 import io.ktor.client.plugins.HttpTimeout
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.plugins.defaultRequest
+import io.ktor.client.plugins.logging.ANDROID
 import io.ktor.client.plugins.logging.LogLevel
+import io.ktor.client.plugins.logging.Logger
 import io.ktor.client.plugins.logging.Logging
 import io.ktor.http.ContentType
 import io.ktor.http.contentType
@@ -24,6 +26,18 @@ internal object HttpClientProvider {
             configureLogging(isDebug)
             configureTimeout()
             configureDefaultRequest(baseUrl)
+
+            // TODO : 토큰 관련 기능 구현 후 적용
+//            install(Auth) {
+//                bearer {
+//                    loadTokens {
+//                        BearerTokens(
+//                            accessToken = "",
+//                            refreshToken = "",
+//                        )
+//                    }
+//              }
+//            }
         }
 
     private fun HttpClientConfig<*>.configureContentNegotiation(isDebug: Boolean) {
