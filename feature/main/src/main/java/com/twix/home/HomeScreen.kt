@@ -3,10 +3,13 @@ package com.twix.home
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.twix.home.component.EmptyGoalGuide
 import com.twix.home.component.HomeTopBar
 import com.twix.home.component.WeeklyCalendar
 import com.twix.home.model.HomeUiState
@@ -54,6 +57,8 @@ fun HomeScreen(
             onUpdateVisibleDate = onUpdateVisibleDate,
         )
 
-        Spacer(Modifier.weight(1f))
+        Spacer(Modifier.height(12.dp))
+
+        EmptyGoalGuide(modifier = Modifier.weight(1f))
     }
 }
