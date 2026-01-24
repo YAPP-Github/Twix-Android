@@ -12,7 +12,7 @@ sealed interface HomeIntent : Intent {
 
     data object NextWeek : HomeIntent
 
-    data class UpdateMonthYear(
+    data class UpdateVisibleDate(
         val date: LocalDate,
     ) : HomeIntent
 }
