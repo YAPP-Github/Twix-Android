@@ -21,22 +21,21 @@ import com.twix.designsystem.theme.GrayColor
 import com.twix.domain.model.enums.AppTextStyle
 
 @Composable
-fun EmptyGoalGuide(
-    modifier: Modifier = Modifier,
-) {
+fun EmptyGoalGuide(modifier: Modifier = Modifier) {
     Column(
-        modifier = modifier
-            .fillMaxWidth(),
+        modifier =
+            modifier
+                .fillMaxWidth(),
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
+        verticalArrangement = Arrangement.Center,
     ) {
         Image(
             painter = painterResource(R.drawable.ic_empty_face),
             contentDescription = "empty face",
-            modifier = Modifier
-                .padding(horizontal = 9.dp, vertical = 6.dp)
-                .size(width = 34.dp, height = 40.dp)
-
+            modifier =
+                Modifier
+                    .padding(horizontal = 9.dp, vertical = 6.dp)
+                    .size(width = 34.dp, height = 40.dp),
         )
 
         Spacer(Modifier.height(10.dp))
@@ -44,7 +43,7 @@ fun EmptyGoalGuide(
         AppText(
             text = stringResource(R.string.homt_empty_goal_guide),
             style = AppTextStyle.T2,
-            color = GrayColor.C200
+            color = GrayColor.C200,
         )
 
         Spacer(Modifier.height(12.dp))
@@ -52,8 +51,9 @@ fun EmptyGoalGuide(
         Image(
             painter = painterResource(R.drawable.ic_empty_goal_arrow),
             contentDescription = "empty goal arrow",
-            modifier = Modifier
-                .offset(x = 32.dp)
+            modifier =
+                Modifier
+                    .offset(x = 32.dp),
         )
     }
 }

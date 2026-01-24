@@ -38,7 +38,7 @@ fun WeeklyCalendar(
     onSelectDate: (LocalDate) -> Unit,
     onPreviousWeek: () -> Unit,
     onNextWeek: () -> Unit,
-    onUpdateVisibleDate: (LocalDate) -> Unit
+    onUpdateVisibleDate: (LocalDate) -> Unit,
 ) {
     val today = remember { LocalDate.now() }
     val weekStart = remember(referenceDate) { referenceDate.weekStartSunday() }
@@ -58,8 +58,11 @@ fun WeeklyCalendar(
     var dragSumPx by remember { mutableFloatStateOf(0f) }
 
     LaunchedEffect(days.first()) {
-        if (dragSumPx > 0) onUpdateVisibleDate(days.first())
-        else onUpdateVisibleDate(days.last())
+        if (dragSumPx > 0) {
+            onUpdateVisibleDate(days.first())
+        } else {
+            onUpdateVisibleDate(days.last())
+        }
     }
 
     Column(
