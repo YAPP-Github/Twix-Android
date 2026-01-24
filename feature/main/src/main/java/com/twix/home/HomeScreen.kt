@@ -8,8 +8,10 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.twix.home.component.HomeTopBar
+import com.twix.home.component.WeeklyCalendar
 import com.twix.home.model.HomeUiState
 import org.koin.androidx.compose.koinViewModel
+import java.time.LocalDate
 
 @Composable
 fun HomeRoute(viewModel: HomeViewModel = koinViewModel()) {
@@ -17,11 +19,21 @@ fun HomeRoute(viewModel: HomeViewModel = koinViewModel()) {
 
     HomeScreen(
         uiState = uiState,
+        onSelectDate = { viewModel.dispatch(HomeIntent.SelectDate(it)) },
+        onPreviousWeek = { viewModel.dispatch(HomeIntent.PreviousWeek) },
+        onNextWeek = { viewModel.dispatch(HomeIntent.NextWeek) },
+        onUpdateVisibleDate = { viewModel.dispatch(HomeIntent.UpdateVisibleDate(it)) },
     )
 }
 
 @Composable
-fun HomeScreen(uiState: HomeUiState) {
+fun HomeScreen(
+    uiState: HomeUiState,
+    onSelectDate: (LocalDate) -> Unit,
+    onPreviousWeek: () -> Unit,
+    onNextWeek: () -> Unit,
+    onUpdateVisibleDate: (LocalDate) -> Unit,
+) {
     Column(
         modifier =
             Modifier
@@ -31,6 +43,15 @@ fun HomeScreen(uiState: HomeUiState) {
             monthYearText = uiState.monthYear,
             onNotificationClick = {},
             onSettingClick = {},
+        )
+
+        WeeklyCalendar(
+            selectedDate = uiState.selectedDate,
+            referenceDate = uiState.referenceDate,
+            onSelectDate = onSelectDate,
+            onPreviousWeek = onPreviousWeek,
+            onNextWeek = onNextWeek,
+            onUpdateVisibleDate = onUpdateVisibleDate,
         )
 
         Spacer(Modifier.weight(1f))
