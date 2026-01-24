@@ -19,10 +19,12 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.twix.designsystem.R
 import com.twix.designsystem.components.text.AppText
 import com.twix.designsystem.theme.GrayColor
+import com.twix.designsystem.theme.TwixTheme
 import com.twix.domain.model.enums.AppTextStyle
 
 @Composable
@@ -35,7 +37,8 @@ fun HomeTopBar(
         modifier =
             Modifier
                 .fillMaxWidth()
-                .padding(start = 20.dp, end = 10.dp),
+                .padding(start = 20.dp, end = 10.dp)
+                .padding(bottom = 10.dp),
         verticalAlignment = Alignment.Bottom,
     ) {
         Column(
@@ -109,6 +112,18 @@ private fun TopBarButton(
         Image(
             painter = icon,
             contentDescription = contentDescription,
+        )
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun Preview() {
+    TwixTheme {
+        HomeTopBar(
+            monthYearText = "1월 22일",
+            {},
+            {},
         )
     }
 }
