@@ -57,11 +57,22 @@ jetbrains-kotlin-jvm = "2.1.0"
 
 # Logging
 kermit = "2.0.8"
+junit = "4.13.2"
+espressoCore = "3.7.0"
+appcompat = "1.7.1"
+cameraX = "1.5.2"
+cameraLifecycle = "1.5.2"
 
 [libraries]
 # AndroidX
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "androidx-core-ktx" }
 androidx-lifecycle-runtime-ktx = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "androidx-lifecycle-runtime-ktx" }
+
+androidx-camera-camera2 = { module = "androidx.camera:camera-camera2", version.ref = "cameraX" }
+androidx-camera-lifecycle = { module = "androidx.camera:camera-lifecycle", version.ref = "cameraX" }
+androidx-camera-view = { group = "androidx.camera", name = "camera-view", version.ref = "cameraX" }
+androidx-camera-compose = { module = "androidx.camera:camera-compose", version.ref = "cameraX" }
+
 android-gradle-plugin = { group = "com.android.tools.build", name = "gradle-api", version.ref = "agp" }
 compose-gradle-plugin = { module = "org.jetbrains.kotlin:compose-compiler-gradle-plugin", version.ref = "kotlin" }
 kotlin-gradle-plugin = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-plugin", version.ref = "kotlin" }
@@ -126,11 +137,21 @@ kotlin-test = { group = "org.jetbrains.kotlin", name = "kotlin-test", version.re
 
 # Logging
 kermit = { group = "co.touchlab", name = "kermit", version.ref = "kermit" }
+junit = { group = "junit", name = "junit", version.ref = "junit" }
+androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
+androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
 
 [bundles]
 androidx = [
     "androidx-core-ktx",
     "androidx-lifecycle-runtime-ktx",
+]
+
+cameraX = [
+    "androidx-camera-camera2",
+    "androidx-camera-lifecycle",
+    "androidx-camera-view",
+    "androidx-camera-compose"
 ]
 
 ktor = [
