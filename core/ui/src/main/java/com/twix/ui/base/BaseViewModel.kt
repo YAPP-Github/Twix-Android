@@ -8,6 +8,7 @@ import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.consumeAsFlow
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import kotlin.coroutines.cancellation.CancellationException
 
@@ -32,7 +33,7 @@ abstract class BaseViewModel<S : State, I : Intent, SE : SideEffect>(
     init {
         // Intent 순차 처리
         viewModelScope.launch {
-            intentChannel.consumeAsFlow().collect { intent ->
+            intentChannel.receiveAsFlow().collect { intent ->
                 try {
                     handleIntent(intent)
                 } catch (t: Throwable) {
