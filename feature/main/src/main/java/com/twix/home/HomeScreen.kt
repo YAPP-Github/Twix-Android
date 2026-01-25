@@ -26,6 +26,7 @@ import com.twix.home.component.EmptyGoalGuide
 import com.twix.home.component.HomeTopBar
 import com.twix.home.component.WeeklyCalendar
 import com.twix.home.model.HomeUiState
+import com.twix.ui.extension.noRippleClickable
 import org.koin.androidx.compose.koinViewModel
 import java.time.LocalDate
 
@@ -100,11 +101,7 @@ private fun AddGoalButton(
             modifier
                 .size(56.dp)
                 .background(GrayColor.C500, CircleShape)
-                .clickable(
-                    indication = null,
-                    onClick = onClick,
-                    interactionSource = remember { MutableInteractionSource() },
-                ),
+                .noRippleClickable(onClick = onClick),
         contentAlignment = Alignment.Center,
     ) {
         Image(
