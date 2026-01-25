@@ -8,6 +8,7 @@ class FeatureConventionPlugin : BuildLogicConventionPlugin({
     apply<AndroidLibraryConventionPlugin>()
     apply<KoinConventionPlugin>()
     apply<AndroidComposeConventionPlugin>()
+    apply< KermitConventionPlugin>()
 
     dependencies {
         implementation(project(":core:analytics"))
