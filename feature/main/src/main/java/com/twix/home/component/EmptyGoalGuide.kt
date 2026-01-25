@@ -41,7 +41,7 @@ fun EmptyGoalGuide(modifier: Modifier = Modifier) {
         Spacer(Modifier.height(10.dp))
 
         AppText(
-            text = stringResource(R.string.homt_empty_goal_guide),
+            text = stringResource(R.string.home_empty_goal_guide),
             style = AppTextStyle.T2,
             color = GrayColor.C200,
         )
