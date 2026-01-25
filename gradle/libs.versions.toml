@@ -40,6 +40,9 @@ compose-ui-test = "1.7.8"
 # Ktlint
 ktlint = "14.0.1"
 
+# CameraX
+cameraX = "1.5.2"
+
 # ksp
 ksp = "2.3.1"
 
@@ -60,14 +63,13 @@ kermit = "2.0.8"
 junit = "4.13.2"
 espressoCore = "3.7.0"
 appcompat = "1.7.1"
-cameraX = "1.5.2"
-cameraLifecycle = "1.5.2"
 
 [libraries]
 # AndroidX
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "androidx-core-ktx" }
 androidx-lifecycle-runtime-ktx = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "androidx-lifecycle-runtime-ktx" }
 
+# CameraX
 androidx-camera-camera2 = { module = "androidx.camera:camera-camera2", version.ref = "cameraX" }
 androidx-camera-lifecycle = { module = "androidx.camera:camera-lifecycle", version.ref = "cameraX" }
 androidx-camera-view = { group = "androidx.camera", name = "camera-view", version.ref = "cameraX" }
