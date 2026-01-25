@@ -37,6 +37,7 @@ fun HomeRoute(viewModel: HomeViewModel = koinViewModel()) {
         onPreviousWeek = { viewModel.dispatch(HomeIntent.PreviousWeek) },
         onNextWeek = { viewModel.dispatch(HomeIntent.NextWeek) },
         onUpdateVisibleDate = { viewModel.dispatch(HomeIntent.UpdateVisibleDate(it)) },
+        onMoveToToday = { viewModel.dispatch(HomeIntent.MoveToToday) },
     )
 }
 
@@ -47,6 +48,7 @@ fun HomeScreen(
     onPreviousWeek: () -> Unit,
     onNextWeek: () -> Unit,
     onUpdateVisibleDate: (LocalDate) -> Unit,
+    onMoveToToday: () -> Unit,
 ) {
     Box(
         modifier =
@@ -62,6 +64,7 @@ fun HomeScreen(
                 monthYearText = uiState.monthYear,
                 onNotificationClick = {},
                 onSettingClick = {},
+                onMoveToToday = onMoveToToday,
             )
 
             WeeklyCalendar(

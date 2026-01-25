@@ -1,8 +1,8 @@
 package com.twix.home.component
 
+import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -12,11 +12,9 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -26,12 +24,14 @@ import com.twix.designsystem.components.text.AppText
 import com.twix.designsystem.theme.GrayColor
 import com.twix.designsystem.theme.TwixTheme
 import com.twix.domain.model.enums.AppTextStyle
+import com.twix.ui.extension.noRippleClickable
 
 @Composable
 fun HomeTopBar(
     monthYearText: String,
     onNotificationClick: () -> Unit,
     onSettingClick: () -> Unit,
+    onMoveToToday: () -> Unit,
 ) {
     Row(
         modifier =
@@ -65,11 +65,22 @@ fun HomeTopBar(
 
             Spacer(Modifier.height(4.dp))
 
-            AppText(
-                text = stringResource(R.string.home_today_goal),
-                style = AppTextStyle.H3,
-                color = GrayColor.C400,
-            )
+            Row(
+                verticalAlignment = Alignment.Top,
+                horizontalArrangement = Arrangement.spacedBy(4.dp),
+            ) {
+                AppText(
+                    text = stringResource(R.string.home_today_goal),
+                    style = AppTextStyle.H3,
+                    color = GrayColor.C400,
+                )
+
+                Image(
+                    painter = painterResource(R.drawable.ic_refresh),
+                    contentDescription = "refresh",
+                    modifier = Modifier.noRippleClickable(onClick = onMoveToToday),
+                )
+            }
 
             Spacer(Modifier.height(2.dp))
         }
@@ -77,13 +88,13 @@ fun HomeTopBar(
         Spacer(Modifier.weight(1f))
 
         TopBarButton(
-            icon = painterResource(id = R.drawable.ic_alert),
+            iconRes = R.drawable.ic_alert,
             contentDescription = "notification",
             onClick = onNotificationClick,
         )
 
         TopBarButton(
-            icon = painterResource(id = R.drawable.ic_setting),
+            iconRes = R.drawable.ic_setting,
             contentDescription = "setting",
             onClick = onSettingClick,
         )
@@ -92,25 +103,19 @@ fun HomeTopBar(
 
 @Composable
 private fun TopBarButton(
-    icon: Painter,
+    @DrawableRes iconRes: Int,
     contentDescription: String,
     onClick: () -> Unit,
 ) {
-    val interactionSource = remember { MutableInteractionSource() }
-
     Box(
         modifier =
             Modifier
                 .size(40.dp)
-                .clickable(
-                    indication = null,
-                    interactionSource = interactionSource,
-                    onClick = onClick,
-                ),
+                .noRippleClickable(onClick = onClick),
         contentAlignment = Alignment.Center,
     ) {
         Image(
-            painter = icon,
+            painter = painterResource(id = iconRes),
             contentDescription = contentDescription,
         )
     }
@@ -122,6 +127,7 @@ private fun Preview() {
     TwixTheme {
         HomeTopBar(
             monthYearText = "1월 22일",
+            {},
             {},
             {},
         )

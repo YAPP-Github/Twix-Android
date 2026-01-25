@@ -12,6 +12,8 @@ sealed interface HomeIntent : Intent {
 
     data object NextWeek : HomeIntent
 
+    data object MoveToToday : HomeIntent
+
     data class UpdateVisibleDate(
         val date: LocalDate,
     ) : HomeIntent
