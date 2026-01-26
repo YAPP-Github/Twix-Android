@@ -30,6 +30,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.twix.designsystem.R
@@ -58,6 +59,7 @@ fun ToastHost(
     var dismissJob by remember { mutableStateOf<Job?>(null) }
     val animationMs = 200
 
+    // 가장 최신 토스트만을 렌더링하기 위해서 collectLatest를 사용
     LaunchedEffect(toastManager) {
         toastManager.toasts.collectLatest { toast ->
             dismissJob?.cancel()
@@ -74,6 +76,7 @@ fun ToastHost(
         }
     }
 
+    // 이 메서드는 보러가기 버튼을 클릭했을 때 토스트가 바로 사라지도록 처리하기 위해서 추가
     fun dismiss() {
         dismissJob?.cancel()
         visible = false
@@ -153,9 +156,9 @@ private fun ToastItem(
                 text = data.message,
                 style = AppTextStyle.B1,
                 color = CommonColor.White,
+                modifier = Modifier.weight(1f),
+                textAlign = TextAlign.Start,
             )
-
-            Spacer(Modifier.weight(1f))
 
             data.action?.let {
                 ActionButton(it, onDismiss)
@@ -180,8 +183,8 @@ private fun ActionButton(
                 .padding(vertical = 5.5.dp, horizontal = 12.dp)
                 .noRippleClickable(
                     onClick = {
-                        onDismiss()
                         action.onClick()
+                        onDismiss()
                     },
                 ),
     )
