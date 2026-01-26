@@ -1,4 +1,4 @@
-package com.peto.task_certification.camera
+package com.twix.task_certification.camera
 
 import android.content.ContentValues
 import android.content.Context

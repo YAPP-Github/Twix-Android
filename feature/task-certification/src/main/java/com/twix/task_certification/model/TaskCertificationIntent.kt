@@ -1,4 +1,4 @@
-package com.peto.task_certification.model
+package com.twix.task_certification.model
 
 import androidx.lifecycle.LifecycleOwner
 import com.twix.ui.base.Intent

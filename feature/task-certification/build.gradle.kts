@@ -3,7 +3,7 @@ plugins {
 }
 
 android {
-    namespace = "com.peto.task_certification"
+    namespace = "com.twix.task_certification"
 }
 dependencies {
     implementation(libs.bundles.cameraX)

@@ -1,4 +1,4 @@
-package com.peto.task_certification.component
+package com.twix.task_certification.component
 
 import androidx.camera.compose.CameraXViewfinder
 import androidx.compose.foundation.border
@@ -15,10 +15,10 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
-import com.peto.task_certification.model.CameraPreview
-import com.peto.task_certification.model.CaptureStatus
 import com.twix.designsystem.theme.GrayColor
 import com.twix.designsystem.theme.TwixTheme
+import com.twix.task_certification.model.CameraPreview
+import com.twix.task_certification.model.CaptureStatus
 
 @Composable
 internal fun CameraPreviewBox(

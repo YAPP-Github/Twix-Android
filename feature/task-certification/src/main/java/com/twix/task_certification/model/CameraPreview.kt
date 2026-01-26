@@ -1,4 +1,4 @@
-package com.peto.task_certification.model
+package com.twix.task_certification.model
 
 import androidx.camera.core.SurfaceRequest
 import androidx.compose.runtime.Immutable

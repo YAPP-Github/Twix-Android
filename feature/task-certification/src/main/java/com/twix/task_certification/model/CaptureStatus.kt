@@ -1,4 +1,4 @@
-package com.peto.task_certification.model
+package com.twix.task_certification.model
 
 import android.net.Uri
 

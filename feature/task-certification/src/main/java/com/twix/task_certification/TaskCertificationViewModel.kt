@@ -1,13 +1,13 @@
-package com.peto.task_certification
+package com.twix.task_certification
 
 import android.net.Uri
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.viewModelScope
-import com.peto.task_certification.camera.Camera
-import com.peto.task_certification.model.CameraPreview
-import com.peto.task_certification.model.TaskCertificationIntent
-import com.peto.task_certification.model.TaskCertificationSideEffect
-import com.peto.task_certification.model.TaskCertificationUiState
+import com.twix.task_certification.camera.Camera
+import com.twix.task_certification.model.CameraPreview
+import com.twix.task_certification.model.TaskCertificationIntent
+import com.twix.task_certification.model.TaskCertificationSideEffect
+import com.twix.task_certification.model.TaskCertificationUiState
 import com.twix.ui.base.BaseViewModel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
@@ -75,7 +75,7 @@ class TaskCertificationViewModel(
 
     private fun updateCapturedCImage(uri: Uri?) {
         uri?.let {
-            reduce { updateCapturedCImage(uri) }
+            reduce { updateCapturedImage(uri) }
         } ?: run {
             viewModelScope.launch {
                 emitSideEffect(TaskCertificationSideEffect.ImageCaptureFailException)

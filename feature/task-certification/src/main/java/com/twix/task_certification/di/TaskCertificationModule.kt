@@ -1,8 +1,8 @@
-package com.peto.task_certification.di
+package com.twix.task_certification.di
 
-import com.peto.task_certification.TaskCertificationViewModel
-import com.peto.task_certification.camera.Camera
-import com.peto.task_certification.camera.CaptureCamera
+import com.twix.task_certification.TaskCertificationViewModel
+import com.twix.task_certification.camera.Camera
+import com.twix.task_certification.camera.CaptureCamera
 import org.koin.core.module.dsl.viewModelOf
 import org.koin.dsl.module
 

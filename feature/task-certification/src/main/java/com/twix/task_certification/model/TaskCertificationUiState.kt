@@ -1,4 +1,4 @@
-package com.peto.task_certification.model
+package com.twix.task_certification.model
 
 import android.net.Uri
 import androidx.camera.core.CameraSelector
@@ -21,5 +21,5 @@ data class TaskCertificationUiState(
         return copy(lens = newLens)
     }
 
-    fun updateCapturedCImage(uri: Uri) = copy(capture = CaptureStatus.Captured(uri))
+    fun updateCapturedImage(uri: Uri) = copy(capture = CaptureStatus.Captured(uri))
 }
