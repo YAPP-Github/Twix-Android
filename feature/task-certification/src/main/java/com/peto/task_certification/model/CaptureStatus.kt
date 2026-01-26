@@ -1,0 +1,11 @@
+package com.peto.task_certification.model
+
+import android.net.Uri
+
+sealed interface CaptureStatus {
+    data class Captured(
+        val uri: Uri,
+    ) : CaptureStatus
+
+    data object NotCaptured : CaptureStatus
+}
