@@ -5,7 +5,6 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.viewModelScope
 import com.peto.task_certification.camera.Camera
 import com.peto.task_certification.model.CameraPreview
-import com.peto.task_certification.model.CaptureStatus
 import com.peto.task_certification.model.TaskCertificationIntent
 import com.peto.task_certification.model.TaskCertificationSideEffect
 import com.peto.task_certification.model.TaskCertificationUiState
@@ -37,6 +36,10 @@ class TaskCertificationViewModel(
             is TaskCertificationIntent.TakePicture -> {
                 takePicture()
             }
+
+            is TaskCertificationIntent.ToggleCamera -> {
+                toggleCamera(intent.lifecycleOwner)
+            }
         }
     }
 
@@ -64,8 +67,10 @@ class TaskCertificationViewModel(
         }
     }
 
-    private suspend fun bindCamera(lifecycleOwner: LifecycleOwner) {
-        camera.bind(lifecycleOwner, uiState.value.lens)
+    private fun bindCamera(lifecycleOwner: LifecycleOwner) {
+        viewModelScope.launch {
+            camera.bind(lifecycleOwner, uiState.value.lens)
+        }
     }
 
     private fun updateCapturedCImage(uri: Uri?) {
@@ -76,5 +81,10 @@ class TaskCertificationViewModel(
                 emitSideEffect(TaskCertificationSideEffect.ImageCaptureFailException)
             }
         }
+    }
+
+    private fun toggleCamera(lifecycleOwner: LifecycleOwner) {
+        reduce { toggleLens() }
+        bindCamera(lifecycleOwner)
     }
 }

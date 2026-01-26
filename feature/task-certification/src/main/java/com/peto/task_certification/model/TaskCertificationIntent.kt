@@ -9,4 +9,8 @@ sealed interface TaskCertificationIntent : Intent {
     data class BindCamera(
         val lifecycleOwner: LifecycleOwner,
     ) : TaskCertificationIntent
+
+    data class ToggleCamera(
+        val lifecycleOwner: LifecycleOwner,
+    ) : TaskCertificationIntent
 }
