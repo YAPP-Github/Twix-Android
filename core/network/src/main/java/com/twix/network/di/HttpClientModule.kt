@@ -16,7 +16,7 @@ internal val httpClientModule =
             )
         }
 
-        single {
+        single<Ktorfit> {
             Ktorfit
                 .Builder()
                 .baseUrl(BuildConfig.BASE_URL)
