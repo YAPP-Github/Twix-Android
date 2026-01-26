@@ -1,5 +1,7 @@
 package com.twix.network.service
 
+import com.twix.network.model.request.CoupleConnectionReqeust
+import com.twix.network.model.request.ProfileRequest
 import com.twix.network.model.response.onboarding.InviteCodeResponse
 import com.twix.network.model.response.onboarding.OnBoardingStatusResponse
 import de.jensklingenberg.ktorfit.http.Body
@@ -14,12 +16,12 @@ interface OnboardingService {
 
     @POST("onboarding/couple-connection")
     suspend fun coupleConnection(
-        @Body request: String,
+        @Body request: CoupleConnectionReqeust,
     )
 
     @POST("onboarding/profile")
     suspend fun profileSetup(
-        @Body request: String,
+        @Body request: ProfileRequest,
     )
 
     @GET("onboarding/invite-code")

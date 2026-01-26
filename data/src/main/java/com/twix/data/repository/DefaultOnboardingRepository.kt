@@ -3,6 +3,8 @@ package com.twix.data.repository
 import com.twix.domain.model.InviteCode
 import com.twix.domain.model.OnboardingStatus
 import com.twix.domain.repository.OnBoardingRepository
+import com.twix.network.model.request.CoupleConnectionReqeust
+import com.twix.network.model.request.ProfileRequest
 import com.twix.network.service.OnboardingService
 
 class DefaultOnboardingRepository(
@@ -23,10 +25,10 @@ class DefaultOnboardingRepository(
     }
 
     override suspend fun coupleConnection(request: String) {
-        service.coupleConnection(request)
+        service.coupleConnection(CoupleConnectionReqeust(request))
     }
 
     override suspend fun profileSetup(request: String) {
-        service.profileSetup(request)
+        service.profileSetup(ProfileRequest(request))
     }
 }
