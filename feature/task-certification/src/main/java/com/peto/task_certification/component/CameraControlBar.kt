@@ -3,7 +3,6 @@ package com.peto.task_certification.component
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
@@ -24,6 +23,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.peto.task_certification.R
 import com.twix.designsystem.theme.GrayColor
+import com.twix.ui.extension.noRippleClickable
 
 @Composable
 internal fun CameraControlBar(
@@ -65,19 +65,13 @@ internal fun CameraControlBar(
 
         Image(
             imageVector = ImageVector.vectorResource(R.drawable.ic_camera_shutter),
-            contentDescription = "카메라 촬영 버튼",
-            modifier =
-                Modifier.clickable {
-                    onCaptureClick()
-                },
+            contentDescription = null,
+            modifier = Modifier.noRippleClickable(onCaptureClick),
         )
         Image(
             imageVector = ImageVector.vectorResource(R.drawable.ic_camera_toggle),
-            contentDescription = "카메라 토글 버튼",
-            modifier =
-                Modifier.clickable {
-                    onToggleCameraClick()
-                },
+            contentDescription = null,
+            modifier = Modifier.noRippleClickable(onToggleCameraClick),
         )
     }
 }
