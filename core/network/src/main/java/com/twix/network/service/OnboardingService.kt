@@ -1,6 +1,6 @@
 package com.twix.network.service
 
-import com.twix.network.model.request.CoupleConnectionReqeust
+import com.twix.network.model.request.CoupleConnectionRequest
 import com.twix.network.model.request.ProfileRequest
 import com.twix.network.model.response.onboarding.InviteCodeResponse
 import com.twix.network.model.response.onboarding.OnBoardingStatusResponse
@@ -16,7 +16,7 @@ interface OnboardingService {
 
     @POST("onboarding/couple-connection")
     suspend fun coupleConnection(
-        @Body request: CoupleConnectionReqeust,
+        @Body request: CoupleConnectionRequest,
     )
 
     @POST("onboarding/profile")
