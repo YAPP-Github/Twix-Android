@@ -70,7 +70,7 @@ class TaskCertificationViewModel(
 
     private fun updateCapturedCImage(uri: Uri?) {
         uri?.let {
-            reduce { copy(capture = CaptureStatus.Captured(uri)) }
+            reduce { updateCapturedCImage(uri) }
         } ?: run {
             viewModelScope.launch {
                 emitSideEffect(TaskCertificationSideEffect.ImageCaptureFailException)
