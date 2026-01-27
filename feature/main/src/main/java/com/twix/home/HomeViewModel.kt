@@ -3,10 +3,12 @@ package com.twix.home
 import com.twix.domain.model.enums.WeekNavigation
 import com.twix.home.model.HomeUiState
 import com.twix.ui.base.BaseViewModel
+import com.twix.ui.toast.ToastManager
 import java.time.LocalDate
 
-class HomeViewModel :
-    BaseViewModel<HomeUiState, HomeIntent, HomeSideEffect>(
+class HomeViewModel(
+    private val toastManager: ToastManager,
+) : BaseViewModel<HomeUiState, HomeIntent, HomeSideEffect>(
         HomeUiState(),
     ) {
     override suspend fun handleIntent(intent: HomeIntent) {
