@@ -1,6 +1,5 @@
 package com.twix.task_certification
 
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -51,7 +50,6 @@ fun TaskCertificationRoute(
             viewModel.dispatch(TaskCertificationIntent.ToggleCamera(lifecycleOwner))
         },
         onClickFlash = {
-            Log.d("dasdas", "onClickFlash")
             viewModel.dispatch(TaskCertificationIntent.ToggleFlash(lifecycleOwner))
         },
     )
