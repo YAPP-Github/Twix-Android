@@ -1,6 +1,8 @@
 package com.twix.task_certification
 
-import android.util.Log
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.PickVisualMediaRequest
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -35,6 +37,11 @@ fun TaskCertificationRoute(
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val lifecycleOwner = LocalLifecycleOwner.current
 
+    val pickMedia =
+        rememberLauncherForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
+            viewModel.dispatch(TaskCertificationIntent.PickPicture(uri))
+        }
+
     LaunchedEffect(Unit) {
         viewModel.dispatch(TaskCertificationIntent.BindCamera(lifecycleOwner))
     }
@@ -51,8 +58,10 @@ fun TaskCertificationRoute(
             viewModel.dispatch(TaskCertificationIntent.ToggleCamera(lifecycleOwner))
         },
         onClickFlash = {
-            Log.d("dasdas", "onClickFlash")
             viewModel.dispatch(TaskCertificationIntent.ToggleFlash(lifecycleOwner))
+        },
+        onClickGallery = {
+            pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
         },
     )
 }
@@ -64,6 +73,7 @@ private fun TaskCertificationScreen(
     onCaptureClick: () -> Unit,
     onToggleCameraClick: () -> Unit,
     onClickFlash: () -> Unit,
+    onClickGallery: () -> Unit,
 ) {
     Column(
         Modifier
@@ -97,6 +107,7 @@ private fun TaskCertificationScreen(
         CameraControlBar(
             onCaptureClick = onCaptureClick,
             onToggleCameraClick = onToggleCameraClick,
+            onClickGallery = onClickGallery,
         )
     }
 }
@@ -111,6 +122,7 @@ fun TaskCertificationScreenPreview() {
             onCaptureClick = {},
             onToggleCameraClick = {},
             onClickFlash = {},
+            onClickGallery = {},
         )
     }
 }

@@ -26,6 +26,7 @@ internal fun CameraControlBar(
     modifier: Modifier = Modifier,
     onCaptureClick: () -> Unit,
     onToggleCameraClick: () -> Unit,
+    onClickGallery: () -> Unit,
 ) {
     Row(
         modifier =
@@ -43,7 +44,8 @@ internal fun CameraControlBar(
             modifier =
                 Modifier
                     .size(52.dp)
-                    .clip(RoundedCornerShape(3.dp)),
+                    .clip(RoundedCornerShape(3.dp))
+                    .noRippleClickable(onClickGallery),
         )
 
         Image(
@@ -69,5 +71,6 @@ private fun CameraControlBarPreview() {
     CameraControlBar(
         onCaptureClick = {},
         onToggleCameraClick = {},
+        onClickGallery = {},
     )
 }

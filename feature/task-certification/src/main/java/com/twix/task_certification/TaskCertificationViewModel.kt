@@ -8,6 +8,7 @@ import com.twix.task_certification.model.CameraPreview
 import com.twix.task_certification.model.TaskCertificationIntent
 import com.twix.task_certification.model.TaskCertificationSideEffect
 import com.twix.task_certification.model.TaskCertificationUiState
+import com.twix.task_certification.model.TorchStatus
 import com.twix.ui.base.BaseViewModel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
@@ -43,6 +44,9 @@ class TaskCertificationViewModel(
 
             is TaskCertificationIntent.ToggleFlash -> {
                 toggleTorch()
+            }
+            is TaskCertificationIntent.PickPicture -> {
+                updateCapturedCImage(intent.uri)
             }
         }
     }
@@ -80,7 +84,7 @@ class TaskCertificationViewModel(
     private fun updateCapturedCImage(uri: Uri?) {
         uri?.let {
             reduce { updateCapturedImage(uri) }
-            reduce { toggleTorch() }
+            if (uiState.value.torch == TorchStatus.On) toggleTorch()
         } ?: run {
             viewModelScope.launch {
                 emitSideEffect(TaskCertificationSideEffect.ImageCaptureFailException)

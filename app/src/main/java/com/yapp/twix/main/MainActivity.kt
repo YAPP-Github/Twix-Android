@@ -8,7 +8,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.safeContentPadding
 import androidx.compose.ui.Modifier
 import com.twix.designsystem.theme.TwixTheme
-import com.twix.navigation.AppNavHost
+import com.twix.task_certification.TaskCertificationRoute
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -22,7 +22,8 @@ class MainActivity : ComponentActivity() {
                             .safeContentPadding()
                             .fillMaxSize(),
                 ) {
-                    AppNavHost()
+                    // AppNavHost()
+                    TaskCertificationRoute {}
                 }
             }
         }
