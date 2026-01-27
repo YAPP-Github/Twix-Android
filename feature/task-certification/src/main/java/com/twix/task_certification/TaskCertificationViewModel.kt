@@ -47,7 +47,7 @@ class TaskCertificationViewModel(
             }
 
             is TaskCertificationIntent.PickPicture -> {
-                this@TaskCertificationViewModel.updateCapturedPicture(intent.uri)
+                pickPicture(intent.uri)
             }
 
             is TaskCertificationIntent.RetakePicture -> {
@@ -58,19 +58,33 @@ class TaskCertificationViewModel(
 
     private fun takePicture() {
         camera.takePicture(
-            onComplete = {
-                this@TaskCertificationViewModel.updateCapturedPicture(it)
+            onComplete = { uri ->
+                savePicture(uri, TaskCertificationSideEffect.ImageCaptureFailException)
                 unbindCamera()
             },
             onFailure = {
-                onFailureCapture()
+                viewModelScope.launch {
+                    emitSideEffect(TaskCertificationSideEffect.ImageCaptureFailException)
+                }
             },
         )
     }
 
-    private fun onFailureCapture() {
-        viewModelScope.launch {
-            emitSideEffect(TaskCertificationSideEffect.ImageCaptureFailException)
+    private fun pickPicture(uri: Uri?) {
+        savePicture(uri, TaskCertificationSideEffect.ImagePickFailException)
+    }
+
+    private fun savePicture(
+        uri: Uri?,
+        sideEffect: TaskCertificationSideEffect,
+    ) {
+        uri?.let {
+            reduce { this.updatePicture(uri) }
+            if (uiState.value.torch == TorchStatus.On) toggleTorch()
+        } ?: run {
+            viewModelScope.launch {
+                emitSideEffect(sideEffect)
+            }
         }
     }
 
@@ -86,17 +100,6 @@ class TaskCertificationViewModel(
         }
     }
 
-    private fun updateCapturedPicture(uri: Uri?) {
-        uri?.let {
-            reduce { this.updateCapturedPicture(uri) }
-            if (uiState.value.torch == TorchStatus.On) toggleTorch()
-        } ?: run {
-            viewModelScope.launch {
-                emitSideEffect(TaskCertificationSideEffect.ImageCaptureFailException)
-            }
-        }
-    }
-
     private fun toggleCamera(lifecycleOwner: LifecycleOwner) {
         reduce { toggleLens() }
         bindCamera(lifecycleOwner)
@@ -108,7 +111,7 @@ class TaskCertificationViewModel(
     }
 
     private fun setupRetake(lifecycleOwner: LifecycleOwner) {
-        reduce { removeCapture() }
+        reduce { removePicture() }
         bindCamera(lifecycleOwner)
     }
 }
