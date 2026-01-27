@@ -8,6 +8,7 @@ import com.twix.ui.base.State
 @Immutable
 data class TaskCertificationUiState(
     val capture: CaptureStatus = CaptureStatus.NotCaptured,
+    val torch: TorchStatus = TorchStatus.Off,
     val lens: CameraSelector = CameraSelector.DEFAULT_BACK_CAMERA,
     val preview: CameraPreview? = null,
 ) : State {
@@ -19,6 +20,11 @@ data class TaskCertificationUiState(
                 CameraSelector.DEFAULT_BACK_CAMERA
             }
         return copy(lens = newLens)
+    }
+
+    fun toggleTorch(): TaskCertificationUiState {
+        val newFlashMode = TorchStatus.toggle(torch)
+        return copy(torch = newFlashMode)
     }
 
     fun updateCapturedImage(uri: Uri) = copy(capture = CaptureStatus.Captured(uri))

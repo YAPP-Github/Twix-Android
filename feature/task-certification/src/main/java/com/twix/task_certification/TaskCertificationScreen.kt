@@ -1,5 +1,6 @@
 package com.twix.task_certification
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -19,7 +20,6 @@ import com.twix.designsystem.components.text.AppText
 import com.twix.designsystem.theme.GrayColor
 import com.twix.designsystem.theme.TwixTheme
 import com.twix.domain.model.enums.AppTextStyle
-import com.twix.task_certification.R
 import com.twix.task_certification.component.CameraControlBar
 import com.twix.task_certification.component.CameraPreviewBox
 import com.twix.task_certification.component.TaskCertificationTopBar
@@ -50,6 +50,10 @@ fun TaskCertificationRoute(
         onToggleCameraClick = {
             viewModel.dispatch(TaskCertificationIntent.ToggleCamera(lifecycleOwner))
         },
+        onClickFlash = {
+            Log.d("dasdas", "onClickFlash")
+            viewModel.dispatch(TaskCertificationIntent.ToggleFlash(lifecycleOwner))
+        },
     )
 }
 
@@ -59,6 +63,7 @@ private fun TaskCertificationScreen(
     onClickClose: () -> Unit,
     onCaptureClick: () -> Unit,
     onToggleCameraClick: () -> Unit,
+    onClickFlash: () -> Unit,
 ) {
     Column(
         Modifier
@@ -81,8 +86,10 @@ private fun TaskCertificationScreen(
         Spacer(modifier = Modifier.height(40.dp))
 
         CameraPreviewBox(
-            captureStatus = uiState.capture,
+            capture = uiState.capture,
             previewRequest = uiState.preview,
+            torch = uiState.torch,
+            onClickFlash = { onClickFlash() },
         )
 
         Spacer(modifier = Modifier.height(52.dp))
@@ -103,6 +110,7 @@ fun TaskCertificationScreenPreview() {
             onClickClose = {},
             onCaptureClick = {},
             onToggleCameraClick = {},
+            onClickFlash = {},
         )
     }
 }

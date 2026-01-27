@@ -40,6 +40,10 @@ class TaskCertificationViewModel(
             is TaskCertificationIntent.ToggleCamera -> {
                 toggleCamera(intent.lifecycleOwner)
             }
+
+            is TaskCertificationIntent.ToggleFlash -> {
+                toggleTorch()
+            }
         }
     }
 
@@ -76,6 +80,7 @@ class TaskCertificationViewModel(
     private fun updateCapturedCImage(uri: Uri?) {
         uri?.let {
             reduce { updateCapturedImage(uri) }
+            reduce { toggleTorch() }
         } ?: run {
             viewModelScope.launch {
                 emitSideEffect(TaskCertificationSideEffect.ImageCaptureFailException)
@@ -86,5 +91,10 @@ class TaskCertificationViewModel(
     private fun toggleCamera(lifecycleOwner: LifecycleOwner) {
         reduce { toggleLens() }
         bindCamera(lifecycleOwner)
+    }
+
+    private fun toggleTorch() {
+        reduce { toggleTorch() }
+        camera.toggleTorch(uiState.value.torch)
     }
 }
