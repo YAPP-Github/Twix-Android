@@ -13,6 +13,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -26,16 +27,45 @@ import com.twix.task_certification.component.CameraControlBar
 import com.twix.task_certification.component.CameraPreviewBox
 import com.twix.task_certification.component.TaskCertificationTopBar
 import com.twix.task_certification.model.TaskCertificationIntent
+import com.twix.task_certification.model.TaskCertificationSideEffect
 import com.twix.task_certification.model.TaskCertificationUiState
+import com.twix.ui.base.ObserveAsEvents
+import com.twix.ui.toast.ToastManager
+import com.twix.ui.toast.model.ToastData
+import com.twix.ui.toast.model.ToastType
 import org.koin.androidx.compose.koinViewModel
+import org.koin.compose.koinInject
 
 @Composable
 fun TaskCertificationRoute(
+    toastManager: ToastManager = koinInject(),
     viewModel: TaskCertificationViewModel = koinViewModel(),
     navigateToBack: () -> Unit,
 ) {
-    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val context = LocalContext.current
     val lifecycleOwner = LocalLifecycleOwner.current
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    ObserveAsEvents(viewModel.sideEffect) { event ->
+        when (event) {
+            TaskCertificationSideEffect.ImageCaptureFailException -> {
+                toastManager.tryShow(
+                    ToastData(
+                        message = context.getString(R.string.task_certification_image_capture_fail),
+                        type = ToastType.ERROR,
+                    ),
+                )
+            }
+
+            TaskCertificationSideEffect.ImagePickFailException -> {
+                toastManager.tryShow(
+                    ToastData(
+                        message = context.getString(R.string.task_certification_image_pick_fail),
+                        type = ToastType.ERROR,
+                    ),
+                )
+            }
+        }
+    }
 
     val pickMedia =
         rememberLauncherForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
