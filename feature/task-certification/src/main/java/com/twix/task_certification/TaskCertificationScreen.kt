@@ -68,7 +68,7 @@ fun TaskCertificationRoute(
             viewModel.dispatch(TaskCertificationIntent.ToggleLens)
         },
         onClickFlash = {
-            viewModel.dispatch(TaskCertificationIntent.ToggleFlash(lifecycleOwner))
+            viewModel.dispatch(TaskCertificationIntent.ToggleFlash)
         },
     )
 }
