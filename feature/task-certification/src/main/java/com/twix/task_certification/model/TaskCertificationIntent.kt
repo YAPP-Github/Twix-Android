@@ -14,7 +14,5 @@ sealed interface TaskCertificationIntent : Intent {
         val lifecycleOwner: LifecycleOwner,
     ) : TaskCertificationIntent
 
-    data class ToggleFlash(
-        val lifecycleOwner: LifecycleOwner,
-    ) : TaskCertificationIntent
+    data object ToggleFlash : TaskCertificationIntent
 }
