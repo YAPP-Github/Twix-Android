@@ -27,7 +27,7 @@ data class TaskCertificationUiState(
         return copy(torch = newFlashMode)
     }
 
-    fun updateCapturedImage(uri: Uri) = copy(capture = CaptureStatus.Captured(uri))
+    fun updateCapturedPicture(uri: Uri) = copy(capture = CaptureStatus.Captured(uri))
 
     fun removeCapture(): TaskCertificationUiState = copy(capture = CaptureStatus.NotCaptured)
 }

@@ -47,7 +47,7 @@ class TaskCertificationViewModel(
             }
 
             is TaskCertificationIntent.PickPicture -> {
-                updateCapturedCImage(intent.uri)
+                this@TaskCertificationViewModel.updateCapturedPicture(intent.uri)
             }
 
             is TaskCertificationIntent.RetakePicture -> {
@@ -59,7 +59,7 @@ class TaskCertificationViewModel(
     private fun takePicture() {
         camera.takePicture(
             onComplete = {
-                updateCapturedCImage(it)
+                this@TaskCertificationViewModel.updateCapturedPicture(it)
                 unbindCamera()
             },
             onFailure = {
@@ -86,9 +86,9 @@ class TaskCertificationViewModel(
         }
     }
 
-    private fun updateCapturedCImage(uri: Uri?) {
+    private fun updateCapturedPicture(uri: Uri?) {
         uri?.let {
-            reduce { updateCapturedImage(uri) }
+            reduce { this.updateCapturedPicture(uri) }
             if (uiState.value.torch == TorchStatus.On) toggleTorch()
         } ?: run {
             viewModelScope.launch {
