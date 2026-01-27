@@ -5,6 +5,7 @@ import androidx.camera.core.CameraSelector
 import androidx.camera.core.ImageCaptureException
 import androidx.camera.core.SurfaceRequest
 import androidx.lifecycle.LifecycleOwner
+import com.twix.task_certification.model.TorchStatus
 import kotlinx.coroutines.flow.StateFlow
 
 interface Camera {
@@ -21,4 +22,6 @@ interface Camera {
         onComplete: (Uri?) -> Unit,
         onFailure: (ImageCaptureException) -> Unit,
     )
+
+    fun toggleTorch(torch: TorchStatus)
 }

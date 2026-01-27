@@ -5,6 +5,8 @@ import android.content.Context
 import android.net.Uri
 import android.os.Build
 import android.provider.MediaStore
+import androidx.camera.core.CameraControl
+import androidx.camera.core.CameraInfo
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.ImageCapture
 import androidx.camera.core.ImageCaptureException
@@ -13,6 +15,7 @@ import androidx.camera.core.SurfaceRequest
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.camera.lifecycle.awaitInstance
 import androidx.core.content.ContextCompat
+import com.twix.task_certification.model.TorchStatus
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -20,6 +23,9 @@ import kotlinx.coroutines.flow.asStateFlow
 class CaptureCamera(
     private val context: Context,
 ) : Camera {
+    private var cameraControl: CameraControl? = null
+    private var cameraInfo: CameraInfo? = null
+
     private val _surfaceRequests = MutableStateFlow<SurfaceRequest?>(null)
     override val surfaceRequests: StateFlow<SurfaceRequest?> = _surfaceRequests.asStateFlow()
 
@@ -45,12 +51,17 @@ class CaptureCamera(
     ) {
         val provider = ProcessCameraProvider.awaitInstance(context)
         provider.unbindAll()
-        provider.bindToLifecycle(
-            lifecycleOwner,
-            lens,
-            preview,
-            imageCapture,
-        )
+
+        val camera =
+            provider.bindToLifecycle(
+                lifecycleOwner,
+                lens,
+                preview,
+                imageCapture,
+            )
+
+        cameraControl = camera.cameraControl
+        cameraInfo = camera.cameraInfo
     }
 
     override fun takePicture(
@@ -111,6 +122,13 @@ class CaptureCamera(
 
     override suspend fun unbind() {
         ProcessCameraProvider.awaitInstance(context).unbindAll()
+    }
+
+    override fun toggleTorch(torch: TorchStatus) {
+        when (torch) {
+            TorchStatus.On -> cameraControl?.enableTorch(true)
+            TorchStatus.Off -> cameraControl?.enableTorch(false)
+        }
     }
 
     companion object Companion {
