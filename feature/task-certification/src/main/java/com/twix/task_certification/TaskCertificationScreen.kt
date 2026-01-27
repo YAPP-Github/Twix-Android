@@ -3,6 +3,7 @@ package com.twix.task_certification
 import android.Manifest
 import android.content.pm.PackageManager
 import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
@@ -68,6 +69,11 @@ fun TaskCertificationRoute(
             hasPermission = granted
         }
 
+    val pickMedia =
+        rememberLauncherForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
+            viewModel.dispatch(TaskCertificationIntent.PickPicture(uri))
+        }
+
     LaunchedEffect(Unit) {
         if (!hasPermission) {
             permissionLauncher.launch(Manifest.permission.CAMERA)
@@ -107,6 +113,9 @@ fun TaskCertificationRoute(
         onClickFlash = {
             viewModel.dispatch(TaskCertificationIntent.ToggleFlash)
         },
+        onClickGallery = {
+            pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
+        },
     )
 }
 
@@ -118,6 +127,7 @@ private fun TaskCertificationScreen(
     onCaptureClick: () -> Unit,
     onToggleCameraClick: () -> Unit,
     onClickFlash: () -> Unit,
+    onClickGallery: () -> Unit,
 ) {
     Column(
         Modifier
@@ -151,6 +161,7 @@ private fun TaskCertificationScreen(
         CameraControlBar(
             onCaptureClick = onCaptureClick,
             onToggleCameraClick = onToggleCameraClick,
+            onClickGallery = onClickGallery,
         )
     }
 }
@@ -166,6 +177,7 @@ fun TaskCertificationScreenPreview() {
             onCaptureClick = {},
             onToggleCameraClick = {},
             onClickFlash = {},
+            onClickGallery = {},
         )
     }
 }

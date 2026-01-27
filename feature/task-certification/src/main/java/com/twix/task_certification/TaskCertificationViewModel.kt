@@ -19,6 +19,10 @@ class TaskCertificationViewModel :
                 takePicture(intent.uri)
             }
 
+            is TaskCertificationIntent.PickPicture -> {
+                pickPicture(intent.uri)
+            }
+
             is TaskCertificationIntent.ToggleLens -> {
                 toggleLens()
             }
@@ -30,17 +34,23 @@ class TaskCertificationViewModel :
     }
 
     private fun takePicture(uri: Uri?) {
-        uri?.let {
-            reduce { updateCapturedImage(uri) }
-            if (uiState.value.torch == TorchStatus.On) {
-                reduce { toggleTorch() }
-            }
-        } ?: run { onFailureCapture() }
+        uri?.let { updatePickPicture(it) } ?: viewModelScope.launch {
+            emitSideEffect(
+                TaskCertificationSideEffect.ImageCaptureFailException,
+            )
+        }
     }
 
-    private fun onFailureCapture() {
-        viewModelScope.launch {
-            emitSideEffect(TaskCertificationSideEffect.ImageCaptureFailException)
+    private fun pickPicture(uri: Uri?) {
+        uri?.let { updatePickPicture(uri) } ?: viewModelScope.launch {
+            emitSideEffect(TaskCertificationSideEffect.ImagePickFailException)
+        }
+    }
+
+    private fun updatePickPicture(uri: Uri) {
+        reduce { updateCapturedImage(uri) }
+        if (uiState.value.torch == TorchStatus.On) {
+            reduce { toggleTorch() }
         }
     }
 
