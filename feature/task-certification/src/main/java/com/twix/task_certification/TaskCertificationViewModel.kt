@@ -8,6 +8,7 @@ import com.twix.task_certification.model.CameraPreview
 import com.twix.task_certification.model.TaskCertificationIntent
 import com.twix.task_certification.model.TaskCertificationSideEffect
 import com.twix.task_certification.model.TaskCertificationUiState
+import com.twix.task_certification.model.TorchStatus
 import com.twix.ui.base.BaseViewModel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
@@ -33,7 +34,7 @@ class TaskCertificationViewModel(
                 bindCamera(intent.lifecycleOwner)
             }
 
-            is TaskCertificationIntent.TakePicture -> {
+            TaskCertificationIntent.TakePicture -> {
                 takePicture()
             }
 
@@ -44,24 +45,46 @@ class TaskCertificationViewModel(
             is TaskCertificationIntent.ToggleFlash -> {
                 toggleTorch()
             }
+
+            is TaskCertificationIntent.PickPicture -> {
+                pickPicture(intent.uri)
+            }
+
+            is TaskCertificationIntent.RetakePicture -> {
+                setupRetake(intent.lifecycleOwner)
+            }
         }
     }
 
     private fun takePicture() {
         camera.takePicture(
-            onComplete = {
-                updateCapturedCImage(it)
+            onComplete = { uri ->
+                savePicture(uri, TaskCertificationSideEffect.ImageCaptureFailException)
                 unbindCamera()
             },
             onFailure = {
-                onFailureCapture()
+                viewModelScope.launch {
+                    emitSideEffect(TaskCertificationSideEffect.ImageCaptureFailException)
+                }
             },
         )
     }
 
-    private fun onFailureCapture() {
-        viewModelScope.launch {
-            emitSideEffect(TaskCertificationSideEffect.ImageCaptureFailException)
+    private fun pickPicture(uri: Uri?) {
+        savePicture(uri, TaskCertificationSideEffect.ImagePickFailException)
+    }
+
+    private fun savePicture(
+        uri: Uri?,
+        sideEffect: TaskCertificationSideEffect,
+    ) {
+        uri?.let {
+            reduce { this.updatePicture(uri) }
+            if (uiState.value.torch == TorchStatus.On) toggleTorch()
+        } ?: run {
+            viewModelScope.launch {
+                emitSideEffect(sideEffect)
+            }
         }
     }
 
@@ -77,17 +100,6 @@ class TaskCertificationViewModel(
         }
     }
 
-    private fun updateCapturedCImage(uri: Uri?) {
-        uri?.let {
-            reduce { updateCapturedImage(uri) }
-            reduce { toggleTorch() }
-        } ?: run {
-            viewModelScope.launch {
-                emitSideEffect(TaskCertificationSideEffect.ImageCaptureFailException)
-            }
-        }
-    }
-
     private fun toggleCamera(lifecycleOwner: LifecycleOwner) {
         reduce { toggleLens() }
         bindCamera(lifecycleOwner)
@@ -96,5 +108,10 @@ class TaskCertificationViewModel(
     private fun toggleTorch() {
         reduce { toggleTorch() }
         camera.toggleTorch(uiState.value.torch)
+    }
+
+    private fun setupRetake(lifecycleOwner: LifecycleOwner) {
+        reduce { removePicture() }
+        bindCamera(lifecycleOwner)
     }
 }
