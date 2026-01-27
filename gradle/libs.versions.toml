@@ -43,6 +43,9 @@ ktlint = "14.0.1"
 # CameraX
 cameraX = "1.5.2"
 
+# Guava
+guava = "33.5.0-android"
+
 # ksp
 ksp = "2.3.1"
 
@@ -140,6 +143,9 @@ kotlin-test = { group = "org.jetbrains.kotlin", name = "kotlin-test", version.re
 # Logging
 kermit = { group = "co.touchlab", name = "kermit", version.ref = "kermit" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
+
+# Guava
+guava = { module = "com.google.guava:guava", version.ref = "guava" }
 
 [bundles]
 androidx = [
