@@ -10,7 +10,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import com.twix.designsystem.theme.TwixTheme
 import com.twix.navigation.AppNavHost
-import com.twix.task_certification.TaskCertificationRoute
 import com.twix.ui.toast.ToastHost
 import com.twix.ui.toast.ToastManager
 import org.koin.android.ext.android.inject
@@ -30,7 +29,7 @@ class MainActivity : ComponentActivity() {
                             .fillMaxSize(),
                 ) {
                     AppNavHost()
-                    TaskCertificationRoute {}
+
                     ToastHost(
                         toastManager = toastManager,
                         modifier =
