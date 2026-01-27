@@ -17,6 +17,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.core.net.toUri
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.twix.designsystem.components.text.AppText
@@ -26,6 +27,7 @@ import com.twix.domain.model.enums.AppTextStyle
 import com.twix.task_certification.component.CameraControlBar
 import com.twix.task_certification.component.CameraPreviewBox
 import com.twix.task_certification.component.TaskCertificationTopBar
+import com.twix.task_certification.model.CaptureStatus
 import com.twix.task_certification.model.TaskCertificationIntent
 import com.twix.task_certification.model.TaskCertificationSideEffect
 import com.twix.task_certification.model.TaskCertificationUiState
@@ -93,6 +95,11 @@ fun TaskCertificationRoute(
         onClickGallery = {
             pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
         },
+        onClickUpload = {
+        },
+        onClickRefresh = {
+            viewModel.dispatch(TaskCertificationIntent.RetakePicture(lifecycleOwner))
+        },
     )
 }
 
@@ -104,6 +111,8 @@ private fun TaskCertificationScreen(
     onToggleCameraClick: () -> Unit,
     onClickFlash: () -> Unit,
     onClickGallery: () -> Unit,
+    onClickUpload: () -> Unit,
+    onClickRefresh: () -> Unit,
 ) {
     Column(
         Modifier
@@ -135,9 +144,12 @@ private fun TaskCertificationScreen(
         Spacer(modifier = Modifier.height(52.dp))
 
         CameraControlBar(
+            capture = uiState.capture,
             onCaptureClick = onCaptureClick,
             onToggleCameraClick = onToggleCameraClick,
             onClickGallery = onClickGallery,
+            onClickRefresh = onClickRefresh,
+            onClickUpload = onClickUpload,
         )
     }
 }
@@ -153,6 +165,25 @@ fun TaskCertificationScreenPreview() {
             onToggleCameraClick = {},
             onClickFlash = {},
             onClickGallery = {},
+            onClickUpload = {},
+            onClickRefresh = {},
+        )
+    }
+}
+
+@Preview
+@Composable
+fun CapturedTaskCertificationScreenPreview() {
+    TwixTheme {
+        TaskCertificationScreen(
+            uiState = TaskCertificationUiState(capture = CaptureStatus.Captured("".toUri())),
+            onClickClose = {},
+            onCaptureClick = {},
+            onToggleCameraClick = {},
+            onClickFlash = {},
+            onClickGallery = {},
+            onClickUpload = {},
+            onClickRefresh = {},
         )
     }
 }

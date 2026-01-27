@@ -34,7 +34,7 @@ class TaskCertificationViewModel(
                 bindCamera(intent.lifecycleOwner)
             }
 
-            is TaskCertificationIntent.TakePicture -> {
+            TaskCertificationIntent.TakePicture -> {
                 takePicture()
             }
 
@@ -45,8 +45,13 @@ class TaskCertificationViewModel(
             is TaskCertificationIntent.ToggleFlash -> {
                 toggleTorch()
             }
+
             is TaskCertificationIntent.PickPicture -> {
                 updateCapturedCImage(intent.uri)
+            }
+
+            is TaskCertificationIntent.RetakePicture -> {
+                setupRetake(intent.lifecycleOwner)
             }
         }
     }
@@ -100,5 +105,10 @@ class TaskCertificationViewModel(
     private fun toggleTorch() {
         reduce { toggleTorch() }
         camera.toggleTorch(uiState.value.torch)
+    }
+
+    private fun setupRetake(lifecycleOwner: LifecycleOwner) {
+        reduce { removeCapture() }
+        bindCamera(lifecycleOwner)
     }
 }
