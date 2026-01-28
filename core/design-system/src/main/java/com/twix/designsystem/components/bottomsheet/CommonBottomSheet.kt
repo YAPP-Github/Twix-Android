@@ -47,6 +47,7 @@ import com.twix.designsystem.theme.GrayColor
 import com.twix.designsystem.theme.TwixTheme
 import com.twix.domain.model.enums.AppTextStyle
 import com.twix.ui.extension.noRippleClickable
+import kotlinx.coroutines.android.awaitFrame
 import kotlinx.coroutines.delay
 
 @Composable
@@ -65,6 +66,7 @@ fun CommonBottomSheet(
     LaunchedEffect(visible) {
         if (visible) {
             rendering = true
+            awaitFrame() // 의도적으로 기다려서 바텀시트 렌더링 애니메이션이 보이도록 유도
             internalVisible = true
         } else {
             internalVisible = false
