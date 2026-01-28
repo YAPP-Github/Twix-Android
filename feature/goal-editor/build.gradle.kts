@@ -3,5 +3,5 @@ plugins {
 }
 
 android {
-    namespace = "com.twix.goal-editor"
+    namespace = "com.twix.goal_editor"
 }
