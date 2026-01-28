@@ -23,4 +23,11 @@ sealed class NavRoutes(
     object MainGraph : NavRoutes("main_graph")
 
     object MainRoute : NavRoutes("main")
+
+    /**
+     * GoalEditorGraph
+     * */
+    object GoalEditorGraph : NavRoutes("goal_editor_graph")
+
+    object GoalEditorRoute : NavRoutes("goal_editor")
 }

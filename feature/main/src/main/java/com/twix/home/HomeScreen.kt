@@ -33,6 +33,7 @@ import java.time.LocalDate
 fun HomeRoute(
     viewModel: HomeViewModel = koinViewModel(),
     onShowCalendarBottomSheet: () -> Unit,
+    navigateToGoalEditor: () -> Unit,
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
@@ -44,6 +45,7 @@ fun HomeRoute(
         onUpdateVisibleDate = { viewModel.dispatch(HomeIntent.UpdateVisibleDate(it)) },
         onMoveToToday = { viewModel.dispatch(HomeIntent.MoveToToday) },
         onShowCalendarBottomSheet = onShowCalendarBottomSheet,
+        onAddNewGoal = navigateToGoalEditor,
     )
 }
 
@@ -56,6 +58,7 @@ fun HomeScreen(
     onUpdateVisibleDate: (LocalDate) -> Unit,
     onMoveToToday: () -> Unit,
     onShowCalendarBottomSheet: () -> Unit,
+    onAddNewGoal: () -> Unit,
 ) {
     Box(
         modifier =
@@ -94,9 +97,7 @@ fun HomeScreen(
                 Modifier
                     .align(Alignment.BottomEnd)
                     .padding(bottom = 12.dp, end = 16.dp),
-            onClick = {
-                // TODO: 목표 추가 화면으로 이동
-            },
+            onClick = onAddNewGoal,
         )
     }
 }
