@@ -75,7 +75,7 @@ fun HomeTopBar(
             ) {
                 AppText(
                     text = stringResource(R.string.home_today_goal),
-                    style = AppTextStyle.H3,
+                    style = AppTextStyle.H3Brand,
                     color = GrayColor.C400,
                 )
 
