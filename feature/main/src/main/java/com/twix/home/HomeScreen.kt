@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -29,7 +30,10 @@ import org.koin.androidx.compose.koinViewModel
 import java.time.LocalDate
 
 @Composable
-fun HomeRoute(viewModel: HomeViewModel = koinViewModel()) {
+fun HomeRoute(
+    viewModel: HomeViewModel = koinViewModel(),
+    onShowCalendarBottomSheet: () -> Unit,
+) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     HomeScreen(
@@ -39,6 +43,7 @@ fun HomeRoute(viewModel: HomeViewModel = koinViewModel()) {
         onNextWeek = { viewModel.dispatch(HomeIntent.NextWeek) },
         onUpdateVisibleDate = { viewModel.dispatch(HomeIntent.UpdateVisibleDate(it)) },
         onMoveToToday = { viewModel.dispatch(HomeIntent.MoveToToday) },
+        onShowCalendarBottomSheet = onShowCalendarBottomSheet,
     )
 }
 
@@ -50,6 +55,7 @@ fun HomeScreen(
     onNextWeek: () -> Unit,
     onUpdateVisibleDate: (LocalDate) -> Unit,
     onMoveToToday: () -> Unit,
+    onShowCalendarBottomSheet: () -> Unit,
 ) {
     Box(
         modifier =
@@ -66,6 +72,7 @@ fun HomeScreen(
                 onNotificationClick = {},
                 onSettingClick = {},
                 onMoveToToday = onMoveToToday,
+                onShowCalendarBottomSheet = onShowCalendarBottomSheet,
             )
 
             WeeklyCalendar(
