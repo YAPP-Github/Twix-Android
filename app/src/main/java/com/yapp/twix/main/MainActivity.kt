@@ -8,10 +8,10 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.safeContentPadding
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import com.twix.designsystem.components.toast.ToastHost
+import com.twix.designsystem.components.toast.ToastManager
 import com.twix.designsystem.theme.TwixTheme
 import com.twix.navigation.AppNavHost
-import com.twix.ui.toast.ToastHost
-import com.twix.ui.toast.ToastManager
 import org.koin.android.ext.android.inject
 
 class MainActivity : ComponentActivity() {

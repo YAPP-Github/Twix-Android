@@ -1,4 +1,4 @@
-package com.twix.ui.toast.model
+package com.twix.designsystem.components.toast.model
 
 import androidx.compose.runtime.Immutable
 
