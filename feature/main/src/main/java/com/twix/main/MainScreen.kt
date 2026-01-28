@@ -26,8 +26,10 @@ import org.koin.androidx.compose.koinViewModel
 @Composable
 fun MainRoute(viewModel: MainViewModel = koinViewModel()) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val homeViewModel: HomeViewModel = koinViewModel()
 
     MainScreen(
+        homeViewModel = homeViewModel,
         selectedTab = uiState.selectedTab,
         onTabClick = { tab -> viewModel.dispatch(MainIntent.SelectTab(tab)) },
     )
@@ -35,10 +37,10 @@ fun MainRoute(viewModel: MainViewModel = koinViewModel()) {
 
 @Composable
 private fun MainScreen(
+    homeViewModel: HomeViewModel,
     selectedTab: MainTab,
     onTabClick: (MainTab) -> Unit,
 ) {
-    val homeViewModel: HomeViewModel = koinViewModel()
     val calendarState by homeViewModel.calendarState.collectAsStateWithLifecycle()
     var showCalendarBottomSheet by remember { mutableStateOf(false) }
 
