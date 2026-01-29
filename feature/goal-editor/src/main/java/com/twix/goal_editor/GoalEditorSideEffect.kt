@@ -4,5 +4,8 @@ import com.twix.designsystem.components.toast.model.ToastType
 import com.twix.ui.base.SideEffect
 
 interface GoalEditorSideEffect : SideEffect {
-    data class ShowToast(val message: String, val type: ToastType) : GoalEditorSideEffect
+    data class ShowToast(
+        val message: String,
+        val type: ToastType,
+    ) : GoalEditorSideEffect
 }
