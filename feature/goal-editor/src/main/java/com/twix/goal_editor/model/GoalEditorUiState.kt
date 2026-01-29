@@ -12,7 +12,7 @@ data class GoalEditorUiState(
     val selectedRepeatType: RepeatType = RepeatType.DAILY,
     val repeatCount: Int = 0,
     val startDate: LocalDate = LocalDate.now(),
-    val endDate: LocalDate? = null,
+    val endDate: LocalDate = LocalDate.now(),
 ) : State {
     val isEnabled: Boolean
         get() = selectedIconId != -1L && goalTitle.isNotBlank() && repeatCount > 0
