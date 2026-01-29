@@ -21,10 +21,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -46,13 +42,13 @@ fun GoalInfoCard(
     selectedRepeatType: RepeatType,
     repeatCount: Int,
     startDate: LocalDate,
+    endDateEnabled: Boolean,
     endDate: LocalDate,
     onSelectedRepeatType: (RepeatType) -> Unit,
     onShowRepeatCountBottomSheet: () -> Unit,
     onShowCalendarBottomSheet: (Boolean) -> Unit, // true면 endDate
+    onToggleEndDateEnabled: (Boolean) -> Unit,
 ) {
-    var endDateVisible by remember { mutableStateOf(false) }
-
     Column(
         modifier =
             Modifier
@@ -77,12 +73,12 @@ fun GoalInfoCard(
         HorizontalDivider(thickness = 1.dp, color = GrayColor.C500)
 
         EndDateOption(
-            visible = endDateVisible,
-            onToggle = { endDateVisible = it },
+            visible = endDateEnabled,
+            onToggle = onToggleEndDateEnabled,
         )
 
         AnimatedVisibility(
-            visible = endDateVisible,
+            visible = endDateEnabled,
             enter = expandVertically(expandFrom = Alignment.Top) + fadeIn(),
             exit = shrinkVertically(shrinkTowards = Alignment.Top) + fadeOut(),
         ) {
@@ -249,7 +245,7 @@ private fun HeaderText(text: String) {
 }
 
 @Composable
-private fun RepeatType.label(): String =
+fun RepeatType.label(): String =
     when (this) {
         RepeatType.DAILY -> stringResource(R.string.word_daily)
         RepeatType.WEEKLY -> stringResource(R.string.word_weekly)
