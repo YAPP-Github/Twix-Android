@@ -16,10 +16,12 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.twix.designsystem.R
+import com.twix.designsystem.theme.CommonColor
 import com.twix.designsystem.theme.GrayColor
 import com.twix.home.component.EmptyGoalGuide
 import com.twix.home.component.HomeTopBar
@@ -122,6 +124,7 @@ private fun AddGoalButton(
             modifier =
                 Modifier
                     .size(40.dp),
+            colorFilter = ColorFilter.tint(CommonColor.White),
         )
     }
 }
