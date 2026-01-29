@@ -1,8 +1,11 @@
 package com.twix.goal_editor
 
+import androidx.lifecycle.viewModelScope
+import com.twix.designsystem.components.toast.model.ToastType
 import com.twix.domain.model.enums.RepeatType
 import com.twix.goal_editor.model.GoalEditorUiState
 import com.twix.ui.base.BaseViewModel
+import kotlinx.coroutines.launch
 import java.time.LocalDate
 
 class GoalEditorViewModel :
@@ -12,46 +15,58 @@ class GoalEditorViewModel :
     override suspend fun handleIntent(intent: GoalEditorIntent) {
         when (intent) {
             GoalEditorIntent.Save -> save()
-            is GoalEditorIntent.SelectIcon -> selectIcon(intent.iconId)
-            is GoalEditorIntent.UpdateEndDate -> updateEndDate(intent.endDate)
-            is GoalEditorIntent.UpdateRepeatCount -> updateRepeatCount(intent.repeatCount)
-            is GoalEditorIntent.UpdateRepeatType -> updateRepeatType(intent.repeatType)
-            is GoalEditorIntent.UpdateStartDate -> updateStartDate(intent.startDate)
-            is GoalEditorIntent.UpdateTitle -> updateTitle(intent.title)
+            is GoalEditorIntent.SetIcon -> setIcon(intent.iconId)
+            is GoalEditorIntent.SetEndDate -> setEndDate(intent.endDate)
+            is GoalEditorIntent.SetRepeatCount -> setRepeatCount(intent.repeatCount)
+            is GoalEditorIntent.SetRepeatType -> setRepeatType(intent.repeatType)
+            is GoalEditorIntent.SetStartDate -> setStartDate(intent.startDate)
+            is GoalEditorIntent.SetTitle -> setTitle(intent.title)
+            is GoalEditorIntent.SetEndDateEnabled -> setEndDateEnabled(intent.enabled)
         }
     }
 
-    private fun selectIcon(iconId: Long) {
+    private fun setIcon(iconId: Long) {
         if (iconId <= 0) return
 
         reduce { copy(selectedIconId = iconId) }
     }
 
-    private fun updateTitle(title: String) {
+    private fun setTitle(title: String) {
         if (title.isBlank()) return
 
         reduce { copy(goalTitle = title) }
     }
 
-    private fun updateRepeatType(repeatType: RepeatType) {
+    private fun setRepeatType(repeatType: RepeatType) {
         reduce { copy(selectedRepeatType = repeatType) }
     }
 
-    private fun updateRepeatCount(repeatCount: Int) {
+    private fun setRepeatCount(repeatCount: Int) {
         if (repeatCount <= 0) return
 
         reduce { copy(repeatCount = repeatCount) }
     }
 
-    private fun updateStartDate(startDate: LocalDate) {
+    private fun setStartDate(startDate: LocalDate) {
         reduce { copy(startDate = startDate) }
     }
 
-    private fun updateEndDate(endDate: LocalDate) {
+    private fun setEndDate(endDate: LocalDate) {
         reduce { copy(endDate = endDate) }
+    }
+
+    private fun setEndDateEnabled(enabled: Boolean) {
+        reduce { copy(endDateEnabled = enabled) }
     }
 
     private fun save() {
         if (!currentState.isEnabled) return
+
+        if (currentState.endDateEnabled && currentState.endDate.isBefore(currentState.startDate)) {
+            viewModelScope.launch {
+                emitSideEffect(GoalEditorSideEffect.ShowToast("종료 날짜가 시작 날짜보다 이전입니다.", ToastType.ERROR))
+            }
+            return
+        }
     }
 }

@@ -5,28 +5,32 @@ import com.twix.ui.base.Intent
 import java.time.LocalDate
 
 sealed interface GoalEditorIntent : Intent {
-    data class SelectIcon(
+    data class SetIcon(
         val iconId: Long,
     ) : GoalEditorIntent
 
-    data class UpdateTitle(
+    data class SetTitle(
         val title: String,
     ) : GoalEditorIntent
 
-    data class UpdateRepeatType(
+    data class SetRepeatType(
         val repeatType: RepeatType,
     ) : GoalEditorIntent
 
-    data class UpdateRepeatCount(
+    data class SetRepeatCount(
         val repeatCount: Int,
     ) : GoalEditorIntent
 
-    data class UpdateStartDate(
+    data class SetStartDate(
         val startDate: LocalDate,
     ) : GoalEditorIntent
 
-    data class UpdateEndDate(
+    data class SetEndDate(
         val endDate: LocalDate,
+    ) : GoalEditorIntent
+
+    data class SetEndDateEnabled(
+        val enabled: Boolean,
     ) : GoalEditorIntent
 
     data object Save : GoalEditorIntent
