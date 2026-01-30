@@ -134,7 +134,7 @@ private fun ImageCapturedBar(
                 Modifier
                     .width(150.dp)
                     .height(74.dp)
-                    .noRippleClickable(onClickUpload),
+                    .noRippleClickable(onClick = onClickUpload),
         ) {
             AppText(
                 text = "업로드",
