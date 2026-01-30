@@ -132,6 +132,8 @@ fun TaskCertificationRoute(
                     .takePicture()
                     .onSuccess {
                         viewModel.dispatch(TaskCertificationIntent.TakePicture(it))
+                    }.onFailure {
+                        viewModel.dispatch(TaskCertificationIntent.TakePicture(null))
                     }
             }
         },
