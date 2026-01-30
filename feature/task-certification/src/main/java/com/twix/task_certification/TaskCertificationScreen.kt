@@ -1,5 +1,9 @@
 package com.twix.task_certification
 
+import android.Manifest
+import android.content.pm.PackageManager
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -8,11 +12,15 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.coroutineScope
@@ -42,29 +50,54 @@ fun TaskCertificationRoute(
 
     val lifecycleOwner = LocalLifecycleOwner.current
     val coroutineScope = lifecycleOwner.lifecycle.coroutineScope
+    val context = androidx.compose.ui.platform.LocalContext.current
 
-    LaunchedEffect(uiState.lens) {
-        camera.bind(lifecycleOwner, uiState.lens)
+    var hasPermission by remember {
+        mutableStateOf(
+            ContextCompat.checkSelfPermission(
+                context,
+                Manifest.permission.CAMERA,
+            ) == PackageManager.PERMISSION_GRANTED,
+        )
     }
 
-    LaunchedEffect(uiState.torch) {
-        camera.toggleTorch(uiState.torch)
+    val permissionLauncher =
+        rememberLauncherForActivityResult(
+            ActivityResultContracts.RequestPermission(),
+        ) { granted ->
+            hasPermission = granted
+        }
+
+    LaunchedEffect(Unit) {
+        if (!hasPermission) {
+            permissionLauncher.launch(Manifest.permission.CAMERA)
+        }
+    }
+
+    LaunchedEffect(uiState.lens, hasPermission) {
+        if (hasPermission) {
+            camera.bind(lifecycleOwner, uiState.lens)
+        }
+    }
+
+    LaunchedEffect(uiState.torch, hasPermission) {
+        if (hasPermission) {
+            camera.toggleTorch(uiState.torch)
+        }
     }
 
     TaskCertificationScreen(
         uiState = uiState,
         cameraPreview = cameraPreview,
-        onClickClose = {
-            navigateToBack()
-        },
+        onClickClose = navigateToBack,
         onCaptureClick = {
+            if (!hasPermission) return@TaskCertificationScreen
+
             coroutineScope.launch {
                 camera
                     .takePicture()
                     .onSuccess {
                         viewModel.dispatch(TaskCertificationIntent.TakePicture(it))
-                    }.onFailure {
-                        // feat/#38-task-certification-gallery branch에서 작업 예정
                     }
             }
         },
