@@ -46,9 +46,7 @@ class TaskCertificationViewModel :
     }
 
     private fun pickPicture(uri: Uri?) {
-        uri?.let { updatePickPicture(uri) } ?: viewModelScope.launch {
-            emitSideEffect(TaskCertificationSideEffect.ImagePickFailException)
-        }
+        uri?.let { updatePickPicture(uri) }
     }
 
     private fun updatePickPicture(uri: Uri) {

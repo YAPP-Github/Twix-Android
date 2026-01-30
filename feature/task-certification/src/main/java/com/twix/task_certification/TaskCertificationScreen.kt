@@ -108,15 +108,6 @@ fun TaskCertificationRoute(
                     ),
                 )
             }
-
-            TaskCertificationSideEffect.ImagePickFailException -> {
-                toastManager.tryShow(
-                    ToastData(
-                        message = context.getString(R.string.task_certification_image_pick_fail),
-                        type = ToastType.ERROR,
-                    ),
-                )
-            }
         }
     }
 
