@@ -6,10 +6,6 @@ import com.twix.ui.base.Intent
 sealed interface TaskCertificationIntent : Intent {
     data object TakePicture : TaskCertificationIntent
 
-    data class BindCamera(
-        val lifecycleOwner: LifecycleOwner,
-    ) : TaskCertificationIntent
-
     data class ToggleCamera(
         val lifecycleOwner: LifecycleOwner,
     ) : TaskCertificationIntent

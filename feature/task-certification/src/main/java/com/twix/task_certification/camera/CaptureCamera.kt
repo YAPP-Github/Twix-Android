@@ -11,10 +11,10 @@ import androidx.camera.core.CameraSelector
 import androidx.camera.core.ImageCapture
 import androidx.camera.core.ImageCaptureException
 import androidx.camera.core.Preview
-import androidx.camera.core.SurfaceRequest
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.camera.lifecycle.awaitInstance
 import androidx.core.content.ContextCompat
+import com.twix.task_certification.model.CameraPreview
 import com.twix.task_certification.model.TorchStatus
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -26,8 +26,8 @@ class CaptureCamera(
     private var cameraControl: CameraControl? = null
     private var cameraInfo: CameraInfo? = null
 
-    private val _surfaceRequests = MutableStateFlow<SurfaceRequest?>(null)
-    override val surfaceRequests: StateFlow<SurfaceRequest?> = _surfaceRequests.asStateFlow()
+    private val _surfaceRequests = MutableStateFlow<CameraPreview?>(null)
+    override val surfaceRequests: StateFlow<CameraPreview?> = _surfaceRequests.asStateFlow()
 
     private val imageCapture: ImageCapture =
         ImageCapture
@@ -41,7 +41,7 @@ class CaptureCamera(
     private val preview: Preview =
         Preview.Builder().build().apply {
             setSurfaceProvider { request ->
-                _surfaceRequests.value = request
+                _surfaceRequests.value = CameraPreview(request)
             }
         }
 

@@ -20,27 +20,34 @@ import com.twix.designsystem.components.text.AppText
 import com.twix.designsystem.theme.GrayColor
 import com.twix.designsystem.theme.TwixTheme
 import com.twix.domain.model.enums.AppTextStyle
+import com.twix.task_certification.camera.Camera
 import com.twix.task_certification.component.CameraControlBar
 import com.twix.task_certification.component.CameraPreviewBox
 import com.twix.task_certification.component.TaskCertificationTopBar
+import com.twix.task_certification.model.CameraPreview
 import com.twix.task_certification.model.TaskCertificationIntent
 import com.twix.task_certification.model.TaskCertificationUiState
 import org.koin.androidx.compose.koinViewModel
+import org.koin.compose.koinInject
 
 @Composable
 fun TaskCertificationRoute(
+    camera: Camera = koinInject(),
     viewModel: TaskCertificationViewModel = koinViewModel(),
     navigateToBack: () -> Unit,
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val cameraPreview by camera.surfaceRequests.collectAsStateWithLifecycle()
+
     val lifecycleOwner = LocalLifecycleOwner.current
 
-    LaunchedEffect(Unit) {
-        viewModel.dispatch(TaskCertificationIntent.BindCamera(lifecycleOwner))
+    LaunchedEffect(uiState.lens) {
+        camera.bind(lifecycleOwner, uiState.lens)
     }
 
     TaskCertificationScreen(
         uiState = uiState,
+        cameraPreview = cameraPreview,
         onClickClose = {
             navigateToBack()
         },
@@ -60,6 +67,7 @@ fun TaskCertificationRoute(
 @Composable
 private fun TaskCertificationScreen(
     uiState: TaskCertificationUiState,
+    cameraPreview: CameraPreview?,
     onClickClose: () -> Unit,
     onCaptureClick: () -> Unit,
     onToggleCameraClick: () -> Unit,
@@ -87,7 +95,7 @@ private fun TaskCertificationScreen(
 
         CameraPreviewBox(
             capture = uiState.capture,
-            previewRequest = uiState.preview,
+            previewRequest = cameraPreview,
             torch = uiState.torch,
             onClickFlash = { onClickFlash() },
         )
@@ -107,6 +115,7 @@ fun TaskCertificationScreenPreview() {
     TwixTheme {
         TaskCertificationScreen(
             uiState = TaskCertificationUiState(),
+            cameraPreview = null,
             onClickClose = {},
             onCaptureClick = {},
             onToggleCameraClick = {},
