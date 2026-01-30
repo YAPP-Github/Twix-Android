@@ -9,9 +9,7 @@ sealed interface TaskCertificationIntent : Intent {
         val uri: Uri?,
     ) : TaskCertificationIntent
 
-    data class ToggleCamera(
-        val lifecycleOwner: LifecycleOwner,
-    ) : TaskCertificationIntent
+    data object ToggleLens : TaskCertificationIntent
 
     data class ToggleFlash(
         val lifecycleOwner: LifecycleOwner,
