@@ -144,6 +144,10 @@ fun TaskCertificationRoute(
         onClickGallery = {
             pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
         },
+        onClickRefresh = {
+            viewModel.dispatch(TaskCertificationIntent.RetakePicture)
+        },
+        onClickUpload = { },
     )
 }
 
@@ -156,6 +160,8 @@ private fun TaskCertificationScreen(
     onToggleCameraClick: () -> Unit,
     onClickFlash: () -> Unit,
     onClickGallery: () -> Unit,
+    onClickRefresh: () -> Unit,
+    onClickUpload: () -> Unit,
 ) {
     Column(
         Modifier
@@ -187,9 +193,12 @@ private fun TaskCertificationScreen(
         Spacer(modifier = Modifier.height(52.dp))
 
         CameraControlBar(
+            capture = uiState.capture,
             onCaptureClick = onCaptureClick,
             onToggleCameraClick = onToggleCameraClick,
             onClickGallery = onClickGallery,
+            onClickRefresh = onClickRefresh,
+            onClickUpload = onClickUpload,
         )
     }
 }
@@ -206,6 +215,8 @@ fun TaskCertificationScreenPreview() {
             onToggleCameraClick = {},
             onClickFlash = {},
             onClickGallery = {},
+            onClickRefresh = {},
+            onClickUpload = {},
         )
     }
 }

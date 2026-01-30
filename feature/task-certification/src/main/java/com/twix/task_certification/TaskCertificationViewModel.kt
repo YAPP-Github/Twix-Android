@@ -30,6 +30,10 @@ class TaskCertificationViewModel :
             is TaskCertificationIntent.ToggleFlash -> {
                 toggleTorch()
             }
+
+            is TaskCertificationIntent.RetakePicture -> {
+                setupRetake()
+            }
         }
     }
 
@@ -60,5 +64,9 @@ class TaskCertificationViewModel :
 
     private fun toggleTorch() {
         reduce { toggleTorch() }
+    }
+
+    private fun setupRetake() {
+        reduce { removePicture() }
     }
 }
