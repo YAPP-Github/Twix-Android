@@ -35,13 +35,19 @@ import com.twix.task_certification.component.CameraPreviewBox
 import com.twix.task_certification.component.TaskCertificationTopBar
 import com.twix.task_certification.model.CameraPreview
 import com.twix.task_certification.model.TaskCertificationIntent
+import com.twix.task_certification.model.TaskCertificationSideEffect
 import com.twix.task_certification.model.TaskCertificationUiState
+import com.twix.ui.base.ObserveAsEvents
+import com.twix.ui.toast.ToastManager
+import com.twix.ui.toast.model.ToastData
+import com.twix.ui.toast.model.ToastType
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 import org.koin.compose.koinInject
 
 @Composable
 fun TaskCertificationRoute(
+    toastManager: ToastManager = koinInject(),
     camera: Camera = koinInject(),
     viewModel: TaskCertificationViewModel = koinViewModel(),
     navigateToBack: () -> Unit,
@@ -89,6 +95,28 @@ fun TaskCertificationRoute(
     LaunchedEffect(uiState.torch, hasPermission) {
         if (hasPermission) {
             camera.toggleTorch(uiState.torch)
+        }
+    }
+
+    ObserveAsEvents(viewModel.sideEffect) { event ->
+        when (event) {
+            TaskCertificationSideEffect.ImageCaptureFailException -> {
+                toastManager.tryShow(
+                    ToastData(
+                        message = context.getString(R.string.task_certification_image_capture_fail),
+                        type = ToastType.ERROR,
+                    ),
+                )
+            }
+
+            TaskCertificationSideEffect.ImagePickFailException -> {
+                toastManager.tryShow(
+                    ToastData(
+                        message = context.getString(R.string.task_certification_image_pick_fail),
+                        type = ToastType.ERROR,
+                    ),
+                )
+            }
         }
     }
 
