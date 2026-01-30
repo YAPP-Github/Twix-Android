@@ -40,6 +40,12 @@ compose-ui-test = "1.7.8"
 # Ktlint
 ktlint = "14.0.1"
 
+# CameraX
+cameraX = "1.5.2"
+
+# Guava
+guava = "33.5.0-android"
+
 # ksp
 ksp = "2.3.1"
 
@@ -57,11 +63,21 @@ jetbrains-kotlin-jvm = "2.1.0"
 
 # Logging
 kermit = "2.0.8"
+junit = "4.13.2"
+espressoCore = "3.7.0"
+appcompat = "1.7.1"
 
 [libraries]
 # AndroidX
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "androidx-core-ktx" }
 androidx-lifecycle-runtime-ktx = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "androidx-lifecycle-runtime-ktx" }
+
+# CameraX
+androidx-camera-camera2 = { module = "androidx.camera:camera-camera2", version.ref = "cameraX" }
+androidx-camera-lifecycle = { module = "androidx.camera:camera-lifecycle", version.ref = "cameraX" }
+androidx-camera-view = { group = "androidx.camera", name = "camera-view", version.ref = "cameraX" }
+androidx-camera-compose = { module = "androidx.camera:camera-compose", version.ref = "cameraX" }
+
 android-gradle-plugin = { group = "com.android.tools.build", name = "gradle-api", version.ref = "agp" }
 compose-gradle-plugin = { module = "org.jetbrains.kotlin:compose-compiler-gradle-plugin", version.ref = "kotlin" }
 kotlin-gradle-plugin = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-plugin", version.ref = "kotlin" }
@@ -126,11 +142,22 @@ kotlin-test = { group = "org.jetbrains.kotlin", name = "kotlin-test", version.re
 
 # Logging
 kermit = { group = "co.touchlab", name = "kermit", version.ref = "kermit" }
+junit = { group = "junit", name = "junit", version.ref = "junit" }
+
+# Guava
+guava = { module = "com.google.guava:guava", version.ref = "guava" }
 
 [bundles]
 androidx = [
     "androidx-core-ktx",
     "androidx-lifecycle-runtime-ktx",
+]
+
+cameraX = [
+    "androidx-camera-camera2",
+    "androidx-camera-lifecycle",
+    "androidx-camera-view",
+    "androidx-camera-compose"
 ]
 
 ktor = [

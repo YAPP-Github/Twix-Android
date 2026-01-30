@@ -23,4 +23,11 @@ sealed class NavRoutes(
     object MainGraph : NavRoutes("main_graph")
 
     object MainRoute : NavRoutes("main")
+
+    /**
+     * TaskCertificationGraph
+     * */
+    object TaskCertificationGraph : NavRoutes("task_certification_graph")
+
+    object TaskCertificationRoute : NavRoutes("task_certification")
 }
