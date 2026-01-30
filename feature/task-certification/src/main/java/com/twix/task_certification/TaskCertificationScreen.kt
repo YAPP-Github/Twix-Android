@@ -1,6 +1,5 @@
 package com.twix.task_certification
 
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -52,13 +51,19 @@ fun TaskCertificationRoute(
             navigateToBack()
         },
         onCaptureClick = {
-            viewModel.dispatch(TaskCertificationIntent.TakePicture)
+            camera.takePicture(
+                onComplete = {
+                    viewModel.dispatch(TaskCertificationIntent.TakePicture(it))
+                },
+                onFailure = {
+                    // feat/#38-task-certification-gallery branch에서 작업 예정
+                },
+            )
         },
         onToggleCameraClick = {
             viewModel.dispatch(TaskCertificationIntent.ToggleCamera(lifecycleOwner))
         },
         onClickFlash = {
-            Log.d("dasdas", "onClickFlash")
             viewModel.dispatch(TaskCertificationIntent.ToggleFlash(lifecycleOwner))
         },
     )
