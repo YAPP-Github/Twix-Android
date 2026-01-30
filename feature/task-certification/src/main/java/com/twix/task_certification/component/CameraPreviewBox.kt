@@ -85,14 +85,14 @@ private fun TorchIcon(
     torch: TorchStatus,
     onClickFlash: () -> Unit,
 ) {
-    val flashIcon =
+    val torchIcon =
         when (torch) {
             TorchStatus.On -> ImageVector.vectorResource(id = R.drawable.ic_camera_torch_on)
             TorchStatus.Off -> ImageVector.vectorResource(id = R.drawable.ic_camera_torch_off)
         }
 
     Image(
-        imageVector = flashIcon,
+        imageVector = torchIcon,
         contentDescription = null,
         modifier =
             Modifier
