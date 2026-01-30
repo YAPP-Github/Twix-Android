@@ -16,7 +16,7 @@ class TaskCertificationViewModel :
     override suspend fun handleIntent(intent: TaskCertificationIntent) {
         when (intent) {
             is TaskCertificationIntent.TakePicture -> {
-                takePicture()
+                takePicture(intent.uri)
             }
 
             is TaskCertificationIntent.ToggleCamera -> {
@@ -29,32 +29,16 @@ class TaskCertificationViewModel :
         }
     }
 
-    private fun takePicture() {
-//        camera.takePicture(
-//            onComplete = {
-//                updateCapturedCImage(it)
-//                unbindCamera()
-//            },
-//            onFailure = {
-//                onFailureCapture()
-//            },
-//        )
+    private fun takePicture(uri: Uri?) {
+        uri?.let {
+            reduce { updateCapturedImage(uri) }
+            reduce { toggleTorch() }
+        } ?: run { onFailureCapture() }
     }
 
     private fun onFailureCapture() {
         viewModelScope.launch {
             emitSideEffect(TaskCertificationSideEffect.ImageCaptureFailException)
-        }
-    }
-
-    private fun updateCapturedCImage(uri: Uri?) {
-        uri?.let {
-            reduce { updateCapturedImage(uri) }
-            reduce { toggleTorch() }
-        } ?: run {
-            viewModelScope.launch {
-                emitSideEffect(TaskCertificationSideEffect.ImageCaptureFailException)
-            }
         }
     }
 

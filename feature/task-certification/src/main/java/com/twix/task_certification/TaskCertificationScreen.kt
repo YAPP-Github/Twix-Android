@@ -51,13 +51,20 @@ fun TaskCertificationRoute(
             navigateToBack()
         },
         onCaptureClick = {
-            viewModel.dispatch(TaskCertificationIntent.TakePicture)
+            camera.takePicture(
+                onComplete = {
+                    viewModel.dispatch(TaskCertificationIntent.TakePicture(it))
+                },
+                onFailure = {
+                    // feat/#38-task-certification-gallery branch에서 작업 예정
+                },
+            )
         },
         onToggleCameraClick = {
             viewModel.dispatch(TaskCertificationIntent.ToggleCamera(lifecycleOwner))
         },
         onClickFlash = {
-            viewModel.dispatch(TaskCertificationIntent.ToggleFlash)
+            viewModel.dispatch(TaskCertificationIntent.ToggleFlash(lifecycleOwner))
         },
     )
 }
