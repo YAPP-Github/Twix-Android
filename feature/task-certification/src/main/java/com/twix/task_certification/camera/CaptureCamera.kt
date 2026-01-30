@@ -23,7 +23,6 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlin.coroutines.Continuation
 import kotlin.coroutines.resume
-import kotlin.coroutines.resumeWithException
 
 class CaptureCamera(
     private val context: Context,
@@ -115,7 +114,7 @@ class CaptureCamera(
             }
 
             override fun onError(exception: ImageCaptureException) {
-                continuation.resumeWithException(exception)
+                continuation.resume(Result.failure(exception))
             }
         }
 
