@@ -14,6 +14,7 @@ import androidx.camera.core.Preview
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.camera.lifecycle.awaitInstance
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.LifecycleOwner
 import com.twix.task_certification.model.CameraPreview
 import com.twix.task_certification.model.TorchStatus
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -50,7 +51,7 @@ class CaptureCamera(
         }
 
     override suspend fun bind(
-        lifecycleOwner: androidx.lifecycle.LifecycleOwner,
+        lifecycleOwner: LifecycleOwner,
         lens: CameraSelector,
     ) {
         val provider = ProcessCameraProvider.awaitInstance(context)
