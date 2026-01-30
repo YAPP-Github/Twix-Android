@@ -19,6 +19,10 @@ import com.twix.task_certification.model.TorchStatus
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.suspendCancellableCoroutine
+import kotlin.coroutines.Continuation
+import kotlin.coroutines.resume
+import kotlin.coroutines.resumeWithException
 
 class CaptureCamera(
     private val context: Context,
@@ -64,20 +68,17 @@ class CaptureCamera(
         cameraInfo = camera.cameraInfo
     }
 
-    override fun takePicture(
-        onComplete: (Uri?) -> Unit,
-        onFailure: (ImageCaptureException) -> Unit,
-    ) {
-        val contentValues = contentValues()
-        val outputOptions = outputFileOptions(contentValues)
+    override suspend fun takePicture(): Result<Uri> =
+        suspendCancellableCoroutine { continuation ->
+            val contentValues = contentValues()
+            val outputOptions = outputFileOptions(contentValues)
 
-        capture(
-            imageCapture = imageCapture,
-            outputOptions = outputOptions,
-            onComplete = onComplete,
-            onFailure = onFailure,
-        )
-    }
+            imageCapture.takePicture(
+                outputOptions,
+                ContextCompat.getMainExecutor(context),
+                capture(continuation),
+            )
+        }
 
     private fun contentValues(): ContentValues =
         ContentValues().apply {
@@ -99,26 +100,23 @@ class CaptureCamera(
                 contentValues,
             ).build()
 
-    private fun capture(
-        imageCapture: ImageCapture,
-        outputOptions: ImageCapture.OutputFileOptions,
-        onComplete: (Uri?) -> Unit,
-        onFailure: (ImageCaptureException) -> Unit,
-    ) {
-        imageCapture.takePicture(
-            outputOptions,
-            ContextCompat.getMainExecutor(context),
-            object : ImageCapture.OnImageSavedCallback {
-                override fun onImageSaved(result: ImageCapture.OutputFileResults) {
-                    onComplete(result.savedUri)
+    private fun capture(continuation: Continuation<Result<Uri>>): ImageCapture.OnImageSavedCallback =
+        object : ImageCapture.OnImageSavedCallback {
+            override fun onImageSaved(result: ImageCapture.OutputFileResults) {
+                val uri = result.savedUri
+                if (uri != null) {
+                    continuation.resume(Result.success(uri))
+                } else {
+                    continuation.resume(
+                        Result.failure(IllegalStateException(URI_NOT_FOUND_EXCEPTION)),
+                    )
                 }
+            }
 
-                override fun onError(exception: ImageCaptureException) {
-                    onFailure(exception)
-                }
-            },
-        )
-    }
+            override fun onError(exception: ImageCaptureException) {
+                continuation.resumeWithException(exception)
+            }
+        }
 
     override suspend fun unbind() {
         ProcessCameraProvider.awaitInstance(context).unbindAll()
@@ -137,5 +135,7 @@ class CaptureCamera(
         private const val IMAGE_MIME_TYPE = "image/jpeg"
         private const val IMAGE_NAME = "task_%d"
         private const val IMAGE_PATH = "Pictures/TaskCertification"
+
+        private const val URI_NOT_FOUND_EXCEPTION = "촬영한 이미지의 Uri를 찾을 수 없습니다"
     }
 }

@@ -15,6 +15,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.coroutineScope
 import com.twix.designsystem.components.text.AppText
 import com.twix.designsystem.theme.GrayColor
 import com.twix.designsystem.theme.TwixTheme
@@ -26,6 +27,7 @@ import com.twix.task_certification.component.TaskCertificationTopBar
 import com.twix.task_certification.model.CameraPreview
 import com.twix.task_certification.model.TaskCertificationIntent
 import com.twix.task_certification.model.TaskCertificationUiState
+import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 import org.koin.compose.koinInject
 
@@ -39,6 +41,7 @@ fun TaskCertificationRoute(
     val cameraPreview by camera.surfaceRequests.collectAsStateWithLifecycle()
 
     val lifecycleOwner = LocalLifecycleOwner.current
+    val coroutineScope = lifecycleOwner.lifecycle.coroutineScope
 
     LaunchedEffect(uiState.lens) {
         camera.bind(lifecycleOwner, uiState.lens)
@@ -51,14 +54,15 @@ fun TaskCertificationRoute(
             navigateToBack()
         },
         onCaptureClick = {
-            camera.takePicture(
-                onComplete = {
-                    viewModel.dispatch(TaskCertificationIntent.TakePicture(it))
-                },
-                onFailure = {
-                    // feat/#38-task-certification-gallery branch에서 작업 예정
-                },
-            )
+            coroutineScope.launch {
+                camera
+                    .takePicture()
+                    .onSuccess {
+                        viewModel.dispatch(TaskCertificationIntent.TakePicture(it))
+                    }.onFailure {
+                        // feat/#38-task-certification-gallery branch에서 작업 예정
+                    }
+            }
         },
         onToggleCameraClick = {
             viewModel.dispatch(TaskCertificationIntent.ToggleLens)
