@@ -1,7 +1,6 @@
 package com.twix.task_certification
 
 import android.net.Uri
-import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.viewModelScope
 import com.twix.task_certification.model.TaskCertificationIntent
 import com.twix.task_certification.model.TaskCertificationSideEffect
@@ -19,8 +18,8 @@ class TaskCertificationViewModel :
                 takePicture(intent.uri)
             }
 
-            is TaskCertificationIntent.ToggleCamera -> {
-                toggleCamera(intent.lifecycleOwner)
+            is TaskCertificationIntent.ToggleLens -> {
+                toggleLens()
             }
 
             is TaskCertificationIntent.ToggleFlash -> {
@@ -42,9 +41,8 @@ class TaskCertificationViewModel :
         }
     }
 
-    private fun toggleCamera(lifecycleOwner: LifecycleOwner) {
+    private fun toggleLens() {
         reduce { toggleLens() }
-        // bindCamera(lifecycleOwner)
     }
 
     private fun toggleTorch() {
