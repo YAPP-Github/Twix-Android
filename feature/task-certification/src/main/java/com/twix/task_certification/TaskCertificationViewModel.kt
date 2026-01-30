@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.twix.task_certification.model.TaskCertificationIntent
 import com.twix.task_certification.model.TaskCertificationSideEffect
 import com.twix.task_certification.model.TaskCertificationUiState
+import com.twix.task_certification.model.TorchStatus
 import com.twix.ui.base.BaseViewModel
 import kotlinx.coroutines.launch
 
@@ -31,7 +32,9 @@ class TaskCertificationViewModel :
     private fun takePicture(uri: Uri?) {
         uri?.let {
             reduce { updateCapturedImage(uri) }
-            reduce { toggleTorch() }
+            if (uiState.value.torch == TorchStatus.On) {
+                reduce { toggleTorch() }
+            }
         } ?: run { onFailureCapture() }
     }
 
@@ -47,6 +50,5 @@ class TaskCertificationViewModel :
 
     private fun toggleTorch() {
         reduce { toggleTorch() }
-        // camera.toggleTorch(uiState.value.torch)
     }
 }

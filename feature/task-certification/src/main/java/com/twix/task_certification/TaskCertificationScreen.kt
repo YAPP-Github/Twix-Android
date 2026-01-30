@@ -47,6 +47,10 @@ fun TaskCertificationRoute(
         camera.bind(lifecycleOwner, uiState.lens)
     }
 
+    LaunchedEffect(uiState.torch) {
+        camera.toggleTorch(uiState.torch)
+    }
+
     TaskCertificationScreen(
         uiState = uiState,
         cameraPreview = cameraPreview,
@@ -68,7 +72,7 @@ fun TaskCertificationRoute(
             viewModel.dispatch(TaskCertificationIntent.ToggleLens)
         },
         onClickFlash = {
-            viewModel.dispatch(TaskCertificationIntent.ToggleFlash(lifecycleOwner))
+            viewModel.dispatch(TaskCertificationIntent.ToggleFlash)
         },
     )
 }
