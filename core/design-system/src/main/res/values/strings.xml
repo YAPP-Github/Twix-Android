@@ -32,5 +32,6 @@
     <string name="header_start_date">시작 날짜</string>
     <string name="header_end_date">종료 날짜</string>
     <string name="header_end_date_option">종료 날짜 설정</string>
+    <string name="icon_editor_dialog_title">아이콘 변경</string>
     
 </resources>
