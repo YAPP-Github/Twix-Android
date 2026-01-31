@@ -20,7 +20,6 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
@@ -35,6 +34,7 @@ import com.twix.designsystem.R
 import com.twix.designsystem.components.comment.model.CommentUiModel
 import com.twix.designsystem.keyboard.Keyboard
 import com.twix.designsystem.keyboard.keyboardAsState
+import com.twix.designsystem.theme.GrayColor
 import com.twix.designsystem.theme.TwixTheme
 import kotlinx.coroutines.android.awaitFrame
 
@@ -113,7 +113,7 @@ fun CommentTextField(
                             val cx = radius + index * paddingStart
 
                             drawCircle(
-                                color = Color.Black,
+                                color = GrayColor.C500,
                                 radius = radius,
                                 center = Offset(cx, radius),
                                 style = Stroke(2.dp.toPx()),

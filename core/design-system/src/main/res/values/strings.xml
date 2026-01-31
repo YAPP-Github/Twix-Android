@@ -20,4 +20,5 @@
 
     <!-- 코멘트 입력 -->
     <string name="comment_text_field_placeholder">코멘트추가</string>
+    <string name="comment_condition_guide">5글자로 코멘트를 남길 수 있어요</string>
 </resources>
