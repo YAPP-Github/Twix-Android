@@ -23,7 +23,7 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
-import com.twix.designsystem.components.AppRoundButton
+import com.twix.designsystem.components.button.AppRoundButton
 import com.twix.designsystem.components.text.AppText
 import com.twix.designsystem.theme.CommonColor
 import com.twix.designsystem.theme.GrayColor

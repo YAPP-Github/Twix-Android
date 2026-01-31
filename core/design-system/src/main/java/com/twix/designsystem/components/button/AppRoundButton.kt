@@ -1,4 +1,4 @@
-package com.twix.designsystem.components
+package com.twix.designsystem.components.button
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
