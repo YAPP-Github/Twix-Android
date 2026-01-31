@@ -46,7 +46,7 @@ class TaskCertificationViewModel :
     }
 
     private fun takePicture(uri: Uri?) {
-        uri?.let { updatePickPicture(it) } ?: viewModelScope.launch {
+        uri?.let { updatePicture(it) } ?: viewModelScope.launch {
             emitSideEffect(
                 TaskCertificationSideEffect.ImageCaptureFailException,
             )
@@ -54,10 +54,10 @@ class TaskCertificationViewModel :
     }
 
     private fun pickPicture(uri: Uri?) {
-        uri?.let { updatePickPicture(uri) }
+        uri?.let { updatePicture(uri) }
     }
 
-    private fun updatePickPicture(uri: Uri) {
+    private fun updatePicture(uri: Uri) {
         reduce { updateCapturedImage(uri) }
         if (uiState.value.torch == TorchStatus.On) {
             reduce { toggleTorch() }
