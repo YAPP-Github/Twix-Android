@@ -62,6 +62,10 @@ class TaskCertificationViewModel :
         if (uiState.value.torch == TorchStatus.On) {
             reduce { toggleTorch() }
         }
+
+        if (uiState.value.hasMaxCommentLength.not()) {
+            updateCommentFocus(true)
+        }
     }
 
     private fun toggleLens() {

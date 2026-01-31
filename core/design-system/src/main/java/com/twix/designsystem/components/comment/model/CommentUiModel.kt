@@ -8,6 +8,9 @@ data class CommentUiModel(
     val comment: TextFieldValue = TextFieldValue(""),
     val isFocused: Boolean = false,
 ) {
+    val hasMaxCommentLength: Boolean
+        get() = comment.text.length == COMMENT_COUNT
+
     fun updateComment(comment: TextFieldValue) = copy(comment = comment.copy(comment.text.take(COMMENT_COUNT)))
 
     fun updateFocus(isFocused: Boolean) = copy(isFocused = isFocused)

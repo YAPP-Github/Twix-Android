@@ -21,7 +21,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
-import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
@@ -170,7 +169,6 @@ private fun TaskCertificationScreen(
     onCommentChanged: (TextFieldValue) -> Unit,
     onFocusChanged: (Boolean) -> Unit,
 ) {
-    val keyboardController = LocalSoftwareKeyboardController.current
     val fucusManager = LocalFocusManager.current
 
     Column(

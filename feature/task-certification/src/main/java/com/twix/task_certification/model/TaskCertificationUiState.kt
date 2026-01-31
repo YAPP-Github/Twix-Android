@@ -15,6 +15,9 @@ data class TaskCertificationUiState(
     val preview: CameraPreview? = null,
     val commentUiModel: CommentUiModel = CommentUiModel(),
 ) : State {
+    val hasMaxCommentLength: Boolean
+        get() = commentUiModel.hasMaxCommentLength
+
     fun toggleLens(): TaskCertificationUiState {
         val newLens =
             if (lens == CameraSelector.DEFAULT_BACK_CAMERA) {
@@ -37,8 +40,4 @@ data class TaskCertificationUiState(
     fun updateComment(comment: TextFieldValue) = copy(commentUiModel = commentUiModel.updateComment(comment))
 
     fun updateCommentFocus(isFocused: Boolean) = copy(commentUiModel = commentUiModel.updateFocus(isFocused))
-
-    companion object {
-        private const val MAX_COMMENT_LENGTH = 5
-    }
 }
