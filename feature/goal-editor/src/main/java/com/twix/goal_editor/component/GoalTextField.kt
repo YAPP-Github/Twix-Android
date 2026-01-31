@@ -2,6 +2,8 @@ package com.twix.goal_editor.component
 
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -10,7 +12,9 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.onFocusChanged
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import com.twix.designsystem.R
 import com.twix.designsystem.components.text_field.UnderlineTextField
@@ -20,6 +24,7 @@ fun GoalTextField(
     value: String,
     onCommitTitle: (String) -> Unit,
 ) {
+    val focusManager = LocalFocusManager.current
     var internalValue by rememberSaveable(value) { mutableStateOf(value) }
     // 초기에 무의미하게 commit 되는 것을 방지하는 상태 변수
     var wasFocused by remember { mutableStateOf(false) }
@@ -38,5 +43,7 @@ fun GoalTextField(
         value = internalValue,
         placeHolder = stringResource(R.string.goal_editor_text_field_placeholder),
         onValueChange = { internalValue = it },
+        keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
+        keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() }),
     )
 }
