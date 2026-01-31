@@ -14,6 +14,9 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
@@ -37,6 +40,7 @@ import com.twix.designsystem.components.bottomsheet.CommonBottomSheet
 import com.twix.designsystem.components.bottomsheet.model.CommonBottomSheetConfig
 import com.twix.designsystem.components.button.AppButton
 import com.twix.designsystem.components.calendar.Calendar
+import com.twix.designsystem.components.dialog.CommonDialog
 import com.twix.designsystem.components.text.AppText
 import com.twix.designsystem.components.toast.ToastManager
 import com.twix.designsystem.components.toast.model.ToastData
@@ -44,12 +48,14 @@ import com.twix.designsystem.theme.CommonColor
 import com.twix.designsystem.theme.GrayColor
 import com.twix.designsystem.theme.TwixTheme
 import com.twix.domain.model.enums.AppTextStyle
+import com.twix.domain.model.enums.GoalIconType
 import com.twix.domain.model.enums.RepeatType
 import com.twix.goal_editor.component.EmojiPicker
 import com.twix.goal_editor.component.GoalEditorTopBar
 import com.twix.goal_editor.component.GoalInfoCard
 import com.twix.goal_editor.component.GoalTextField
 import com.twix.goal_editor.component.label
+import com.twix.goal_editor.component.toRes
 import com.twix.goal_editor.model.GoalEditorUiState
 import com.twix.ui.extension.dismissKeyboardOnTap
 import com.twix.ui.extension.noRippleClickable
@@ -80,6 +86,7 @@ fun GoalEditorRoute(
         onBack = navigateToBack,
         onCommitTitle = { viewModel.dispatch(GoalEditorIntent.SetTitle(it)) },
         onSelectRepeatType = { viewModel.dispatch(GoalEditorIntent.SetRepeatType(it)) },
+        onCommitIcon = { viewModel.dispatch(GoalEditorIntent.SetIcon(it)) },
         onCommitEndDate = { viewModel.dispatch(GoalEditorIntent.SetEndDate(it)) },
         onCommitStartDate = { viewModel.dispatch(GoalEditorIntent.SetStartDate(it)) },
         onCommitRepeatCount = { viewModel.dispatch(GoalEditorIntent.SetRepeatCount(it)) },
@@ -95,6 +102,7 @@ fun GoalEditorScreen(
     onBack: () -> Unit,
     onCommitTitle: (String) -> Unit,
     onSelectRepeatType: (RepeatType) -> Unit,
+    onCommitIcon: (GoalIconType) -> Unit,
     onCommitEndDate: (LocalDate) -> Unit,
     onCommitStartDate: (LocalDate) -> Unit,
     onCommitRepeatCount: (Int) -> Unit,
@@ -103,7 +111,9 @@ fun GoalEditorScreen(
 ) {
     var showRepeatCountBottomSheet by remember { mutableStateOf(false) }
     var showCalendarBottomSheet by remember { mutableStateOf(false) }
+    var showIconEditorDialog by remember { mutableStateOf(false) }
     var isEndDate by remember { mutableStateOf(true) }
+    var internalSelectedIcon by remember { mutableStateOf(uiState.selectedIcon) }
 
     Box {
         Column(
@@ -122,8 +132,8 @@ fun GoalEditorScreen(
             Spacer(Modifier.height(52.dp))
 
             EmojiPicker(
-                emojiId = uiState.selectedIconId,
-                onClick = {},
+                icon = uiState.selectedIcon,
+                onClick = { showIconEditorDialog = true },
             )
 
             Spacer(Modifier.height(44.dp))
@@ -194,6 +204,76 @@ fun GoalEditorScreen(
                 )
             },
         )
+
+        CommonDialog(
+            visible = showIconEditorDialog,
+            confirmText = stringResource(R.string.word_completion),
+            onDismissRequest = { showIconEditorDialog = false },
+            onConfirm = {
+                onCommitIcon(internalSelectedIcon)
+                showIconEditorDialog = false
+            },
+            content = {
+                IconEditorDialogContent(
+                    selectedIcon = internalSelectedIcon,
+                    onClick = { internalSelectedIcon = it },
+                )
+            },
+        )
+    }
+}
+
+@Composable
+private fun IconEditorDialogContent(
+    selectedIcon: GoalIconType,
+    onClick: (GoalIconType) -> Unit,
+) {
+    AppText(
+        text = stringResource(R.string.icon_editor_dialog_title),
+        style = AppTextStyle.T1,
+        color = GrayColor.C500,
+    )
+
+    Spacer(Modifier.height(16.dp))
+
+    LazyVerticalGrid(
+        columns = GridCells.Fixed(4),
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalArrangement = Arrangement.spacedBy(16.dp),
+    ) {
+        items(GoalIconType.entries) {
+            val isSelected = it == selectedIcon
+
+            /**
+             * LazyVerticalGrid(GridCells.Fixed(4))는 각 아이템을 전체 폭을 4등분한 값으로 측정함
+             * 따라서 아이템 루트에 CircleShape Border를 적용해도 LazyVerticalGrid가 측정한 아이템 폭에 의해 타원처럼 보일 수 있음
+             *
+             * 그래서 바깥 Box가 LazyVerticalGrid가 측정한 폭을 받아 정렬만 담당하고,
+             * 실제 원형 영역은 안쪽 Box(size + CircleShape)로 적용함
+             */
+            Box(
+                modifier = Modifier.fillMaxWidth(),
+                contentAlignment = Alignment.Center,
+            ) {
+                Box(
+                    modifier =
+                        Modifier
+                            .size(64.dp)
+                            .clip(CircleShape)
+                            .border(1.dp, if (isSelected) GrayColor.C500 else GrayColor.C100, CircleShape)
+                            .noRippleClickable(onClick = { onClick(it) }),
+                    contentAlignment = Alignment.Center,
+                ) {
+                    Image(
+                        painter = painterResource(it.toRes()),
+                        contentDescription = "emoji",
+                        modifier =
+                            Modifier
+                                .size(42.dp),
+                    )
+                }
+            }
+        }
     }
 }
 
@@ -340,6 +420,7 @@ private fun Preview() {
             onCommitRepeatCount = {},
             onToggleEndDateEnabled = {},
             onComplete = {},
+            onCommitIcon = {},
             isEdit = false,
         )
     }
