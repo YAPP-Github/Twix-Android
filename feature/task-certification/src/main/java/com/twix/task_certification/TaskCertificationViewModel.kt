@@ -34,6 +34,14 @@ class TaskCertificationViewModel :
             is TaskCertificationIntent.RetakePicture -> {
                 setupRetake()
             }
+
+            is TaskCertificationIntent.UpdateComment -> {
+                updateComment(intent)
+            }
+
+            is TaskCertificationIntent.CommentFocusChanged -> {
+                updateCommentFocus(intent.isFocused)
+            }
         }
     }
 
@@ -66,5 +74,13 @@ class TaskCertificationViewModel :
 
     private fun setupRetake() {
         reduce { removePicture() }
+    }
+
+    private fun updateComment(intent: TaskCertificationIntent.UpdateComment) {
+        reduce { updateComment(intent.comment) }
+    }
+
+    private fun updateCommentFocus(isFocused: Boolean) {
+        reduce { updateCommentFocus(isFocused) }
     }
 }

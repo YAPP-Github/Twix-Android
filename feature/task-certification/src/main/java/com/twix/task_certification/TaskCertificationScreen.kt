@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -18,7 +19,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
@@ -38,6 +43,7 @@ import com.twix.task_certification.model.TaskCertificationIntent
 import com.twix.task_certification.model.TaskCertificationSideEffect
 import com.twix.task_certification.model.TaskCertificationUiState
 import com.twix.ui.base.ObserveAsEvents
+import com.twix.ui.extension.noRippleClickable
 import com.twix.ui.toast.ToastManager
 import com.twix.ui.toast.model.ToastData
 import com.twix.ui.toast.model.ToastType
@@ -57,7 +63,7 @@ fun TaskCertificationRoute(
 
     val lifecycleOwner = LocalLifecycleOwner.current
     val coroutineScope = lifecycleOwner.lifecycle.coroutineScope
-    val context = androidx.compose.ui.platform.LocalContext.current
+    val context = LocalContext.current
 
     var hasPermission by remember {
         mutableStateOf(
@@ -140,6 +146,12 @@ fun TaskCertificationRoute(
         onClickRefresh = {
             viewModel.dispatch(TaskCertificationIntent.RetakePicture)
         },
+        onCommentChanged = {
+            viewModel.dispatch(TaskCertificationIntent.UpdateComment(it))
+        },
+        onFocusChanged = {
+            viewModel.dispatch(TaskCertificationIntent.CommentFocusChanged(it))
+        },
         onClickUpload = { },
     )
 }
@@ -155,11 +167,18 @@ private fun TaskCertificationScreen(
     onClickGallery: () -> Unit,
     onClickRefresh: () -> Unit,
     onClickUpload: () -> Unit,
+    onCommentChanged: (TextFieldValue) -> Unit,
+    onFocusChanged: (Boolean) -> Unit,
 ) {
+    val keyboardController = LocalSoftwareKeyboardController.current
+    val fucusManager = LocalFocusManager.current
+
     Column(
         Modifier
             .fillMaxSize()
-            .background(GrayColor.C500),
+            .background(GrayColor.C500)
+            .noRippleClickable { fucusManager.clearFocus() }
+            .imePadding(),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         TaskCertificationTopBar(
@@ -178,12 +197,13 @@ private fun TaskCertificationScreen(
 
         CameraPreviewBox(
             capture = uiState.capture,
+            commentUiModel = uiState.commentUiModel,
             previewRequest = cameraPreview,
             torch = uiState.torch,
-            onClickFlash = { onClickFlash() },
+            onClickFlash = onClickFlash,
+            onCommentChanged = onCommentChanged,
+            onFocusChanged = onFocusChanged,
         )
-
-        Spacer(modifier = Modifier.height(52.dp))
 
         CameraControlBar(
             capture = uiState.capture,
@@ -210,6 +230,8 @@ fun TaskCertificationScreenPreview() {
             onClickGallery = {},
             onClickRefresh = {},
             onClickUpload = {},
+            onCommentChanged = {},
+            onFocusChanged = {},
         )
     }
 }
