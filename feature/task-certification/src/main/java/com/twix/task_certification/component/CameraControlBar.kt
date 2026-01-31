@@ -127,6 +127,7 @@ private fun ImageCapturedBar(
     ) {
         Image(
             imageVector = ImageVector.vectorResource(R.drawable.ic_camera_refresh),
+            imageVector = ImageVector.vectorResource(R.drawable.ic_camera_retake),
             contentDescription = null,
             modifier =
                 Modifier
