@@ -2,6 +2,7 @@ package com.twix.task_certification.component
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -118,39 +119,44 @@ private fun ImageCapturedBar(
     onClickUpload: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    Row(
+    Box(
         modifier =
             modifier
+                .fillMaxWidth()
                 .padding(horizontal = 58.dp),
-        horizontalArrangement = Arrangement.Center,
-        verticalAlignment = Alignment.CenterVertically,
     ) {
         Image(
-            imageVector = ImageVector.vectorResource(R.drawable.ic_camera_refresh),
             imageVector = ImageVector.vectorResource(R.drawable.ic_camera_retake),
             contentDescription = null,
             modifier =
                 Modifier
-                    .size(50.dp)
+                    .size(52.dp)
+                    .align(Alignment.CenterStart)
                     .noRippleClickable(onClick = onClickRefresh),
         )
 
-        Spacer(modifier = Modifier.width(12.dp))
-
-        AppRoundButton(
-            borderColor = CommonColor.White,
-            backgroundColor = GrayColor.C500,
+        Row(
             modifier =
                 Modifier
-                    .width(150.dp)
-                    .height(74.dp)
-                    .noRippleClickable(onClick = onClickUpload),
+                    .align(Alignment.Center),
         ) {
-            AppText(
-                text = "업로드",
-                style = AppTextStyle.T2,
-                color = CommonColor.White,
-            )
+            Spacer(modifier = Modifier.width(12.dp))
+
+            AppRoundButton(
+                borderColor = CommonColor.White,
+                backgroundColor = GrayColor.C500,
+                modifier =
+                    Modifier
+                        .width(150.dp)
+                        .height(74.dp)
+                        .noRippleClickable(onClick = onClickUpload),
+            ) {
+                AppText(
+                    text = "업로드",
+                    style = AppTextStyle.T2,
+                    color = CommonColor.White,
+                )
+            }
         }
     }
 }
