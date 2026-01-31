@@ -28,4 +28,6 @@ data class TaskCertificationUiState(
     }
 
     fun updateCapturedImage(uri: Uri) = copy(capture = CaptureStatus.Captured(uri))
+
+    fun removePicture(): TaskCertificationUiState = copy(capture = CaptureStatus.NotCaptured)
 }
