@@ -134,7 +134,7 @@ private fun ImageCapturedBar(
                     .noRippleClickable(onClick = onClickRefresh),
         )
 
-        Spacer(modifier = modifier.width(12.dp))
+        Spacer(modifier = Modifier.width(12.dp))
 
         AppRoundButton(
             borderColor = CommonColor.White,
