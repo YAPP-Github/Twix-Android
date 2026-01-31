@@ -4,7 +4,10 @@ import androidx.camera.compose.CameraXViewfinder
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -21,8 +24,10 @@ import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
 import com.twix.designsystem.components.comment.CommentTextField
 import com.twix.designsystem.components.comment.model.CommentUiModel
+import com.twix.designsystem.components.text.AppText
 import com.twix.designsystem.theme.GrayColor
 import com.twix.designsystem.theme.TwixTheme
+import com.twix.domain.model.enums.AppTextStyle
 import com.twix.task_certification.R
 import com.twix.task_certification.model.CameraPreview
 import com.twix.task_certification.model.CaptureStatus
@@ -49,7 +54,8 @@ fun CameraPreviewBox(
                     color = GrayColor.C400,
                     width = 2.dp,
                     shape = RoundedCornerShape(73.83.dp),
-                ).clip(RoundedCornerShape(73.83.dp)),
+                )
+                .clip(RoundedCornerShape(73.83.dp)),
     ) {
         CameraSurface(capture, previewRequest)
 
@@ -57,15 +63,28 @@ fun CameraPreviewBox(
             TorchIcon(torch, onClickFlash)
         }
 
-        CommentTextField(
-            uiModel = commentUiModel,
-            onCommentChanged = onCommentChanged,
-            onFocusChanged = onFocusChanged,
-            modifier =
-                Modifier
-                    .padding(bottom = 20.dp)
-                    .align(Alignment.BottomCenter),
-        )
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            modifier = modifier.align(Alignment.BottomCenter),
+        ) {
+            if (commentUiModel.isFocused) {
+                AppText(
+                    text = "5글자로 코멘트를 남길 수 있어요",
+                    style = AppTextStyle.B2,
+                    color = GrayColor.C100,
+                )
+
+                Spacer(modifier = Modifier.height(8.dp))
+            }
+            CommentTextField(
+                uiModel = commentUiModel,
+                onCommentChanged = onCommentChanged,
+                onFocusChanged = onFocusChanged,
+                modifier =
+                    Modifier
+                        .padding(bottom = 20.dp),
+            )
+        }
     }
 }
 
@@ -121,7 +140,7 @@ private fun TorchIcon(
 fun CameraPreviewBoxNotCapturedPreview() {
     TwixTheme {
         CameraPreviewBox(
-            commentUiModel = CommentUiModel(),
+            commentUiModel = CommentUiModel(isFocused = true),
             capture = CaptureStatus.NotCaptured,
             torch = TorchStatus.Off,
             previewRequest = null,
