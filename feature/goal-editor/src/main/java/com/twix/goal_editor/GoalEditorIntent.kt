@@ -1,12 +1,13 @@
 package com.twix.goal_editor
 
+import com.twix.domain.model.enums.GoalIconType
 import com.twix.domain.model.enums.RepeatType
 import com.twix.ui.base.Intent
 import java.time.LocalDate
 
 sealed interface GoalEditorIntent : Intent {
     data class SetIcon(
-        val iconId: Long,
+        val icon: GoalIconType,
     ) : GoalEditorIntent
 
     data class SetTitle(
