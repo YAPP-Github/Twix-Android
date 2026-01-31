@@ -2,6 +2,7 @@ package com.twix.goal_editor
 
 import androidx.lifecycle.viewModelScope
 import com.twix.designsystem.components.toast.model.ToastType
+import com.twix.domain.model.enums.GoalIconType
 import com.twix.domain.model.enums.RepeatType
 import com.twix.goal_editor.model.GoalEditorUiState
 import com.twix.ui.base.BaseViewModel
@@ -15,7 +16,7 @@ class GoalEditorViewModel :
     override suspend fun handleIntent(intent: GoalEditorIntent) {
         when (intent) {
             GoalEditorIntent.Save -> save()
-            is GoalEditorIntent.SetIcon -> setIcon(intent.iconId)
+            is GoalEditorIntent.SetIcon -> setIcon(intent.icon)
             is GoalEditorIntent.SetEndDate -> setEndDate(intent.endDate)
             is GoalEditorIntent.SetRepeatCount -> setRepeatCount(intent.repeatCount)
             is GoalEditorIntent.SetRepeatType -> setRepeatType(intent.repeatType)
@@ -25,10 +26,8 @@ class GoalEditorViewModel :
         }
     }
 
-    private fun setIcon(iconId: Long) {
-        if (iconId <= 0) return
-
-        reduce { copy(selectedIconId = iconId) }
+    private fun setIcon(icon: GoalIconType) {
+        reduce { copy(selectedIcon = icon) }
     }
 
     private fun setTitle(title: String) {
