@@ -7,6 +7,7 @@ import com.twix.task_certification.model.TaskCertificationSideEffect
 import com.twix.task_certification.model.TaskCertificationUiState
 import com.twix.task_certification.model.TorchStatus
 import com.twix.ui.base.BaseViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class TaskCertificationViewModel :
@@ -41,6 +42,10 @@ class TaskCertificationViewModel :
 
             is TaskCertificationIntent.CommentFocusChanged -> {
                 updateCommentFocus(intent.isFocused)
+            }
+
+            is TaskCertificationIntent.Upload -> {
+                upload()
             }
         }
     }
@@ -86,5 +91,17 @@ class TaskCertificationViewModel :
 
     private fun updateCommentFocus(isFocused: Boolean) {
         reduce { updateCommentFocus(isFocused) }
+    }
+
+    private fun upload() {
+        if (uiState.value.commentUiModel.canUpload
+                .not()
+        ) {
+            viewModelScope.launch {
+                reduce { showCommentError() }
+                delay(1500)
+                reduce { hideCommentError() }
+            }
+        }
     }
 }

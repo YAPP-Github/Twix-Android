@@ -14,6 +14,7 @@ data class TaskCertificationUiState(
     val lens: CameraSelector = CameraSelector.DEFAULT_BACK_CAMERA,
     val preview: CameraPreview? = null,
     val commentUiModel: CommentUiModel = CommentUiModel(),
+    val showCommentError: Boolean = false,
 ) : State {
     val hasMaxCommentLength: Boolean
         get() = commentUiModel.hasMaxCommentLength
@@ -40,4 +41,8 @@ data class TaskCertificationUiState(
     fun updateComment(comment: TextFieldValue) = copy(commentUiModel = commentUiModel.updateComment(comment))
 
     fun updateCommentFocus(isFocused: Boolean) = copy(commentUiModel = commentUiModel.updateFocus(isFocused))
+
+    fun showCommentError() = copy(showCommentError = true)
+
+    fun hideCommentError() = copy(showCommentError = false)
 }

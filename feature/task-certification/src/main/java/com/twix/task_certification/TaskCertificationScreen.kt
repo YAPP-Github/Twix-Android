@@ -5,6 +5,7 @@ import android.content.pm.PackageManager
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.animation.AnimatedContent
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -36,6 +37,7 @@ import com.twix.domain.model.enums.AppTextStyle
 import com.twix.task_certification.camera.Camera
 import com.twix.task_certification.component.CameraControlBar
 import com.twix.task_certification.component.CameraPreviewBox
+import com.twix.task_certification.component.CommentErrorText
 import com.twix.task_certification.component.TaskCertificationTopBar
 import com.twix.task_certification.model.CameraPreview
 import com.twix.task_certification.model.TaskCertificationIntent
@@ -151,7 +153,9 @@ fun TaskCertificationRoute(
         onFocusChanged = {
             viewModel.dispatch(TaskCertificationIntent.CommentFocusChanged(it))
         },
-        onClickUpload = { },
+        onClickUpload = {
+            viewModel.dispatch(TaskCertificationIntent.Upload)
+        },
     )
 }
 
@@ -185,11 +189,17 @@ private fun TaskCertificationScreen(
 
         Spacer(modifier = Modifier.height(24.26.dp))
 
-        AppText(
-            text = stringResource(R.string.task_certification_title),
-            style = AppTextStyle.H2,
-            color = GrayColor.C100,
-        )
+        AnimatedContent(targetState = uiState.showCommentError) { isError ->
+            if (isError) {
+                CommentErrorText()
+            } else {
+                AppText(
+                    text = stringResource(R.string.task_certification_title),
+                    style = AppTextStyle.H2,
+                    color = GrayColor.C100,
+                )
+            }
+        }
 
         Spacer(modifier = Modifier.height(40.dp))
 

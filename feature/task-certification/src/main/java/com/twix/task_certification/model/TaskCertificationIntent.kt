@@ -26,4 +26,6 @@ sealed interface TaskCertificationIntent : Intent {
     data class CommentFocusChanged(
         val isFocused: Boolean,
     ) : TaskCertificationIntent
+
+    data object Upload : TaskCertificationIntent
 }
