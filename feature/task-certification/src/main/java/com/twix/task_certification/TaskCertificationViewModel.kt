@@ -7,6 +7,7 @@ import com.twix.task_certification.model.TaskCertificationSideEffect
 import com.twix.task_certification.model.TaskCertificationUiState
 import com.twix.task_certification.model.TorchStatus
 import com.twix.ui.base.BaseViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class TaskCertificationViewModel :
@@ -34,11 +35,23 @@ class TaskCertificationViewModel :
             is TaskCertificationIntent.RetakePicture -> {
                 setupRetake()
             }
+
+            is TaskCertificationIntent.UpdateComment -> {
+                updateComment(intent)
+            }
+
+            is TaskCertificationIntent.CommentFocusChanged -> {
+                updateCommentFocus(intent.isFocused)
+            }
+
+            is TaskCertificationIntent.Upload -> {
+                upload()
+            }
         }
     }
 
     private fun takePicture(uri: Uri?) {
-        uri?.let { updatePickPicture(it) } ?: viewModelScope.launch {
+        uri?.let { updatePicture(it) } ?: viewModelScope.launch {
             emitSideEffect(
                 TaskCertificationSideEffect.ImageCaptureFailException,
             )
@@ -46,13 +59,17 @@ class TaskCertificationViewModel :
     }
 
     private fun pickPicture(uri: Uri?) {
-        uri?.let { updatePickPicture(uri) }
+        uri?.let { updatePicture(uri) }
     }
 
-    private fun updatePickPicture(uri: Uri) {
+    private fun updatePicture(uri: Uri) {
         reduce { updateCapturedImage(uri) }
         if (uiState.value.torch == TorchStatus.On) {
             reduce { toggleTorch() }
+        }
+
+        if (uiState.value.hasMaxCommentLength.not()) {
+            updateCommentFocus(true)
         }
     }
 
@@ -66,5 +83,29 @@ class TaskCertificationViewModel :
 
     private fun setupRetake() {
         reduce { removePicture() }
+    }
+
+    private fun updateComment(intent: TaskCertificationIntent.UpdateComment) {
+        reduce { updateComment(intent.comment) }
+    }
+
+    private fun updateCommentFocus(isFocused: Boolean) {
+        reduce { updateCommentFocus(isFocused) }
+    }
+
+    private fun upload() {
+        if (uiState.value.commentUiModel.canUpload
+                .not()
+        ) {
+            viewModelScope.launch {
+                reduce { showCommentError() }
+                delay(ERROR_DISPLAY_DURATION_MS)
+                reduce { hideCommentError() }
+            }
+        }
+    }
+
+    companion object {
+        private const val ERROR_DISPLAY_DURATION_MS = 1500L
     }
 }
