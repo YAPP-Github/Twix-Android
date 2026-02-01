@@ -6,12 +6,15 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.AnimatedContent
+import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.imePadding
+import androidx.compose.foundation.layout.offset
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -20,17 +23,30 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusManager
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Rect
+import androidx.compose.ui.graphics.BlendMode
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.CompositingStrategy
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.coroutineScope
+import com.twix.designsystem.components.comment.CIRCLE_PADDING_START
+import com.twix.designsystem.components.comment.CIRCLE_SIZE
+import com.twix.designsystem.components.comment.model.CommentUiModel
 import com.twix.designsystem.components.text.AppText
+import com.twix.designsystem.theme.DimmedColor
 import com.twix.designsystem.theme.GrayColor
 import com.twix.designsystem.theme.TwixTheme
 import com.twix.domain.model.enums.AppTextStyle
@@ -51,6 +67,7 @@ import com.twix.ui.toast.model.ToastType
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 import org.koin.compose.koinInject
+import com.twix.designsystem.R as DesR
 
 @Composable
 fun TaskCertificationRoute(
@@ -173,13 +190,15 @@ private fun TaskCertificationScreen(
     onCommentChanged: (TextFieldValue) -> Unit,
     onFocusChanged: (Boolean) -> Unit,
 ) {
-    val fucusManager = LocalFocusManager.current
+    val focusManager = LocalFocusManager.current
+    var textFieldRect by remember { mutableStateOf(Rect.Zero) }
+    var guideTextRect by remember { mutableStateOf(Rect.Zero) }
 
     Column(
         Modifier
             .fillMaxSize()
             .background(GrayColor.C500)
-            .noRippleClickable { fucusManager.clearFocus() }
+            .noRippleClickable { focusManager.clearFocus() }
             .imePadding(),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
@@ -211,6 +230,8 @@ private fun TaskCertificationScreen(
             onClickFlash = onClickFlash,
             onCommentChanged = onCommentChanged,
             onFocusChanged = onFocusChanged,
+            onGuideTextPositioned = { guideTextRect = it },
+            onTextFieldPositioned = { textFieldRect = it },
         )
 
         CameraControlBar(
@@ -221,6 +242,65 @@ private fun TaskCertificationScreen(
             onClickRefresh = onClickRefresh,
             onClickUpload = onClickUpload,
         )
+    }
+
+    DimmedScreen(
+        isFocused = uiState.commentUiModel.isFocused,
+        textFieldRect = textFieldRect,
+        guideTextRect = guideTextRect,
+        focusManager = focusManager,
+    )
+}
+
+@Composable
+fun DimmedScreen(
+    isFocused: Boolean,
+    textFieldRect: Rect,
+    guideTextRect: Rect,
+    focusManager: FocusManager,
+) {
+    if (isFocused && textFieldRect != Rect.Zero) {
+        val density = LocalDensity.current
+        val circleSizePx = with(density) { CIRCLE_SIZE.toPx() }
+        val radiusPx = circleSizePx / 2
+        val paddingStartPx = with(density) { CIRCLE_PADDING_START.toPx() }
+
+        Canvas(
+            modifier =
+                Modifier
+                    .fillMaxSize()
+                    .graphicsLayer(compositingStrategy = CompositingStrategy.Offscreen)
+                    .noRippleClickable { focusManager.clearFocus() },
+        ) {
+            drawRect(color = DimmedColor.D070)
+
+            repeat(CommentUiModel.COMMENT_COUNT) { index ->
+                val cx = textFieldRect.left + radiusPx + (index * paddingStartPx)
+                val cy = textFieldRect.top + radiusPx
+
+                drawCircle(
+                    color = Color.Transparent,
+                    radius = radiusPx,
+                    center = Offset(cx, cy),
+                    blendMode = BlendMode.Clear,
+                )
+            }
+        }
+
+        if (guideTextRect != Rect.Zero) {
+            Box(
+                modifier =
+                    Modifier.offset {
+                        IntOffset(guideTextRect.left.toInt(), guideTextRect.top.toInt())
+                    },
+            ) {
+                AppText(
+                    text = stringResource(DesR.string.comment_condition_guide),
+                    style = AppTextStyle.B2,
+                    color = GrayColor.C100,
+                )
+            }
+        }
     }
 }
 

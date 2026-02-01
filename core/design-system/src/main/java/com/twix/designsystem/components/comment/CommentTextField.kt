@@ -20,7 +20,10 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.layout.boundsInRoot
+import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
@@ -38,8 +41,8 @@ import com.twix.designsystem.theme.GrayColor
 import com.twix.designsystem.theme.TwixTheme
 import kotlinx.coroutines.android.awaitFrame
 
-private val CIRCLE_PADDING_START: Dp = 50.dp
-private val CIRCLE_SIZE: Dp = 64.dp
+val CIRCLE_PADDING_START: Dp = 50.dp
+val CIRCLE_SIZE: Dp = 64.dp
 private val CIRCLE_GAP: Dp = CIRCLE_PADDING_START - CIRCLE_SIZE
 
 @Composable
@@ -47,6 +50,7 @@ fun CommentTextField(
     uiModel: CommentUiModel,
     onCommentChanged: (TextFieldValue) -> Unit,
     onFocusChanged: (Boolean) -> Unit,
+    onPositioned: (Rect) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val focusManager = LocalFocusManager.current
@@ -80,7 +84,9 @@ fun CommentTextField(
     Box(
         modifier =
             modifier
-                .clickable(
+                .onGloballyPositioned { coordinates ->
+                    onPositioned(coordinates.boundsInRoot())
+                }.clickable(
                     // TODO : noClickableRipple 로 수정
                     interactionSource = interactionSource,
                     indication = null,
@@ -160,6 +166,7 @@ private fun CommentTextFieldPreview() {
             uiModel = CommentUiModel(text, isFocused),
             onCommentChanged = { text = it },
             onFocusChanged = { isFocused = it },
+            onPositioned = {},
         )
     }
 }

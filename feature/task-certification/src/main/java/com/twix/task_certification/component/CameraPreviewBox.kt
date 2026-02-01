@@ -12,6 +12,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.vectorResource
@@ -38,6 +39,8 @@ fun CameraPreviewBox(
     onClickFlash: () -> Unit,
     onCommentChanged: (TextFieldValue) -> Unit,
     onFocusChanged: (Boolean) -> Unit,
+    onGuideTextPositioned: (Rect) -> Unit,
+    onTextFieldPositioned: (Rect) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Box(
@@ -53,7 +56,7 @@ fun CameraPreviewBox(
     ) {
         CameraSurface(capture, previewRequest)
 
-        if (capture == CaptureStatus.NotCaptured) {
+        if (capture is CaptureStatus.NotCaptured) {
             TorchIcon(torch, onClickFlash)
         }
 
@@ -61,6 +64,8 @@ fun CameraPreviewBox(
             uiModel = commentUiModel,
             onCommentChanged = onCommentChanged,
             onFocusChanged = onFocusChanged,
+            onGuideTextPositioned = onGuideTextPositioned,
+            onTextFieldPositioned = onTextFieldPositioned,
             modifier = Modifier.align(Alignment.BottomCenter),
         )
     }
@@ -125,6 +130,8 @@ fun CameraPreviewBoxNotCapturedPreview() {
             onClickFlash = {},
             onCommentChanged = {},
             onFocusChanged = {},
+            onGuideTextPositioned = {},
+            onTextFieldPositioned = {},
         )
     }
 }
