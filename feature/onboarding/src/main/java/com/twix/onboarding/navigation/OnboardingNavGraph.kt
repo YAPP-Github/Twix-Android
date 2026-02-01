@@ -8,6 +8,7 @@ import com.twix.navigation.NavRoutes
 import com.twix.navigation.base.NavGraphContributor
 import com.twix.onboarding.couple.CoupleConnectRoute
 import com.twix.onboarding.dday.DdayRouete
+import com.twix.onboarding.invite.InviteCodeRoute
 import com.twix.onboarding.profile.ProfileRoute
 
 object OnboardingNavGraph : NavGraphContributor {
@@ -26,8 +27,18 @@ object OnboardingNavGraph : NavGraphContributor {
         ) {
             composable(NavRoutes.CoupleConnectionRoute.route) {
                 CoupleConnectRoute(
-                    onNext = { navController.navigate(NavRoutes.ProfileRoute.route) },
+                    onNext = {
+                        navController.navigate(NavRoutes.InviteRoute.route) {
+                            popUpTo(graphRoute.route) { inclusive = true }
+                            launchSingleTop = true
+                        }
+                    },
                 )
+            }
+            composable(NavRoutes.InviteRoute.route) {
+                InviteCodeRoute(onNext = {
+                    navController.navigate(NavRoutes.ProfileRoute.route)
+                })
             }
             composable(NavRoutes.ProfileRoute.route) {
                 ProfileRoute(

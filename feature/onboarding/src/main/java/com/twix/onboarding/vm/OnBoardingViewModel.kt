@@ -20,6 +20,10 @@ class OnBoardingViewModel(
             OnBoardingIntent.SubmitNickName -> {
                 handleSubmitNickname()
             }
+
+            is OnBoardingIntent.WriteInviteCode -> {
+                reduceInviteCode(intent.value)
+            }
         }
     }
 
@@ -38,5 +42,9 @@ class OnBoardingViewModel(
         viewModelScope.launch {
             emitSideEffect(sideEffect)
         }
+    }
+
+    private fun reduceInviteCode(value: String) {
+        reduce { updateInviteCode(value) }
     }
 }

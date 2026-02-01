@@ -12,4 +12,7 @@
     <string name="onboarding_couple_connect_direct_description">짝꿍에게 코드를 받았다면?</string>
     <string name="onboarding_couple_connect_direct">직접</string>
     <string name="onboarding_couple_connect">연결하기</string>
+    <string name="onboarding_couple_connect_plz_write_invite_code">짝꿍에게 받은\n초대 코드를 써주세요</string>
+    <string name="onboarding_couple_connect_my_invite_code">내 초대 코드</string>
+    <string name="onboarding_couple_connect_write_invite_code">받은 코드 쓰기</string>
 </resources>
