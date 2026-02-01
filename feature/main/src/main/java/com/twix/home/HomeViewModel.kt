@@ -1,9 +1,16 @@
 package com.twix.home
 
+import androidx.lifecycle.viewModelScope
+import com.twix.designsystem.components.toast.ToastManager
 import com.twix.domain.model.enums.WeekNavigation
+import com.twix.home.model.CalendarState
 import com.twix.home.model.HomeUiState
 import com.twix.ui.base.BaseViewModel
-import com.twix.ui.toast.ToastManager
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.stateIn
 import java.time.LocalDate
 
 class HomeViewModel(
@@ -11,6 +18,26 @@ class HomeViewModel(
 ) : BaseViewModel<HomeUiState, HomeIntent, HomeSideEffect>(
         HomeUiState(),
     ) {
+    val calendarState: StateFlow<CalendarState> =
+        uiState
+            .map { state ->
+                CalendarState(
+                    visibleDate = state.visibleDate,
+                    selectedDate = state.selectedDate,
+                    monthYearText = state.monthYear,
+                )
+            }.distinctUntilChanged()
+            .stateIn(
+                scope = viewModelScope,
+                started = SharingStarted.WhileSubscribed(5_000),
+                initialValue =
+                    CalendarState(
+                        visibleDate = currentState.visibleDate,
+                        selectedDate = currentState.selectedDate,
+                        monthYearText = currentState.monthYear,
+                    ),
+            )
+
     override suspend fun handleIntent(intent: HomeIntent) {
         when (intent) {
             is HomeIntent.SelectDate -> updateDate(intent.date)
@@ -26,7 +53,7 @@ class HomeViewModel(
 
         if (date.month != currentState.visibleDate.month) updateVisibleDate(date)
 
-        reduce { copy(selectedDate = date) }
+        reduce { copy(selectedDate = date, referenceDate = date) }
     }
 
     private fun shiftWeek(action: WeekNavigation) {
@@ -37,6 +64,7 @@ class HomeViewModel(
                 WeekNavigation.TODAY -> LocalDate.now()
             }
         if (currentState.referenceDate == newReference) return
+        if (action == WeekNavigation.TODAY) updateDate(newReference)
         reduce { copy(referenceDate = newReference) }
     }
 

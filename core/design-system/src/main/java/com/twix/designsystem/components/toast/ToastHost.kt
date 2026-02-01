@@ -1,4 +1,4 @@
-package com.twix.ui.toast
+package com.twix.designsystem.components.toast
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.tween
@@ -35,13 +35,13 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.twix.designsystem.R
 import com.twix.designsystem.components.text.AppText
+import com.twix.designsystem.components.toast.model.ToastAction
+import com.twix.designsystem.components.toast.model.ToastData
+import com.twix.designsystem.components.toast.model.ToastType
 import com.twix.designsystem.theme.CommonColor
 import com.twix.designsystem.theme.GrayColor
 import com.twix.domain.model.enums.AppTextStyle
 import com.twix.ui.extension.noRippleClickable
-import com.twix.ui.toast.model.ToastAction
-import com.twix.ui.toast.model.ToastData
-import com.twix.ui.toast.model.ToastType
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
