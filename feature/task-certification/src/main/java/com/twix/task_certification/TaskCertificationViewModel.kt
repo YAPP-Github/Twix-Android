@@ -99,9 +99,13 @@ class TaskCertificationViewModel :
         ) {
             viewModelScope.launch {
                 reduce { showCommentError() }
-                delay(1500)
+                delay(ERROR_DISPLAY_DURATION_MS)
                 reduce { hideCommentError() }
             }
         }
+    }
+
+    companion object {
+        private const val ERROR_DISPLAY_DURATION_MS = 1500L
     }
 }
