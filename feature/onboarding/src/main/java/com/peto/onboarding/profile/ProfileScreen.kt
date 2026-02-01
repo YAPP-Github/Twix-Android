@@ -20,6 +20,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -27,6 +28,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.peto.onboarding.R
 import com.peto.onboarding.model.OnBoardingIntent
+import com.peto.onboarding.model.OnBoardingSideEffect
 import com.peto.onboarding.profile.component.NameTextField
 import com.peto.onboarding.profile.component.OnBoardingTopbar
 import com.peto.onboarding.vm.OnBoardingViewModel
@@ -37,21 +39,46 @@ import com.twix.designsystem.theme.GrayColor
 import com.twix.designsystem.theme.SystemColor
 import com.twix.designsystem.theme.TwixTheme
 import com.twix.domain.model.enums.AppTextStyle
+import com.twix.ui.toast.ToastManager
+import com.twix.ui.toast.model.ToastData
+import com.twix.ui.toast.model.ToastType
 import org.koin.androidx.compose.koinViewModel
+import org.koin.compose.koinInject
 import com.twix.designsystem.R as DesR
 
 @Composable
 fun ProfileRoute(
     onNext: () -> Unit,
     onBack: () -> Unit,
+    toastManager: ToastManager = koinInject(),
     viewModel: OnBoardingViewModel = koinViewModel(),
 ) {
+    val context = LocalContext.current
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+
+    LaunchedEffect(viewModel.sideEffect) {
+        viewModel.sideEffect.collect { sideEffect ->
+            when (sideEffect) {
+                OnBoardingSideEffect.ProfileSetting.ShowInvalidNickNameToast -> {
+                    toastManager.tryShow(
+                        ToastData(
+                            message = context.getString(R.string.onboarding_profile_invalid_name_length_toast),
+                            type = ToastType.ERROR,
+                        ),
+                    )
+                }
+
+                OnBoardingSideEffect.ProfileSetting.NavigateToNext -> onNext()
+            }
+        }
+    }
 
     ProfileScreen(
         uiModel = uiState.profile,
         onBack = onBack,
-        onCompleted = onNext,
+        onCompleted = {
+            viewModel.dispatch(OnBoardingIntent.SubmitNickName)
+        },
         onChangeNickName = { viewModel.dispatch(OnBoardingIntent.WriteNickName(it)) },
     )
 }
@@ -124,7 +151,6 @@ private fun ProfileScreen(
         AppButton(
             text = stringResource(R.string.onboarding_profile_button_title),
             onClick = { onCompleted() },
-            enabled = uiModel.isValid,
             backgroundColor = if (uiModel.isValid) GrayColor.C500 else GrayColor.C100,
             textColor = if (uiModel.isValid) CommonColor.White else GrayColor.C300,
             modifier =

@@ -34,7 +34,8 @@ class MainActivity : ComponentActivity() {
                         toastManager = toastManager,
                         modifier =
                             Modifier
-                                .align(Alignment.BottomCenter),
+                                .align(Alignment.BottomCenter)
+                                .imePadding(),
                     )
                 }
             }

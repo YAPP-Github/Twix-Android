@@ -8,5 +8,8 @@ import com.twix.ui.base.State
 data class OnBoardingUiState(
     val profile: ProfileUiModel = ProfileUiModel(),
 ) : State {
+    val isValidNickName: Boolean
+        get() = profile.isValid
+
     fun updateNickName(value: String) = copy(profile = profile.updateNickname(value))
 }

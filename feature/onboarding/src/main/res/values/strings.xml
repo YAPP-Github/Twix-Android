@@ -6,4 +6,5 @@
     <string name="onboarding_profile_placeholder">닉네임을 입력해 주세요.</string>
     <string name="onboarding_profile_helper">닉네임 2~8자</string>
     <string name="onboarding_profile_button_title">완료</string>
+    <string name="onboarding_profile_invalid_name_length_toast">2자에서 8자 이내로 닉네임을 입력해주세요.</string>
 </resources>
