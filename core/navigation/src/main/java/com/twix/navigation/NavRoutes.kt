@@ -23,4 +23,17 @@ sealed class NavRoutes(
     object MainGraph : NavRoutes("main_graph")
 
     object MainRoute : NavRoutes("main")
+
+    /**
+     * OnboardingGraph
+     * */
+    object OnboardingGraph : NavRoutes("onboarding_graph")
+
+    object OnboardingRoute : NavRoutes("onboarding")
+
+    object CoupleConnectionRoute : NavRoutes("couple_connect")
+
+    object ProfileRoute : NavRoutes("profile")
+
+    object DdayRoute : NavRoutes("dday")
 }

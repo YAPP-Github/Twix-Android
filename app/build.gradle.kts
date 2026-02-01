@@ -35,6 +35,7 @@ dependencies {
     implementation(projects.domain)
     implementation(projects.feature.login)
     implementation(projects.feature.main)
+    implementation(projects.feature.onboarding)
 
     // Firebase
     implementation(platform(libs.google.firebase.bom))
