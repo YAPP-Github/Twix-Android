@@ -1,14 +1,14 @@
-package com.peto.onboarding.navigation
+package com.twix.onboarding.navigation
 
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
-import com.peto.onboarding.couple.CoupleConnectRoute
-import com.peto.onboarding.dday.DdayRouete
-import com.peto.onboarding.profile.ProfileRoute
 import com.twix.navigation.NavRoutes
 import com.twix.navigation.base.NavGraphContributor
+import com.twix.onboarding.couple.CoupleConnectRoute
+import com.twix.onboarding.dday.DdayRouete
+import com.twix.onboarding.profile.ProfileRoute
 
 object OnboardingNavGraph : NavGraphContributor {
     override val graphRoute: NavRoutes

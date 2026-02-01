@@ -1,4 +1,4 @@
-package com.peto.onboarding.profile
+package com.twix.onboarding.profile
 
 import androidx.compose.runtime.Immutable
 import com.twix.domain.model.nickname.NickName

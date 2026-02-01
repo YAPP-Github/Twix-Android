@@ -1,7 +1,7 @@
-package com.peto.onboarding.model
+package com.twix.onboarding.model
 
 import androidx.compose.runtime.Immutable
-import com.peto.onboarding.profile.ProfileUiModel
+import com.twix.onboarding.profile.ProfileUiModel
 import com.twix.ui.base.State
 
 @Immutable

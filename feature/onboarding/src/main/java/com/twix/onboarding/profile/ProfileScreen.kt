@@ -1,4 +1,4 @@
-package com.peto.onboarding.profile
+package com.twix.onboarding.profile
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
@@ -26,12 +26,6 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.peto.onboarding.R
-import com.peto.onboarding.model.OnBoardingIntent
-import com.peto.onboarding.model.OnBoardingSideEffect
-import com.peto.onboarding.profile.component.NameTextField
-import com.peto.onboarding.profile.component.OnBoardingTopbar
-import com.peto.onboarding.vm.OnBoardingViewModel
 import com.twix.designsystem.components.button.AppButton
 import com.twix.designsystem.components.text.AppText
 import com.twix.designsystem.theme.CommonColor
@@ -39,6 +33,12 @@ import com.twix.designsystem.theme.GrayColor
 import com.twix.designsystem.theme.SystemColor
 import com.twix.designsystem.theme.TwixTheme
 import com.twix.domain.model.enums.AppTextStyle
+import com.twix.onboarding.R
+import com.twix.onboarding.model.OnBoardingIntent
+import com.twix.onboarding.model.OnBoardingSideEffect
+import com.twix.onboarding.profile.component.NameTextField
+import com.twix.onboarding.profile.component.OnBoardingTopbar
+import com.twix.onboarding.vm.OnBoardingViewModel
 import com.twix.ui.toast.ToastManager
 import com.twix.ui.toast.model.ToastData
 import com.twix.ui.toast.model.ToastType

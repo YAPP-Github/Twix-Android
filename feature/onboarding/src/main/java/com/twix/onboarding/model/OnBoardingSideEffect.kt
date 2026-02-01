@@ -1,4 +1,4 @@
-package com.peto.onboarding.model
+package com.twix.onboarding.model
 
 import com.twix.ui.base.SideEffect
 

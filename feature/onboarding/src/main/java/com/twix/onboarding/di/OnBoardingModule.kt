@@ -1,9 +1,9 @@
-package com.peto.onboarding.di
+package com.twix.onboarding.di
 
-import com.peto.onboarding.navigation.OnboardingNavGraph
-import com.peto.onboarding.vm.OnBoardingViewModel
 import com.twix.navigation.NavRoutes
 import com.twix.navigation.base.NavGraphContributor
+import com.twix.onboarding.navigation.OnboardingNavGraph
+import com.twix.onboarding.vm.OnBoardingViewModel
 import org.koin.core.module.dsl.viewModelOf
 import org.koin.core.qualifier.named
 import org.koin.dsl.module

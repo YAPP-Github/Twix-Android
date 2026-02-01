@@ -1,10 +1,10 @@
-package com.peto.onboarding.vm
+package com.twix.onboarding.vm
 
 import androidx.lifecycle.viewModelScope
-import com.peto.onboarding.model.OnBoardingIntent
-import com.peto.onboarding.model.OnBoardingSideEffect
-import com.peto.onboarding.model.OnBoardingUiState
 import com.twix.domain.repository.OnBoardingRepository
+import com.twix.onboarding.model.OnBoardingIntent
+import com.twix.onboarding.model.OnBoardingSideEffect
+import com.twix.onboarding.model.OnBoardingUiState
 import com.twix.ui.base.BaseViewModel
 import kotlinx.coroutines.launch
 

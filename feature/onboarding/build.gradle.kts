@@ -3,5 +3,5 @@ plugins {
 }
 
 android {
-    namespace = "com.peto.onboarding"
+    namespace = "com.twix.onboarding"
 }

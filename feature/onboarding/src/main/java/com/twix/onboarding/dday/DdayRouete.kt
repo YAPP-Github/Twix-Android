@@ -1,4 +1,4 @@
-package com.peto.onboarding.couple
+package com.twix.onboarding.dday
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -10,16 +10,25 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 
 @Composable
-fun CoupleConnectRoute(onNext: () -> Unit) {
+fun DdayRouete(
+    onComplete: () -> Unit,
+    onBack: () -> Unit,
+) {
     Column(
         modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-        Text("커플 등록 등록 화면")
+        Text("디데이 등록 화면")
 
         Button(
-            onClick = { onNext() },
+            onClick = { onBack() },
+        ) {
+            Text("뒤로")
+        }
+
+        Button(
+            onClick = { onComplete() },
         ) {
             Text("다음")
         }
