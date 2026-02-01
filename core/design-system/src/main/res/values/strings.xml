@@ -1,0 +1,21 @@
+<resources>
+
+    <!-- 단어 -->
+    <string name="word_home">홈</string>
+    <string name="word_stats">통계</string>
+    <string name="word_couple_page">커플페이지</string>
+    <string name="word_today">오늘</string>
+
+    <string name="word_sunday">일</string>
+    <string name="word_monday">월</string>
+    <string name="word_tuesday">화</string>
+    <string name="word_wednesday">수</string>
+    <string name="word_thursday">목</string>
+    <string name="word_friday">금</string>
+    <string name="word_saturday">토</string>
+
+    <!-- 홈 화면 -->
+    <string name="home_today_goal">오늘 우리 목표</string>
+    <string name="home_empty_goal_guide">첫 목표를 세워볼까요?</string>
+    
+</resources>

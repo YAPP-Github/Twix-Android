@@ -10,15 +10,17 @@ package com.twix.navigation
 sealed class NavRoutes(
     val route: String,
 ) {
+    /**
+     * LoginGraph
+     * */
     object LoginGraph : NavRoutes("login_graph")
 
-    object Login : NavRoutes("login")
+    object LoginRoute : NavRoutes("login")
 
-    object HomeGraph : NavRoutes("home_graph")
+    /**
+     * MainGraph
+     * */
+    object MainGraph : NavRoutes("main_graph")
 
-    object Home : NavRoutes("home")
-
-    object HomeDetail : NavRoutes("home_detail/{id}") {
-        fun createRoute(id: String) = "home_detail/$id"
-    }
+    object MainRoute : NavRoutes("main")
 }

@@ -3,6 +3,7 @@ package com.yapp.twix.di
 import android.content.Context
 import com.twix.data.di.dataModule
 import com.twix.network.di.networkModule
+import com.twix.ui.di.uiModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
 import org.koin.core.module.Module
@@ -20,6 +21,7 @@ fun initKoin(
                 addAll(featureModules)
                 addAll(networkModule)
                 addAll(dataModule)
+                add(uiModule)
             },
         )
     }
