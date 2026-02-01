@@ -37,7 +37,6 @@ import com.twix.onboarding.R
 import com.twix.onboarding.model.OnBoardingIntent
 import com.twix.onboarding.model.OnBoardingSideEffect
 import com.twix.onboarding.profile.component.NameTextField
-import com.twix.onboarding.profile.component.OnBoardingTopbar
 import com.twix.onboarding.vm.OnBoardingViewModel
 import com.twix.ui.toast.ToastManager
 import com.twix.ui.toast.model.ToastData
@@ -49,7 +48,6 @@ import com.twix.designsystem.R as DesR
 @Composable
 fun ProfileRoute(
     onNext: () -> Unit,
-    onBack: () -> Unit,
     toastManager: ToastManager = koinInject(),
     viewModel: OnBoardingViewModel = koinViewModel(),
 ) {
@@ -75,7 +73,6 @@ fun ProfileRoute(
 
     ProfileScreen(
         uiModel = uiState.profile,
-        onBack = onBack,
         onCompleted = {
             viewModel.dispatch(OnBoardingIntent.SubmitNickName)
         },
@@ -86,7 +83,6 @@ fun ProfileRoute(
 @Composable
 private fun ProfileScreen(
     uiModel: ProfileUiModel,
-    onBack: () -> Unit,
     onCompleted: () -> Unit,
     onChangeNickName: (String) -> Unit,
 ) {
@@ -103,9 +99,7 @@ private fun ProfileScreen(
                 .background(color = CommonColor.White)
                 .imePadding(),
     ) {
-        OnBoardingTopbar { onBack() }
-
-        Spacer(modifier = Modifier.height(8.dp))
+        Spacer(modifier = Modifier.height(80.dp))
 
         AppText(
             text = stringResource(R.string.onboarding_profile_title),
@@ -168,7 +162,6 @@ private fun UnValidProfileScreenPreview() {
     TwixTheme {
         Row {
             ProfileScreen(
-                onBack = {},
                 onCompleted = {},
                 onChangeNickName = {},
                 uiModel =
@@ -186,7 +179,6 @@ private fun UnValidProfileScreenPreview() {
 private fun ValidProfileScreenPreview() {
     TwixTheme {
         ProfileScreen(
-            onBack = {},
             onCompleted = {},
             onChangeNickName = {},
             uiModel =

@@ -32,7 +32,6 @@ object OnboardingNavGraph : NavGraphContributor {
             composable(NavRoutes.ProfileRoute.route) {
                 ProfileRoute(
                     onNext = { navController.navigate(NavRoutes.DdayRoute.route) },
-                    onBack = { navController.popBackStack() },
                 )
             }
             composable(NavRoutes.DdayRoute.route) {
