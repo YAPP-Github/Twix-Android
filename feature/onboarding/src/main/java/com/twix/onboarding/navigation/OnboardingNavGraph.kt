@@ -36,9 +36,14 @@ object OnboardingNavGraph : NavGraphContributor {
                 )
             }
             composable(NavRoutes.InviteRoute.route) {
-                InviteCodeRoute(onNext = {
-                    navController.navigate(NavRoutes.ProfileRoute.route)
-                })
+                InviteCodeRoute(
+                    onNext = {
+                        navController.navigate(NavRoutes.ProfileRoute.route) {
+                            popUpTo(graphRoute.route) { inclusive = true }
+                            launchSingleTop = true
+                        }
+                    },
+                )
             }
             composable(NavRoutes.ProfileRoute.route) {
                 ProfileRoute(

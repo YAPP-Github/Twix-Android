@@ -15,5 +15,7 @@ data class OnBoardingUiState(
 
     fun updateNickName(value: String) = copy(profile = profile.updateNickname(value))
 
+    fun updateMyInviteCode(value: String) = copy(inviteCode = inviteCode.updateMyInviteCode(value))
+
     fun updateInviteCode(value: String) = copy(inviteCode = inviteCode.updateInviteCode(value))
 }

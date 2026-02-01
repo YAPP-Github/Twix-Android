@@ -33,6 +33,8 @@ sealed class NavRoutes(
 
     object CoupleConnectionRoute : NavRoutes("couple_connect")
 
+    object InviteRoute : NavRoutes("invite")
+
     object ProfileRoute : NavRoutes("profile")
 
     object DdayRoute : NavRoutes("dday")

@@ -11,5 +11,9 @@ sealed interface OnBoardingSideEffect : SideEffect {
 
     sealed interface CoupleConnection : OnBoardingSideEffect
 
+    sealed interface InviteCode : OnBoardingSideEffect {
+        data object ShowCopyInviteCodeSuccessToast : InviteCode
+    }
+
     sealed interface DDaySetting : OnBoardingSideEffect
 }

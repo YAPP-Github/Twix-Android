@@ -28,8 +28,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalClipboardManager
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -44,22 +47,45 @@ import com.twix.domain.model.enums.AppTextStyle
 import com.twix.onboarding.R
 import com.twix.onboarding.invite.component.InviteCodeTextField
 import com.twix.onboarding.model.OnBoardingIntent
+import com.twix.onboarding.model.OnBoardingSideEffect
 import com.twix.onboarding.vm.OnBoardingViewModel
+import com.twix.ui.extension.noRippleClickable
+import com.twix.ui.toast.ToastManager
+import com.twix.ui.toast.model.ToastData
+import com.twix.ui.toast.model.ToastType
+import org.koin.compose.koinInject
 import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 internal fun InviteCodeRoute(
     onNext: () -> Unit,
+    toastManager: ToastManager = koinInject(),
     viewModel: OnBoardingViewModel = koinViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val keyboardState by keyboardAsState()
+    val context = LocalContext.current
+
+    LaunchedEffect(viewModel.sideEffect) {
+        when (viewModel.sideEffect) {
+            OnBoardingSideEffect.InviteCode.ShowCopyInviteCodeSuccessToast -> {
+                toastManager.tryShow(
+                    ToastData(
+                        message = context.getString(R.string.onboarding_invite_code_copy),
+                        type = ToastType.SUCCESS,
+                    ),
+                )
+            }
+
+            else -> Unit
+        }
+    }
 
     InviteCodeScreen(
         uiModel = uiState.inviteCode,
         keyboardState = keyboardState,
         onChangeInviteCode = { viewModel.dispatch(OnBoardingIntent.WriteInviteCode(it)) },
-        onComplete = {},
+        onComplete = onNext,
     )
 }
 
@@ -71,6 +97,7 @@ private fun InviteCodeScreen(
     onComplete: () -> Unit,
 ) {
     val focusRequester = remember { FocusRequester() }
+    val clipboardManager = LocalClipboardManager.current
 
     LaunchedEffect(Unit) {
         focusRequester.requestFocus()
@@ -89,7 +116,7 @@ private fun InviteCodeScreen(
                 exit = fadeOut() + shrinkVertically(),
             ) {
                 AppText(
-                    text = stringResource(R.string.onboarding_couple_connect_plz_write_invite_code),
+                    text = stringResource(R.string.onboarding_invite_code_plz_write_invite_code),
                     style = AppTextStyle.H3,
                     color = GrayColor.C500,
                     modifier = Modifier.padding(start = 24.dp, top = 80.dp),
@@ -113,7 +140,7 @@ private fun InviteCodeScreen(
                 verticalArrangement = Arrangement.Center,
             ) {
                 AppText(
-                    text = stringResource(R.string.onboarding_couple_connect_my_invite_code),
+                    text = stringResource(R.string.onboarding_invite_code_my_invite_code),
                     style = AppTextStyle.B3,
                     color = GrayColor.C400,
                 )
@@ -124,7 +151,7 @@ private fun InviteCodeScreen(
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
                     AppText(
-                        text = stringResource(R.string.onboarding_couple_connect_my_invite_code),
+                        text = uiModel.myInviteCode,
                         style = AppTextStyle.H1,
                         color = GrayColor.C500,
                     )
@@ -134,6 +161,10 @@ private fun InviteCodeScreen(
                     Image(
                         imageVector = ImageVector.vectorResource(R.drawable.ic_copy),
                         contentDescription = null,
+                        modifier =
+                            Modifier.noRippleClickable {
+                                clipboardManager.setText(AnnotatedString(uiModel.myInviteCode))
+                            },
                     )
                 }
             }
@@ -141,7 +172,7 @@ private fun InviteCodeScreen(
             Spacer(modifier = Modifier.height(52.dp))
 
             AppText(
-                text = stringResource(R.string.onboarding_couple_connect_write_invite_code),
+                text = stringResource(R.string.onboarding_invite_code_write_invite_code),
                 style = AppTextStyle.B3,
                 color = GrayColor.C500,
                 modifier = Modifier.align(Alignment.CenterHorizontally),
