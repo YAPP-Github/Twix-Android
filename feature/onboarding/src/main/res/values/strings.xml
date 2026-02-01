@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="onboarding_name_placeholder">닉네임을 입력해 주세요.</string>
+    <string name="onboarding_name_helper">닉네임 2~8자</string>
+    <string name="onboarding_profile_title">짝꿍에게 보일\n내 이름을 입력해 주세요</string>
+    <string name="onboarding_profile_placeholder">닉네임을 입력해 주세요.</string>
+    <string name="onboarding_profile_helper">닉네임 2~8자</string>
+    <string name="onboarding_profile_button_title">완료</string>
+</resources>
