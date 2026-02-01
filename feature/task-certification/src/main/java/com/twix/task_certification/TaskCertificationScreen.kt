@@ -234,6 +234,8 @@ private fun TaskCertificationScreen(
             onTextFieldPositioned = { textFieldRect = it },
         )
 
+        Spacer(modifier = Modifier.height(52.dp))
+
         CameraControlBar(
             capture = uiState.capture,
             onCaptureClick = onCaptureClick,
