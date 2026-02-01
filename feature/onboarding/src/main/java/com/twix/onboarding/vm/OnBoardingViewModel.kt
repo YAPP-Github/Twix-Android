@@ -13,6 +13,7 @@ class OnBoardingViewModel(
     private val onBoardingRepository: OnBoardingRepository,
 ) : BaseViewModel<OnBoardingUiState, OnBoardingIntent, OnBoardingSideEffect>(OnBoardingUiState()) {
     init {
+        // TODO : 로그인 기능 후 주석 제거
         // fetchInviteCode()
     }
 
