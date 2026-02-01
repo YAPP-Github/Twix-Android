@@ -42,8 +42,8 @@ import com.twix.designsystem.R as DesR
 
 @Composable
 fun ProfileRoute(
+    onNext: () -> Unit,
     onBack: () -> Unit,
-    onCompleted: () -> Unit,
     viewModel: OnBoardingViewModel = koinViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -51,7 +51,7 @@ fun ProfileRoute(
     ProfileScreen(
         uiModel = uiState.profile,
         onBack = onBack,
-        onCompleted = onCompleted,
+        onCompleted = onNext,
         onChangeNickName = { viewModel.dispatch(OnBoardingIntent.WriteNickName(it)) },
     )
 }
