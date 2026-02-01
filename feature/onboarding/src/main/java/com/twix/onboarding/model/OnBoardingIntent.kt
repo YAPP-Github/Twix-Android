@@ -8,4 +8,10 @@ sealed interface OnBoardingIntent : Intent {
     ) : OnBoardingIntent
 
     data object SubmitNickName : OnBoardingIntent
+
+    data class WriteInviteCode(
+        val value: String,
+    ) : OnBoardingIntent
+
+    data object CopyInviteCode : OnBoardingIntent
 }

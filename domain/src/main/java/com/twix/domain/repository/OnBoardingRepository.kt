@@ -1,7 +1,7 @@
 package com.twix.domain.repository
 
-import com.twix.domain.model.InviteCode
 import com.twix.domain.model.OnboardingStatus
+import com.twix.domain.model.invitecode.InviteCode
 
 interface OnBoardingRepository {
     suspend fun anniversarySetup(request: String)

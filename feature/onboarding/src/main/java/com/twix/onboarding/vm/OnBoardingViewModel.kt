@@ -1,5 +1,6 @@
 package com.twix.onboarding.vm
 
+import android.util.Log
 import androidx.lifecycle.viewModelScope
 import com.twix.domain.repository.OnBoardingRepository
 import com.twix.onboarding.model.OnBoardingIntent
@@ -11,6 +12,19 @@ import kotlinx.coroutines.launch
 class OnBoardingViewModel(
     private val onBoardingRepository: OnBoardingRepository,
 ) : BaseViewModel<OnBoardingUiState, OnBoardingIntent, OnBoardingSideEffect>(OnBoardingUiState()) {
+    init {
+        // TODO : 로그인 기능 후 주석 제거
+        // fetchInviteCode()
+    }
+
+    private fun fetchInviteCode() {
+        viewModelScope.launch {
+            runCatching { onBoardingRepository.fetchInviteCode() }
+                .onSuccess { reduce { updateMyInviteCode(it.value) } }
+                .onFailure { Log.d("FetchInviteCodeException", "$it") }
+        }
+    }
+
     override suspend fun handleIntent(intent: OnBoardingIntent) {
         when (intent) {
             is OnBoardingIntent.WriteNickName -> {
@@ -19,6 +33,14 @@ class OnBoardingViewModel(
 
             OnBoardingIntent.SubmitNickName -> {
                 handleSubmitNickname()
+            }
+
+            is OnBoardingIntent.WriteInviteCode -> {
+                reduceInviteCode(intent.value)
+            }
+
+            OnBoardingIntent.CopyInviteCode -> {
+                emitSideEffect(OnBoardingSideEffect.InviteCode.ShowCopyInviteCodeSuccessToast)
             }
         }
     }
@@ -38,5 +60,9 @@ class OnBoardingViewModel(
         viewModelScope.launch {
             emitSideEffect(sideEffect)
         }
+    }
+
+    private fun reduceInviteCode(value: String) {
+        reduce { updateInviteCode(value) }
     }
 }

@@ -67,6 +67,7 @@ fun ProfileRoute(
                 }
 
                 OnBoardingSideEffect.ProfileSetting.NavigateToNext -> onNext()
+                else -> Unit
             }
         }
     }
