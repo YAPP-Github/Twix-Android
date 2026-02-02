@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -75,9 +76,17 @@ fun TaskCertificationRoute(
         }
     }
 
-    LaunchedEffect(uiState.lens, hasPermission) {
+    DisposableEffect(lifecycleOwner, uiState.lens, hasPermission) {
         if (hasPermission) {
-            camera.bind(lifecycleOwner, uiState.lens)
+            coroutineScope.launch {
+                camera.bind(lifecycleOwner, uiState.lens)
+            }
+        }
+
+        onDispose {
+            coroutineScope.launch {
+                camera.unbind()
+            }
         }
     }
 
