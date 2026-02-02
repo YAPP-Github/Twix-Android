@@ -10,5 +10,5 @@ sealed interface TaskCertificationIntent : Intent {
 
     data object ToggleLens : TaskCertificationIntent
 
-    data object ToggleFlash : TaskCertificationIntent
+    data object ToggleTorch : TaskCertificationIntent
 }
