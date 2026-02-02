@@ -36,7 +36,7 @@ class TaskCertificationViewModel :
 
     private fun onFailureCapture() {
         viewModelScope.launch {
-            emitSideEffect(TaskCertificationSideEffect.ImageCaptureFailException)
+            emitSideEffect(TaskCertificationSideEffect.ShowImageCaptureFailToast)
         }
     }
 
