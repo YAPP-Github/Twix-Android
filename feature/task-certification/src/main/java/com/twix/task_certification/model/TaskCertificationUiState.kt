@@ -19,7 +19,10 @@ data class TaskCertificationUiState(
             } else {
                 CameraSelector.DEFAULT_BACK_CAMERA
             }
-        return copy(lens = newLens)
+        return copy(
+            lens = newLens,
+            torch = TorchStatus.Off,
+        )
     }
 
     fun toggleTorch(): TaskCertificationUiState {
