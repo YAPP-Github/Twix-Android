@@ -15,11 +15,11 @@ class TaskCertificationViewModel :
     override suspend fun handleIntent(intent: TaskCertificationIntent) {
         when (intent) {
             is TaskCertificationIntent.TakePicture -> {
-                takePicture(intent.uri)
+                reducePicture(intent.uri)
             }
 
             is TaskCertificationIntent.ToggleLens -> {
-                toggleLens()
+                reduceLens()
             }
 
             is TaskCertificationIntent.ToggleTorch -> {
@@ -28,7 +28,7 @@ class TaskCertificationViewModel :
         }
     }
 
-    private fun takePicture(uri: Uri?) {
+    private fun reducePicture(uri: Uri?) {
         uri?.let {
             reduce { updatePicture(uri) }
         } ?: run { onFailureCapture() }
@@ -40,7 +40,7 @@ class TaskCertificationViewModel :
         }
     }
 
-    private fun toggleLens() {
+    private fun reduceLens() {
         reduce { toggleLens() }
     }
 
