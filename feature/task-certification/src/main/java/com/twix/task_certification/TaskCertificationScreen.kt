@@ -127,7 +127,7 @@ private fun TaskCertificationScreen(
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         TaskCertificationTopBar(
-            onClickClose = { onClickClose() },
+            onClickClose = onClickClose,
         )
 
         Spacer(modifier = Modifier.height(24.26.dp))
