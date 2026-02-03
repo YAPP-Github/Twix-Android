@@ -15,7 +15,7 @@ interface Camera {
         lens: CameraSelector,
     )
 
-    suspend fun unbind()
+    fun unbind()
 
     suspend fun takePicture(): Result<Uri>
 

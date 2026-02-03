@@ -28,6 +28,7 @@ import com.twix.ui.extension.noRippleClickable
 
 @Composable
 fun CameraPreviewBox(
+    showTorch: Boolean,
     capture: CaptureStatus,
     previewRequest: CameraPreview?,
     torch: TorchStatus,
@@ -48,7 +49,7 @@ fun CameraPreviewBox(
     ) {
         CameraSurface(capture, previewRequest)
 
-        if (capture == CaptureStatus.NotCaptured) {
+        if (showTorch) {
             TorchIcon(torch, onClickFlash)
         }
     }
@@ -107,6 +108,7 @@ fun CameraPreviewBoxNotCapturedPreview() {
     TwixTheme {
         CameraPreviewBox(
             capture = CaptureStatus.NotCaptured,
+            showTorch = true,
             torch = TorchStatus.Off,
             previewRequest = null,
             onClickFlash = {},

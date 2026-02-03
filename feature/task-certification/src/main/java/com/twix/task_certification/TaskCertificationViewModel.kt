@@ -5,7 +5,6 @@ import androidx.lifecycle.viewModelScope
 import com.twix.task_certification.model.TaskCertificationIntent
 import com.twix.task_certification.model.TaskCertificationSideEffect
 import com.twix.task_certification.model.TaskCertificationUiState
-import com.twix.task_certification.model.TorchStatus
 import com.twix.ui.base.BaseViewModel
 import kotlinx.coroutines.launch
 
@@ -16,19 +15,19 @@ class TaskCertificationViewModel :
     override suspend fun handleIntent(intent: TaskCertificationIntent) {
         when (intent) {
             is TaskCertificationIntent.TakePicture -> {
-                takePicture(intent.uri)
+                reducePicture(intent.uri)
             }
 
             is TaskCertificationIntent.PickPicture -> {
-                pickPicture(intent.uri)
+                reducePicture(intent.uri)
             }
 
             is TaskCertificationIntent.ToggleLens -> {
-                toggleLens()
+                reduceLens()
             }
 
-            is TaskCertificationIntent.ToggleFlash -> {
-                toggleTorch()
+            is TaskCertificationIntent.ToggleTorch -> {
+                reduceTorch()
             }
 
             is TaskCertificationIntent.RetakePicture -> {
@@ -37,30 +36,23 @@ class TaskCertificationViewModel :
         }
     }
 
-    private fun takePicture(uri: Uri?) {
-        uri?.let { updatePickPicture(it) } ?: viewModelScope.launch {
-            emitSideEffect(
-                TaskCertificationSideEffect.ImageCaptureFailException,
-            )
+    private fun reducePicture(uri: Uri?) {
+        uri?.let {
+            reduce { updatePicture(uri) }
+        } ?: run { onFailureCapture() }
+    }
+
+    private fun onFailureCapture() {
+        viewModelScope.launch {
+            emitSideEffect(TaskCertificationSideEffect.ShowImageCaptureFailToast)
         }
     }
 
-    private fun pickPicture(uri: Uri?) {
-        uri?.let { updatePickPicture(uri) }
-    }
-
-    private fun updatePickPicture(uri: Uri) {
-        reduce { updateCapturedImage(uri) }
-        if (uiState.value.torch == TorchStatus.On) {
-            reduce { toggleTorch() }
-        }
-    }
-
-    private fun toggleLens() {
+    private fun reduceLens() {
         reduce { toggleLens() }
     }
 
-    private fun toggleTorch() {
+    private fun reduceTorch() {
         reduce { toggleTorch() }
     }
 
