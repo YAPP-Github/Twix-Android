@@ -97,8 +97,8 @@ private fun ImageNotCapturedBar(
             modifier =
                 Modifier
                     .noRippleClickable(enabled = enabled) {
-                        onCaptureClick()
                         enabled = false
+                        onCaptureClick()
                     },
         )
 
