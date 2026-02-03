@@ -25,7 +25,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
 import com.twix.designsystem.components.button.AppRoundButton
-import com.twix.designsystem.components.text.AppText
 import com.twix.designsystem.theme.CommonColor
 import com.twix.designsystem.theme.GrayColor
 import com.twix.designsystem.theme.TwixTheme
@@ -145,18 +144,15 @@ private fun ImageCapturedBar(
             AppRoundButton(
                 borderColor = CommonColor.White,
                 backgroundColor = GrayColor.C500,
+                text = "업로드",
+                textStyle = AppTextStyle.T2,
+                textColor = CommonColor.White,
                 modifier =
                     Modifier
                         .width(150.dp)
                         .height(74.dp)
                         .noRippleClickable(onClick = onClickUpload),
-            ) {
-                AppText(
-                    text = "업로드",
-                    style = AppTextStyle.T2,
-                    color = CommonColor.White,
-                )
-            }
+            )
         }
     }
 }

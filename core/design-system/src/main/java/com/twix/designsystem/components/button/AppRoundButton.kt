@@ -24,24 +24,29 @@ import com.twix.domain.model.enums.AppTextStyle
 
 @Composable
 fun AppRoundButton(
+    text: String,
+    textColor: Color,
     modifier: Modifier = Modifier,
+    textStyle: AppTextStyle = AppTextStyle.T2,
+    backgroundColor: Color,
     borderColor: Color = GrayColor.C500,
-    backgroundColor: Color = CommonColor.White,
-    content: @Composable () -> Unit,
+    hasBorder: Boolean = true,
 ) {
     Box(
         modifier = modifier,
     ) {
-        Box(
-            modifier =
-                Modifier
-                    .fillMaxSize()
-                    .offset(y = 4.dp)
-                    .background(
-                        color = borderColor,
-                        shape = RoundedCornerShape(100),
-                    ),
-        )
+        if (hasBorder) {
+            Box(
+                modifier =
+                    Modifier
+                        .fillMaxSize()
+                        .offset(y = 4.dp)
+                        .background(
+                            color = borderColor,
+                            shape = RoundedCornerShape(100),
+                        ),
+            )
+        }
 
         Box(
             modifier =
@@ -50,14 +55,24 @@ fun AppRoundButton(
                     .background(
                         color = backgroundColor,
                         shape = RoundedCornerShape(100),
-                    ).border(
-                        width = 1.6.dp,
-                        color = borderColor,
-                        shape = RoundedCornerShape(100),
+                    ).then(
+                        if (hasBorder) {
+                            Modifier.border(
+                                width = 1.6.dp,
+                                color = borderColor,
+                                shape = RoundedCornerShape(100),
+                            )
+                        } else {
+                            Modifier
+                        },
                     ),
             contentAlignment = Alignment.Center,
         ) {
-            content()
+            AppText(
+                style = textStyle,
+                color = textColor,
+                text = text,
+            )
         }
     }
 }
@@ -72,27 +87,21 @@ fun AppRoundButtonPreview() {
                     Modifier
                         .width(330.dp)
                         .height(68.dp),
-            ) {
-                AppText(
-                    style = AppTextStyle.T2,
-                    color = GrayColor.C500,
-                    text = "버튼임니다",
-                )
-            }
+                text = "버튼임니다",
+                textColor = GrayColor.C500,
+                backgroundColor = CommonColor.White,
+            )
             Spacer(modifier = Modifier.height(10.dp))
             AppRoundButton(
-                backgroundColor = GrayColor.C500,
                 modifier =
                     Modifier
                         .width(330.dp)
                         .height(68.dp),
-            ) {
-                AppText(
-                    style = AppTextStyle.T2,
-                    color = CommonColor.White,
-                    text = "버튼임니다",
-                )
-            }
+                text = "버튼임니다",
+                textColor = CommonColor.White,
+                backgroundColor = GrayColor.C500,
+                hasBorder = false,
+            )
             Spacer(modifier = Modifier.height(10.dp))
         }
     }
