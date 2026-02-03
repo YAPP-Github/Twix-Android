@@ -83,9 +83,7 @@ fun TaskCertificationRoute(
         }
 
         onDispose {
-            coroutineScope.launch {
-                camera.unbind()
-            }
+            camera.unbind()
         }
     }
 
