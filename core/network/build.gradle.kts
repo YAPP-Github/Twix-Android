@@ -42,4 +42,5 @@ android {
 dependencies {
     implementation(libs.bundles.ktor)
     implementation(libs.ktorfit.lib)
+    ksp(libs.ktorfit.ksp)
 }
