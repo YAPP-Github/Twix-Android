@@ -20,7 +20,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -51,16 +50,17 @@ fun ProfileRoute(
     toastManager: ToastManager = koinInject(),
     viewModel: OnBoardingViewModel = koinViewModel(),
 ) {
-    val context = LocalContext.current
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
+    val notValidNickNameMessage =
+        stringResource(R.string.onboarding_profile_invalid_name_length_toast)
     LaunchedEffect(viewModel.sideEffect) {
         viewModel.sideEffect.collect { sideEffect ->
             when (sideEffect) {
                 OnBoardingSideEffect.ProfileSetting.ShowInvalidNickNameToast -> {
                     toastManager.tryShow(
                         ToastData(
-                            message = context.getString(R.string.onboarding_profile_invalid_name_length_toast),
+                            message = notValidNickNameMessage,
                             type = ToastType.ERROR,
                         ),
                     )
