@@ -20,6 +20,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -144,7 +145,7 @@ private fun ImageCapturedBar(
             AppRoundButton(
                 borderColor = CommonColor.White,
                 backgroundColor = GrayColor.C500,
-                text = "업로드",
+                text = stringResource(R.string.task_certification_image_upload),
                 textStyle = AppTextStyle.T2,
                 textColor = CommonColor.White,
                 modifier =
