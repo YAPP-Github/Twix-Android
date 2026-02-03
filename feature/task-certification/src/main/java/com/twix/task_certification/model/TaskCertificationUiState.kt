@@ -12,6 +12,9 @@ data class TaskCertificationUiState(
     val lens: CameraSelector = CameraSelector.DEFAULT_BACK_CAMERA,
     val preview: CameraPreview? = null,
 ) : State {
+    val showTorch: Boolean
+        get() = capture is CaptureStatus.NotCaptured && lens == CameraSelector.DEFAULT_BACK_CAMERA
+
     fun toggleLens(): TaskCertificationUiState {
         val newLens =
             if (lens == CameraSelector.DEFAULT_BACK_CAMERA) {

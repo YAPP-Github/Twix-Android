@@ -25,7 +25,6 @@ import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.lifecycle.coroutineScope
 import com.twix.designsystem.components.text.AppText
 import com.twix.designsystem.theme.GrayColor
 import com.twix.designsystem.theme.TwixTheme
@@ -150,6 +149,7 @@ private fun TaskCertificationScreen(
         Spacer(modifier = Modifier.height(40.dp))
 
         CameraPreviewBox(
+            showTorch = uiState.showTorch,
             capture = uiState.capture,
             previewRequest = cameraPreview,
             torch = uiState.torch,
