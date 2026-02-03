@@ -131,7 +131,7 @@ private fun CalendarContent(
     onDateClick: (LocalDate) -> Unit,
 ) {
     val grid =
-        remember(headerDate, selectedDate) {
+        remember(headerDate) {
             buildMonthGrid(initialDate = headerDate)
         }
 
