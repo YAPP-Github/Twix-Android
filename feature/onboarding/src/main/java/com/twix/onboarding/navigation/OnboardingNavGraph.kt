@@ -7,8 +7,8 @@ import androidx.navigation.navigation
 import com.twix.navigation.NavRoutes
 import com.twix.navigation.base.NavGraphContributor
 import com.twix.onboarding.couple.CoupleConnectRoute
-import com.twix.onboarding.dday.DdayRouete
 import com.twix.onboarding.invite.InviteCodeRoute
+import com.twix.onboarding.dday.DdayRoute
 import com.twix.onboarding.profile.ProfileRoute
 
 object OnboardingNavGraph : NavGraphContributor {
@@ -51,7 +51,7 @@ object OnboardingNavGraph : NavGraphContributor {
                 )
             }
             composable(NavRoutes.DdayRoute.route) {
-                DdayRouete(
+                DdayRoute(
                     onComplete = {
                         navController.navigate(NavRoutes.MainGraph.route) {
                             popUpTo(graphRoute.route) { inclusive = true }
