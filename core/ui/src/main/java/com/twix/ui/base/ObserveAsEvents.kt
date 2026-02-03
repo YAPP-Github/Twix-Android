@@ -5,9 +5,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.repeatOnLifecycle
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.withContext
 
 /**
  * [Flow]를 통해 전달되는 일회성 이벤트(Side Effect)를 Lifecycle에 안전하게 관찰하기 위한 Composable 함수입니다.
@@ -21,18 +19,15 @@ import kotlinx.coroutines.withContext
  */
 @Composable
 fun <T> ObserveAsEvents(
-    flow: Flow<T>,
-    event: suspend (T) -> Unit,
+    event: Flow<T>,
+    onEvent: suspend (T) -> Unit,
 ) {
     val lifecycleOwner = LocalLifecycleOwner.current
-    LaunchedEffect(flow, lifecycleOwner) {
+    LaunchedEffect(event, lifecycleOwner) {
         // lifecycleOwner가 STARTED 상태일 때만 수집을 시작
         // STOPPED 상태가 되면 수집 코루틴을 자동으로 취소
         lifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-            // UI 변경 작업은 즉시 메인 스레드에서 실행되도록 보장
-            withContext(Dispatchers.Main.immediate) {
-                flow.collect(event)
-            }
+            event.collect(onEvent)
         }
     }
 }

@@ -25,11 +25,11 @@ class TaskCertificationViewModel :
             }
 
             is TaskCertificationIntent.ToggleLens -> {
-                toggleLens()
+                reduceLens()
             }
 
-            is TaskCertificationIntent.ToggleFlash -> {
-                toggleTorch()
+            is TaskCertificationIntent.ToggleTorch -> {
+                reduceTorch()
             }
 
             is TaskCertificationIntent.RetakePicture -> {
@@ -51,18 +51,18 @@ class TaskCertificationViewModel :
     }
 
     private fun takePicture(uri: Uri?) {
-        uri?.let { updatePicture(it) } ?: viewModelScope.launch {
+        uri?.let { reducePicture(it) } ?: viewModelScope.launch {
             emitSideEffect(
-                TaskCertificationSideEffect.ImageCaptureFailException,
+                TaskCertificationSideEffect.ShowImageCaptureFailToast,
             )
         }
     }
 
     private fun pickPicture(uri: Uri?) {
-        uri?.let { updatePicture(uri) }
+        uri?.let { reducePicture(uri) }
     }
 
-    private fun updatePicture(uri: Uri) {
+    private fun reducePicture(uri: Uri) {
         reduce { updateCapturedImage(uri) }
         if (uiState.value.torch == TorchStatus.On) {
             reduce { toggleTorch() }
@@ -73,11 +73,11 @@ class TaskCertificationViewModel :
         }
     }
 
-    private fun toggleLens() {
+    private fun reduceLens() {
         reduce { toggleLens() }
     }
 
-    private fun toggleTorch() {
+    private fun reduceTorch() {
         reduce { toggleTorch() }
     }
 

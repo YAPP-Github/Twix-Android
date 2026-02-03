@@ -16,10 +16,12 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.offset
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -80,7 +82,7 @@ fun TaskCertificationRoute(
     val cameraPreview by camera.surfaceRequests.collectAsStateWithLifecycle()
 
     val lifecycleOwner = LocalLifecycleOwner.current
-    val coroutineScope = lifecycleOwner.lifecycle.coroutineScope
+    val coroutineScope = rememberCoroutineScope()
     val context = LocalContext.current
 
     var hasPermission by remember {
@@ -110,9 +112,15 @@ fun TaskCertificationRoute(
         }
     }
 
-    LaunchedEffect(uiState.lens, hasPermission) {
+    DisposableEffect(lifecycleOwner, uiState.lens, hasPermission) {
         if (hasPermission) {
-            camera.bind(lifecycleOwner, uiState.lens)
+            coroutineScope.launch {
+                camera.bind(lifecycleOwner, uiState.lens)
+            }
+        }
+
+        onDispose {
+            camera.unbind()
         }
     }
 
@@ -122,12 +130,13 @@ fun TaskCertificationRoute(
         }
     }
 
+    val imageCaptureFailMessage = stringResource(R.string.task_certification_image_capture_fail)
     ObserveAsEvents(viewModel.sideEffect) { event ->
         when (event) {
-            TaskCertificationSideEffect.ImageCaptureFailException -> {
+            TaskCertificationSideEffect.ShowImageCaptureFailToast -> {
                 toastManager.tryShow(
                     ToastData(
-                        message = context.getString(R.string.task_certification_image_capture_fail),
+                        message = imageCaptureFailMessage,
                         type = ToastType.ERROR,
                     ),
                 )
@@ -156,7 +165,7 @@ fun TaskCertificationRoute(
             viewModel.dispatch(TaskCertificationIntent.ToggleLens)
         },
         onClickFlash = {
-            viewModel.dispatch(TaskCertificationIntent.ToggleFlash)
+            viewModel.dispatch(TaskCertificationIntent.ToggleTorch)
         },
         onClickGallery = {
             pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
@@ -203,7 +212,7 @@ private fun TaskCertificationScreen(
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         TaskCertificationTopBar(
-            onClickClose = { onClickClose() },
+            onClickClose = onClickClose,
         )
 
         Spacer(modifier = Modifier.height(24.26.dp))
@@ -223,6 +232,7 @@ private fun TaskCertificationScreen(
         Spacer(modifier = Modifier.height(40.dp))
 
         CameraPreviewBox(
+            showTorch = uiState.showTorch,
             capture = uiState.capture,
             commentUiModel = uiState.commentUiModel,
             previewRequest = cameraPreview,

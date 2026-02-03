@@ -19,6 +19,9 @@ data class TaskCertificationUiState(
     val hasMaxCommentLength: Boolean
         get() = commentUiModel.hasMaxCommentLength
 
+    val showTorch: Boolean
+        get() = capture is CaptureStatus.NotCaptured && lens == CameraSelector.DEFAULT_BACK_CAMERA
+
     fun toggleLens(): TaskCertificationUiState {
         val newLens =
             if (lens == CameraSelector.DEFAULT_BACK_CAMERA) {
@@ -26,7 +29,10 @@ data class TaskCertificationUiState(
             } else {
                 CameraSelector.DEFAULT_BACK_CAMERA
             }
-        return copy(lens = newLens)
+        return copy(
+            lens = newLens,
+            torch = TorchStatus.Off,
+        )
     }
 
     fun toggleTorch(): TaskCertificationUiState {
@@ -35,6 +41,12 @@ data class TaskCertificationUiState(
     }
 
     fun updateCapturedImage(uri: Uri) = copy(capture = CaptureStatus.Captured(uri))
+
+    fun updatePicture(uri: Uri): TaskCertificationUiState =
+        copy(
+            capture = CaptureStatus.Captured(uri),
+            torch = TorchStatus.Off,
+        )
 
     fun removePicture(): TaskCertificationUiState = copy(capture = CaptureStatus.NotCaptured)
 

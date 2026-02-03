@@ -29,6 +29,7 @@ class CaptureCamera(
 ) : Camera {
     private var cameraControl: CameraControl? = null
     private var cameraInfo: CameraInfo? = null
+    private var cameraProvider: ProcessCameraProvider? = null
 
     private val _surfaceRequests = MutableStateFlow<CameraPreview?>(null)
     override val surfaceRequests: StateFlow<CameraPreview?> = _surfaceRequests.asStateFlow()
@@ -54,6 +55,8 @@ class CaptureCamera(
         lens: CameraSelector,
     ) {
         val provider = ProcessCameraProvider.awaitInstance(context)
+        cameraProvider = provider
+
         provider.unbindAll()
 
         val camera =
@@ -118,8 +121,8 @@ class CaptureCamera(
             }
         }
 
-    override suspend fun unbind() {
-        ProcessCameraProvider.awaitInstance(context).unbindAll()
+    override fun unbind() {
+        cameraProvider?.unbindAll()
     }
 
     override fun toggleTorch(torch: TorchStatus) {
