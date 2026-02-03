@@ -7,8 +7,8 @@ value class NickName private constructor(
     companion object {
         fun create(value: String): Result<NickName> =
             runCatching {
-                require(value.length in MIN_LENGTH..MAX_LENGTH) {
-                    NickNameException.InvalidLengthException
+                if (value.length !in MIN_LENGTH..MAX_LENGTH) {
+                    throw NickNameException.InvalidLengthException
                 }
                 NickName(value)
             }
