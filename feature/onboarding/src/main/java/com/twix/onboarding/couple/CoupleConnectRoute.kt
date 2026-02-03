@@ -68,7 +68,7 @@ fun CoupleConnectScreen(
         )
 
         Spacer(modifier = Modifier.height(47.dp))
-        InvitationButton(onClick = onClickConnect)
+        InvitationButton(onClick = onClickSend)
 
         Spacer(modifier = Modifier.height(20.dp))
 
