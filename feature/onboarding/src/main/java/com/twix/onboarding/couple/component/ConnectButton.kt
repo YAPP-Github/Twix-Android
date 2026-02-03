@@ -43,12 +43,12 @@ internal fun ConnectButton(
                 .fillMaxWidth()
                 .height(86.dp)
                 .padding(horizontal = 36.dp)
+                .background(color = CommonColor.White, shape = RoundedCornerShape(12.dp))
                 .border(
                     color = GrayColor.C500,
                     width = 1.2.dp,
                     shape = RoundedCornerShape(12.dp),
-                ).background(color = CommonColor.White, shape = RoundedCornerShape(12.dp))
-                .noRippleClickable { onClickConnect() },
+                ).noRippleClickable { onClickConnect() },
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Column(
