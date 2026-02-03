@@ -7,7 +7,9 @@ value class InviteCode(
     companion object {
         fun create(value: String): Result<InviteCode> =
             runCatching {
-                require(value.length == INVITE_CODE_LENGTH) { InviteCodeException.InvalidLengthException }
+                if (value.length != INVITE_CODE_LENGTH) {
+                    throw InviteCodeException.InvalidLengthException
+                }
                 InviteCode(value)
             }
 

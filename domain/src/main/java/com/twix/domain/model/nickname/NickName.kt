@@ -1,14 +1,14 @@
 package com.twix.domain.model.nickname
 
 @JvmInline
-value class NickName private constructor(
+value class NickName(
     val value: String,
 ) {
     companion object {
         fun create(value: String): Result<NickName> =
             runCatching {
-                require(value.length in MIN_LENGTH..MAX_LENGTH) {
-                    NickNameException.InvalidLengthException
+                if (value.length !in MIN_LENGTH..MAX_LENGTH) {
+                    throw NickNameException.InvalidLengthException
                 }
                 NickName(value)
             }
