@@ -63,7 +63,7 @@ class TaskCertificationViewModel :
     }
 
     private fun reducePicture(uri: Uri) {
-        reduce { updateCapturedImage(uri) }
+        reduce { updatePicture(uri) }
         if (uiState.value.torch == TorchStatus.On) {
             reduce { toggleTorch() }
         }
