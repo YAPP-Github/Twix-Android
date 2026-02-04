@@ -1,6 +1,6 @@
-package com.twix.ui.di
+package com.yapp.twix.di
 
-import com.twix.ui.toast.ToastManager
+import com.twix.designsystem.components.toast.ToastManager
 import org.koin.dsl.module
 
 val uiModule =
