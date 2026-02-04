@@ -44,7 +44,7 @@ fun CommonDialog(
     onConfirm: () -> Unit,
     onDismiss: (() -> Unit)? = null,
 ) {
-    BackHandler { onDismissRequest() }
+    BackHandler(enabled = visible) { onDismissRequest() }
 
     Box(
         modifier =
