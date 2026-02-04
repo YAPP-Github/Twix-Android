@@ -17,6 +17,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -41,9 +42,9 @@ fun Calendar(
     onComplete: (LocalDate) -> Unit,
 ) {
     // 헤더의 날짜를 나타내는 상태 변수
-    var headerDate by remember { mutableStateOf(initialDate) }
+    var headerDate by rememberSaveable { mutableStateOf(initialDate) }
     // 달력의 선택된 날짜를 나타내는 상태 변수
-    var selectedDate by remember { mutableStateOf(initialDate) }
+    var selectedDate by rememberSaveable { mutableStateOf(initialDate) }
 
     Column(
         modifier =
@@ -130,7 +131,7 @@ private fun CalendarContent(
     onDateClick: (LocalDate) -> Unit,
 ) {
     val grid =
-        remember(headerDate, selectedDate) {
+        remember(headerDate) {
             buildMonthGrid(initialDate = headerDate)
         }
 
