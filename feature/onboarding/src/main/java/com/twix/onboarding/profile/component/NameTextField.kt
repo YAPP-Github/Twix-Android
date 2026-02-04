@@ -1,8 +1,8 @@
 package com.twix.onboarding.profile.component
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
@@ -13,8 +13,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.twix.designsystem.components.text.AppText
 import com.twix.designsystem.theme.CommonColor
@@ -22,6 +23,10 @@ import com.twix.designsystem.theme.GrayColor
 import com.twix.designsystem.theme.TwixTheme
 import com.twix.domain.model.enums.AppTextStyle
 import com.twix.onboarding.R
+import com.twix.ui.extension.noRippleClickable
+import com.twix.designsystem.R as DesR
+
+// TODO : 디자인 시스템 UnderlineTextField로 수정
 
 @Composable
 fun NameTextField(
@@ -56,12 +61,14 @@ fun NameTextField(
                     focusedPlaceholderColor = GrayColor.C300,
                     unfocusedPlaceholderColor = GrayColor.C300,
                 ),
-            keyboardOptions =
-                KeyboardOptions(
-                    imeAction = ImeAction.None,
-                ),
+            trailingIcon = {
+                Image(
+                    imageVector = ImageVector.vectorResource(DesR.drawable.ic_clear_text),
+                    contentDescription = null,
+                    modifier = Modifier.noRippleClickable { onValueChange("") },
+                )
+            },
         )
-
         HorizontalDivider(modifier = Modifier.fillMaxWidth(), color = GrayColor.C500)
     }
 }
