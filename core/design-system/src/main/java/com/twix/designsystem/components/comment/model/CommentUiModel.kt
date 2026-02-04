@@ -20,7 +20,10 @@ data class CommentUiModel(
                 comment.text.isNotEmpty() &&
                 hasMaxCommentLength
 
-    fun updateComment(comment: TextFieldValue) = copy(comment = comment.copy(comment.text.take(COMMENT_COUNT)))
+    fun updateComment(newComment: TextFieldValue): CommentUiModel {
+        if (comment.text.length > COMMENT_COUNT) return this
+        return copy(comment = newComment)
+    }
 
     fun updateFocus(isFocused: Boolean) = copy(isFocused = isFocused)
 
