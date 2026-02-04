@@ -23,7 +23,6 @@ import com.twix.designsystem.theme.TwixTheme
 import com.twix.domain.model.enums.AppTextStyle
 import com.twix.onboarding.R
 import com.twix.onboarding.couple.component.ConnectButton
-import com.twix.onboarding.couple.component.InvitationButton
 import com.twix.onboarding.vm.OnBoardingViewModel
 import org.koin.androidx.compose.koinViewModel
 
@@ -68,7 +67,7 @@ fun CoupleConnectScreen(
         )
 
         Spacer(modifier = Modifier.height(47.dp))
-        //InvitationButton(onClick = onClickSend)
+        // InvitationButton(onClick = onClickSend)
 
         Spacer(modifier = Modifier.height(20.dp))
 
