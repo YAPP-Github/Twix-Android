@@ -1,5 +1,6 @@
 package com.twix.designsystem.components.text_field
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -36,7 +37,11 @@ fun UnderlineTextField(
     val typo = LocalAppTypography.current
 
     Column(
+        modifier =
+            Modifier
+                .height(52.dp),
         horizontalAlignment = Alignment.Start,
+        verticalArrangement = Arrangement.Center,
     ) {
         Spacer(Modifier.height(4.dp))
 
