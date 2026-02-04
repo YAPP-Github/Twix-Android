@@ -4,6 +4,7 @@ import com.twix.goal_editor.di.goalEditorModule
 import com.twix.home.di.homeModule
 import com.twix.login.di.loginModule
 import com.twix.main.di.mainModule
+import com.twix.task_certification.di.taskCertificationModule
 import org.koin.core.module.Module
 
 val featureModules: List<Module> =
@@ -11,5 +12,6 @@ val featureModules: List<Module> =
         loginModule,
         mainModule,
         homeModule,
+        taskCertificationModule,
         goalEditorModule,
     )
