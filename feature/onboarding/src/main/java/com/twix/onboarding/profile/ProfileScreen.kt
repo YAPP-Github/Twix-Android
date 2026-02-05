@@ -27,6 +27,9 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.twix.designsystem.components.button.AppButton
 import com.twix.designsystem.components.text.AppText
+import com.twix.designsystem.components.toast.ToastManager
+import com.twix.designsystem.components.toast.model.ToastData
+import com.twix.designsystem.components.toast.model.ToastType
 import com.twix.designsystem.theme.CommonColor
 import com.twix.designsystem.theme.GrayColor
 import com.twix.designsystem.theme.SystemColor
@@ -37,9 +40,6 @@ import com.twix.onboarding.model.OnBoardingIntent
 import com.twix.onboarding.model.OnBoardingSideEffect
 import com.twix.onboarding.profile.component.NameTextField
 import com.twix.onboarding.vm.OnBoardingViewModel
-import com.twix.ui.toast.ToastManager
-import com.twix.ui.toast.model.ToastData
-import com.twix.ui.toast.model.ToastType
 import org.koin.androidx.compose.koinViewModel
 import org.koin.compose.koinInject
 import com.twix.designsystem.R as DesR
