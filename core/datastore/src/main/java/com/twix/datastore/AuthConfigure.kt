@@ -11,14 +11,8 @@ import java.io.OutputStream
 
 @Serializable
 internal data class AuthConfigure(
-    val accessToken: String =
-        "eyJhbGciOiJIUzM4NCJ9." +
-            "eyJzdWIiOiIxIiwidHlwZSI6ImFjY2VzcyIsImlhdCI6MTc3MDI0NzM0NCwiZXhwIjoxNzcwODUyMTQ0fQ." +
-            "67rDscm8BeayYFA1gfcEMliEdEh8-HTUyE5TwmAT8Ef8ZvtaWczxpMNZqI5htiek",
-    val refreshToken: String =
-        "eyJhbGciOiJIUzM4NCJ9." +
-            "eyJzdWIiOiIxIiwidHlwZSI6InJlZnJlc2giLCJpYXQiOjE3NzAyNDczNDQsImV4cCI6MTc3MDg1MjE0NH0." +
-            "zgUYdR6onyeY5EaH2_pWLs1rjNLf8m8ZeXsY7Cbk99a_2tzR0rDBZO_hdGTnorRL",
+    val accessToken: String = "",
+    val refreshToken: String = "",
 )
 
 internal object AuthConfigureSerializer : Serializer<AuthConfigure> {
