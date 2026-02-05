@@ -33,10 +33,12 @@ internal object AuthConfigureSerializer : Serializer<AuthConfigure> {
 
     override suspend fun readFrom(input: InputStream): AuthConfigure =
         try {
-            json.decodeFromString(
-                deserializer = AuthConfigure.serializer(),
-                string = input.readBytes().decodeToString(),
-            )
+            withContext(Dispatchers.IO) {
+                json.decodeFromString(
+                    deserializer = AuthConfigure.serializer(),
+                    string = input.readBytes().decodeToString(),
+                )
+            }
         } catch (e: SerializationException) {
             defaultValue
         }
