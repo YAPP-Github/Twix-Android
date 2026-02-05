@@ -4,7 +4,7 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
-import com.twix.login.LoginScreen
+import com.twix.login.LoginRoute
 import com.twix.navigation.NavRoutes
 import com.twix.navigation.base.NavGraphContributor
 
@@ -13,6 +13,8 @@ object LoginNavGraph : NavGraphContributor {
         get() = NavRoutes.LoginGraph
     override val startDestination: String
         get() = NavRoutes.LoginRoute.route
+    override val priority: Int
+        get() = 1
 
     override fun NavGraphBuilder.registerGraph(navController: NavHostController) {
         navigation(
@@ -20,7 +22,16 @@ object LoginNavGraph : NavGraphContributor {
             startDestination = startDestination,
         ) {
             composable(NavRoutes.LoginRoute.route) {
-                LoginScreen()
+                LoginRoute(
+                    navigateToHome = {
+                        navController.navigate(NavRoutes.MainGraph.route) {
+                            popUpTo(NavRoutes.LoginGraph.route) {
+                                inclusive = true
+                            }
+                        }
+                    },
+                    navigateToOnBoarding = { },
+                )
             }
         }
     }
