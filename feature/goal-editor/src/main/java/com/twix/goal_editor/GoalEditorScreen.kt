@@ -74,6 +74,7 @@ fun GoalEditorRoute(
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val context = LocalContext.current
+
     /**
      * LaunchedEffect 내부에서는 stringResource를 사용할 수 없고, context.getString을 그대로 사용하면 경고 발생
      * LaunchedEffect가 예전 context를 들고 있지 않도록 막아주는 용도
