@@ -1,8 +1,8 @@
 package com.twix.login.di
 
 import com.twix.domain.login.LoginProvider
-import com.twix.domain.login.LoginProviderFactory
 import com.twix.domain.login.LoginType
+import com.twix.login.LoginProviderFactory
 import com.twix.login.LoginViewModel
 import com.twix.login.google.GoogleLoginProvider
 import com.twix.login.navigation.LoginNavGraph

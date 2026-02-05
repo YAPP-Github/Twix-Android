@@ -1,4 +1,7 @@
-package com.twix.domain.login
+package com.twix.login
+
+import com.twix.domain.login.LoginProvider
+import com.twix.domain.login.LoginType
 
 class LoginProviderFactory(
     private val providers: Map<LoginType, LoginProvider>,

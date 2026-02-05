@@ -17,8 +17,8 @@ import com.twix.designsystem.components.toast.ToastManager
 import com.twix.designsystem.components.toast.model.ToastData
 import com.twix.designsystem.components.toast.model.ToastType
 import com.twix.designsystem.theme.TwixTheme
-import com.twix.domain.login.LoginProviderFactory
 import com.twix.domain.login.LoginType
+import com.twix.login.LoginProviderFactory
 import com.twix.login.component.LoginButton
 import com.twix.login.model.LoginIntent
 import com.twix.login.model.LoginSideEffect
