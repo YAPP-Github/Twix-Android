@@ -3,6 +3,8 @@ package com.twix.ui.base
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import co.touchlab.kermit.Logger
+import com.twix.result.AppError
+import com.twix.result.AppResult
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
@@ -79,33 +81,52 @@ abstract class BaseViewModel<S : State, I : Intent, SE : SideEffect>(
         onStart: (() -> Unit)? = null, // 비동기 시작 전 처리해야 할 로직 ex) 로딩
         onFinally: (() -> Unit)? = null, // 비동기 종료 후 리소스 정리
         onSuccess: (D) -> Unit, // 비동기 메서드 호출이 성공했을 때 처리해야 할 로직
-        onError: ((Throwable) -> Unit)? = null, // 비동기 메서드 호출에 실패했을 때 처리해야 할 로직
-        block: suspend () -> Result<D>, // 비동기 메서드 ex) 서버 통신 메서드
+        onError: ((AppError) -> Unit)? = null, // 비동기 메서드 호출에 실패했을 때 처리해야 할 로직
+        block: suspend () -> AppResult<D>, // 비동기 메서드 ex) 서버 통신 메서드
     ): Job =
         viewModelScope.launch {
             try {
                 onStart?.invoke()
 
-                val result = block.invoke()
-                result.fold(
-                    onSuccess = { data -> onSuccess(data) },
-                    onFailure = { t ->
-                        if (t is CancellationException) throw t
-
-                        handleError(t)
-                        onError?.invoke(t)
-                    },
-                )
+                when (val result = block()) {
+                    is AppResult.Success -> onSuccess(result.data)
+                    is AppResult.Error -> {
+                        // 공통 처리: 로깅
+                        handleError(result.error)
+                        // 메서드별 처리: 특정 화면만의 UX ex) 다이얼로그/토스트
+                        onError?.invoke(result.error)
+                    }
+                }
+            } catch (e: CancellationException) {
+                // 코루틴 취소는 에러로 취급하지 않기
+                throw e
             } finally {
                 onFinally?.invoke()
             }
         }
 
     /**
-     * 에러 핸들링 메서드
+     * Throwable용 핸들러 ex) Intent 처리 중 발생한 예외
      * */
     protected open fun handleError(t: Throwable) {
-        logger.e { "에러 발생: ${t.stackTraceToString()}" }
+        // TODO: 크래시 리포트
+        logger.e(t) { "Unhandled error while handling intent" }
+    }
+
+    /**
+     * AppError용 핸들러 ex) 서버통신에서 발생한 에러
+     * */
+    protected open fun handleError(error: AppError) {
+        when (error) {
+            is AppError.Http ->
+                logger.e {
+                    "HTTP error: status=${error.status}, code=${error.code}, message=${error.message}"
+                }
+            is AppError.Network -> logger.e(error.cause) { "Network error" }
+            is AppError.Timeout -> logger.e(error.cause) { "Timeout error" }
+            is AppError.Serialization -> logger.e(error.cause) { "Serialization error" }
+            is AppError.Unknown -> logger.e(error.cause) { "Unknown error" }
+        }
     }
 
     // 리소스 정리

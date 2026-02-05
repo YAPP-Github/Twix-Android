@@ -51,14 +51,14 @@ internal fun CameraControlBar(
             contentDescription = null,
             modifier =
                 Modifier
-                    .noRippleClickable(onCaptureClick),
+                    .noRippleClickable(onClick = onCaptureClick),
         )
         Image(
             imageVector = ImageVector.vectorResource(R.drawable.ic_camera_toggle),
             contentDescription = null,
             modifier =
                 Modifier
-                    .noRippleClickable(onToggleCameraClick),
+                    .noRippleClickable(onClick = onToggleCameraClick),
         )
     }
 }

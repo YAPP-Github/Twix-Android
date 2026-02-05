@@ -7,10 +7,18 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.twix.designsystem.components.bottomsheet.CommonBottomSheet
+import com.twix.designsystem.components.bottomsheet.model.CommonBottomSheetConfig
+import com.twix.designsystem.components.calendar.Calendar
 import com.twix.designsystem.theme.CommonColor
+import com.twix.home.HomeIntent
 import com.twix.home.HomeRoute
+import com.twix.home.HomeViewModel
 import com.twix.main.component.MainBottomBar
 import com.twix.main.model.MainTab
 import org.koin.androidx.compose.koinViewModel
@@ -18,46 +26,73 @@ import org.koin.androidx.compose.koinViewModel
 @Composable
 fun MainRoute(viewModel: MainViewModel = koinViewModel()) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val homeViewModel: HomeViewModel = koinViewModel()
 
     MainScreen(
+        homeViewModel = homeViewModel,
         selectedTab = uiState.selectedTab,
         onTabClick = { tab -> viewModel.dispatch(MainIntent.SelectTab(tab)) },
-        content = { tab ->
-            when (tab) {
-                MainTab.HOME -> HomeRoute()
-                MainTab.STATS -> Box(modifier = Modifier.fillMaxSize())
-                MainTab.COUPLE -> Box(modifier = Modifier.fillMaxSize())
-            }
-        },
     )
 }
 
 @Composable
 private fun MainScreen(
+    homeViewModel: HomeViewModel,
     selectedTab: MainTab,
     onTabClick: (MainTab) -> Unit,
-    content: @Composable (MainTab) -> Unit,
 ) {
-    Scaffold(
+    val calendarState by homeViewModel.calendarState.collectAsStateWithLifecycle()
+    var showCalendarBottomSheet by remember { mutableStateOf(false) }
+
+    Box(
         modifier =
             Modifier
-                .fillMaxSize()
-                .background(CommonColor.White),
-        bottomBar = {
-            MainBottomBar(
-                selectedTab = selectedTab,
-                onTabClick = onTabClick,
-            )
-        },
-    ) { padding ->
-        Box(
+                .fillMaxSize(),
+    ) {
+        Scaffold(
             modifier =
                 Modifier
                     .fillMaxSize()
-                    .background(CommonColor.White)
-                    .padding(padding),
-        ) {
-            content(selectedTab)
+                    .background(CommonColor.White),
+            bottomBar = {
+                MainBottomBar(
+                    selectedTab = selectedTab,
+                    onTabClick = onTabClick,
+                )
+            },
+        ) { padding ->
+            Box(
+                modifier =
+                    Modifier
+                        .fillMaxSize()
+                        .background(CommonColor.White)
+                        .padding(padding),
+            ) {
+                when (selectedTab) {
+                    MainTab.HOME ->
+                        HomeRoute(
+                            viewModel = homeViewModel,
+                            onShowCalendarBottomSheet = { showCalendarBottomSheet = true },
+                        )
+                    MainTab.STATS -> Box(modifier = Modifier.fillMaxSize())
+                    MainTab.COUPLE -> Box(modifier = Modifier.fillMaxSize())
+                }
+            }
         }
+
+        CommonBottomSheet(
+            visible = showCalendarBottomSheet,
+            config = CommonBottomSheetConfig(showHandle = false),
+            onDismissRequest = { showCalendarBottomSheet = false },
+            content = {
+                Calendar(
+                    initialDate = calendarState.selectedDate,
+                    onComplete = {
+                        homeViewModel.dispatch(HomeIntent.SelectDate(it))
+                        showCalendarBottomSheet = false
+                    },
+                )
+            },
+        )
     }
 }
