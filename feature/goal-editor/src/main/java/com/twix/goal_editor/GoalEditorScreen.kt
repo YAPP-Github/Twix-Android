@@ -46,6 +46,7 @@ import com.twix.designsystem.components.dialog.CommonDialog
 import com.twix.designsystem.components.text.AppText
 import com.twix.designsystem.components.toast.ToastManager
 import com.twix.designsystem.components.toast.model.ToastData
+import com.twix.designsystem.extension.toRes
 import com.twix.designsystem.theme.CommonColor
 import com.twix.designsystem.theme.GrayColor
 import com.twix.designsystem.theme.TwixTheme
@@ -57,7 +58,6 @@ import com.twix.goal_editor.component.GoalEditorTopBar
 import com.twix.goal_editor.component.GoalInfoCard
 import com.twix.goal_editor.component.GoalTextField
 import com.twix.goal_editor.component.label
-import com.twix.goal_editor.component.toRes
 import com.twix.goal_editor.model.GoalEditorUiState
 import com.twix.ui.extension.dismissKeyboardOnTap
 import com.twix.ui.extension.noRippleClickable
