@@ -153,7 +153,7 @@ private fun RepeatTypeSettings(
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
                     AppText(
-                        text = "%s %s번".format(selectedRepeatType.label(), repeatCount),
+                        text = stringResource(R.string.repeat_count, selectedRepeatType.label(), repeatCount),
                         style = AppTextStyle.B2,
                         color = GrayColor.C500,
                     )
