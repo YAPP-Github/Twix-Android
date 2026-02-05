@@ -22,12 +22,18 @@ internal data class AuthConfigure(
 )
 
 internal object AuthConfigureSerializer : Serializer<AuthConfigure> {
+    private val json =
+        Json {
+            ignoreUnknownKeys = true
+            isLenient = true
+        }
+
     override val defaultValue: AuthConfigure
         get() = AuthConfigure()
 
     override suspend fun readFrom(input: InputStream): AuthConfigure =
         try {
-            Json.decodeFromString(
+            json.decodeFromString(
                 deserializer = AuthConfigure.serializer(),
                 string = input.readBytes().decodeToString(),
             )
@@ -41,7 +47,7 @@ internal object AuthConfigureSerializer : Serializer<AuthConfigure> {
     ) {
         withContext(Dispatchers.IO) {
             output.write(
-                Json
+                json
                     .encodeToString(
                         serializer = AuthConfigure.serializer(),
                         value = t,
