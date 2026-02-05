@@ -106,14 +106,13 @@ internal object HttpClientProvider {
             bearer {
                 cacheTokens = false
 
-                val accessToken = tokenProvider.accessToken
-                val refreshToken = tokenProvider.refreshToken
-
                 /**
                  * [loadTokens]
                  * - 현재 저장된 access/refresh token을 읽어 Authorization 헤더에 추가
                  * */
                 loadTokens {
+                    val accessToken = tokenProvider.accessToken
+                    val refreshToken = tokenProvider.refreshToken
                     BearerTokens(accessToken, refreshToken)
                 }
 
@@ -125,6 +124,7 @@ internal object HttpClientProvider {
                  *  - BearerTokens 반환 → 원 요청 자동 재시도
                  * **/
                 refreshTokens {
+                    val refreshToken = tokenProvider.refreshToken
                     val request = RefreshRequest(refreshToken)
                     val apiService = lazyAuthService.value
                     val (newAccessToken, newRefreshToken) = apiService.refresh(request)
