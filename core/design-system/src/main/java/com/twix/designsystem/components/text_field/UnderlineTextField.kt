@@ -3,7 +3,9 @@ package com.twix.designsystem.components.text_field
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.BasicTextField
@@ -29,9 +31,11 @@ fun UnderlineTextField(
     enabled: Boolean = true,
     readOnly: Boolean = false,
     singleLine: Boolean = true,
+    showTrailing: Boolean = false,
     maxLines: Int = 1,
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
     keyboardActions: KeyboardActions = KeyboardActions.Default,
+    trailing: (@Composable () -> Unit)? = null,
     onValueChange: (String) -> Unit,
 ) {
     val typo = LocalAppTypography.current
@@ -51,6 +55,8 @@ fun UnderlineTextField(
                     .padding(horizontal = 8.dp, vertical = 10.dp),
             contentAlignment = Alignment.CenterStart,
         ) {
+            val shouldShowTrailing = trailing != null && showTrailing && value.isNotBlank()
+
             if (value.isBlank()) {
                 AppText(
                     text = placeHolder,
@@ -62,17 +68,35 @@ fun UnderlineTextField(
                 )
             }
 
-            BasicTextField(
-                value = value,
-                textStyle = textStyle.toTextStyle(typo).copy(color = GrayColor.C500),
-                onValueChange = onValueChange,
-                enabled = enabled,
-                readOnly = readOnly,
-                singleLine = singleLine,
-                maxLines = maxLines,
-                keyboardOptions = keyboardOptions,
-                keyboardActions = keyboardActions,
-            )
+            Row(
+                modifier =
+                    Modifier
+                        .fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                BasicTextField(
+                    value = value,
+                    textStyle = textStyle.toTextStyle(typo).copy(color = GrayColor.C500),
+                    onValueChange = onValueChange,
+                    enabled = enabled,
+                    readOnly = readOnly,
+                    singleLine = singleLine,
+                    maxLines = maxLines,
+                    keyboardOptions = keyboardOptions,
+                    keyboardActions = keyboardActions,
+                )
+
+                if (shouldShowTrailing) {
+                    Box(
+                        modifier =
+                            Modifier
+                                .padding(start = 10.dp),
+                        contentAlignment = Alignment.Center,
+                    ) {
+                        trailing.invoke()
+                    }
+                }
+            }
         }
 
         Spacer(Modifier.height(4.dp))
