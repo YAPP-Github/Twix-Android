@@ -1,7 +1,12 @@
 package com.twix.domain.model.enums
 
-enum class RepeatType {
+enum class RepeatCycle {
     DAILY,
     WEEKLY,
     MONTHLY,
+    ;
+
+    companion object {
+        fun fromApi(value: String): RepeatCycle = runCatching { valueOf(value) }.getOrElse { DAILY }
+    }
 }
