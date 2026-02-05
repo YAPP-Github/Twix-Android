@@ -15,6 +15,7 @@ kotlinx-serialization-json = "1.9.0"
 # AndroidX
 androidx-core-ktx = "1.17.0"
 androidx-lifecycle-runtime-ktx = "2.10.0"
+androidx-datastore = "1.2.0"
 
 # Google
 material = "1.13.0"
@@ -29,7 +30,7 @@ compose-coil = "3.3.0"
 compose-navigation = "2.9.4"
 
 # Ktor
-ktor = "3.3.3"
+ktor = "3.4.0"
 
 # Ktrofit
 ktorfit = "2.7.2"
@@ -71,6 +72,7 @@ appcompat = "1.7.1"
 # AndroidX
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "androidx-core-ktx" }
 androidx-lifecycle-runtime-ktx = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "androidx-lifecycle-runtime-ktx" }
+androidx-datastore = { module = "androidx.datastore:datastore", version.ref = "androidx-datastore" }
 
 # CameraX
 androidx-camera-camera2 = { module = "androidx.camera:camera-camera2", version.ref = "cameraX" }
