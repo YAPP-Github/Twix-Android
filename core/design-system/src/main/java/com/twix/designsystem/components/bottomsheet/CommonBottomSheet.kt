@@ -77,7 +77,7 @@ fun CommonBottomSheet(
 
     if (!rendering) return
 
-    BackHandler { onDismissRequest() }
+    BackHandler(enabled = internalVisible) { onDismissRequest() }
 
     BoxWithConstraints(
         modifier =
