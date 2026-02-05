@@ -10,6 +10,6 @@ data class Goal(
     val repeatCycle: RepeatCycle,
     val myCompleted: Boolean,
     val partnerCompleted: Boolean,
-    val myVerification: GoalVerification?, // API에서 object로 내려오지만 "없을 수도" 있게 설계 추천
+    val myVerification: GoalVerification?,
     val partnerVerification: GoalVerification?,
 )
