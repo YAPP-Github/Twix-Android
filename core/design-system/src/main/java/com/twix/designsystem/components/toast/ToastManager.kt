@@ -1,6 +1,6 @@
-package com.twix.ui.toast
+package com.twix.designsystem.components.toast
 
-import com.twix.ui.toast.model.ToastData
+import com.twix.designsystem.components.toast.model.ToastData
 import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow

@@ -32,7 +32,7 @@ internal fun InvitationButton(
                 .height(86.dp)
                 .padding(horizontal = 36.dp)
                 .background(color = GrayColor.C500, shape = RoundedCornerShape(12.dp))
-                .noRippleClickable(onClick),
+                .noRippleClickable(onClick = onClick),
         contentAlignment = Alignment.Center,
     ) {
         AppText(

@@ -29,7 +29,6 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalClipboardManager
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.AnnotatedString
@@ -38,6 +37,9 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.twix.designsystem.components.button.AppButton
 import com.twix.designsystem.components.text.AppText
+import com.twix.designsystem.components.toast.ToastManager
+import com.twix.designsystem.components.toast.model.ToastData
+import com.twix.designsystem.components.toast.model.ToastType
 import com.twix.designsystem.keyboard.Keyboard
 import com.twix.designsystem.keyboard.keyboardAsState
 import com.twix.designsystem.theme.CommonColor
@@ -50,9 +52,6 @@ import com.twix.onboarding.model.OnBoardingIntent
 import com.twix.onboarding.model.OnBoardingSideEffect
 import com.twix.onboarding.vm.OnBoardingViewModel
 import com.twix.ui.extension.noRippleClickable
-import com.twix.ui.toast.ToastManager
-import com.twix.ui.toast.model.ToastData
-import com.twix.ui.toast.model.ToastType
 import org.koin.compose.koinInject
 import org.koin.compose.viewmodel.koinViewModel
 
@@ -64,14 +63,14 @@ internal fun InviteCodeRoute(
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val keyboardState by keyboardAsState()
-    val context = LocalContext.current
 
+    val inviteCodeSuccessMessage = stringResource(R.string.onboarding_invite_code_copy)
     LaunchedEffect(viewModel.sideEffect) {
         when (viewModel.sideEffect) {
             OnBoardingSideEffect.InviteCode.ShowCopyInviteCodeSuccessToast -> {
                 toastManager.tryShow(
                     ToastData(
-                        message = context.getString(R.string.onboarding_invite_code_copy),
+                        message = inviteCodeSuccessMessage,
                         type = ToastType.SUCCESS,
                     ),
                 )
