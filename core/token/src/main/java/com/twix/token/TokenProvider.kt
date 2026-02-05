@@ -1,9 +1,9 @@
 package com.twix.token
 
 interface TokenProvider {
-    suspend fun accessToken(): String
+    val accessToken: String
 
-    suspend fun refreshToken(): String
+    val refreshToken: String
 
     suspend fun saveToken(
         accessToken: String,

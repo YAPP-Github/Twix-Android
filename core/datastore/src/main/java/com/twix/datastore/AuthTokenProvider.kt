@@ -3,17 +3,29 @@ package com.twix.datastore
 import android.content.Context
 import androidx.datastore.core.DataStore
 import com.twix.token.TokenProvider
-import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.stateIn
 
 class AuthTokenProvider(
-    private val context: Context,
+    context: Context,
+    scope: CoroutineScope,
 ) : TokenProvider {
-    private val dataStore: DataStore<AuthConfigure>
-        get() = context.authDataStore
+    private val dataStore: DataStore<AuthConfigure> = context.authDataStore
 
-    override suspend fun accessToken(): String = dataStore.data.first().accessToken
+    private val tokenState =
+        dataStore.data
+            .stateIn(
+                scope = scope,
+                started = SharingStarted.Eagerly,
+                initialValue = AuthConfigure(),
+            )
 
-    override suspend fun refreshToken(): String = dataStore.data.first().refreshToken
+    override val accessToken: String
+        get() = tokenState.value.accessToken
+
+    override val refreshToken: String
+        get() = tokenState.value.refreshToken
 
     override suspend fun saveToken(
         accessToken: String,
