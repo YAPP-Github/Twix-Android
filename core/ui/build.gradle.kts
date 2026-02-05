@@ -10,6 +10,6 @@ android {
 }
 
 dependencies {
-    implementation(projects.core.designSystem)
     implementation(projects.domain)
+    implementation(projects.core.result)
 }
