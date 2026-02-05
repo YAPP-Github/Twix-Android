@@ -43,4 +43,11 @@ sealed class NavRoutes(
     object ProfileRoute : NavRoutes("profile")
 
     object DdayRoute : NavRoutes("dday")
+
+    /**
+     * GoalEditorGraph
+     * */
+    object GoalEditorGraph : NavRoutes("goal_editor_graph")
+
+    object GoalEditorRoute : NavRoutes("goal_editor")
 }

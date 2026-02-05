@@ -6,6 +6,11 @@
     <string name="word_couple_page">커플페이지</string>
     <string name="word_today">오늘</string>
     <string name="word_completion">완료</string>
+    <string name="word_count">번</string>
+
+    <string name="word_daily">매일</string>
+    <string name="word_weekly">매주</string>
+    <string name="word_monthly">매월</string>
 
     <string name="word_sunday">일</string>
     <string name="word_monday">월</string>
@@ -18,5 +23,19 @@
     <!-- 홈 화면 -->
     <string name="home_today_goal">오늘 우리 목표</string>
     <string name="home_empty_goal_guide">첫 목표를 세워볼까요?</string>
-    
+
+    <!-- 목표 생성, 편집 화면 -->
+    <string name="goal_editor_title">목표 직접 만들기</string>
+    <string name="goal_editor_title_edit">목표 수정하기</string>
+    <string name="goal_editor_text_field_placeholder">목표를 입력해 보세요.</string>
+    <string name="header_repeat_type">반복 주기</string>
+    <string name="header_start_date">시작 날짜</string>
+    <string name="header_end_date">종료 날짜</string>
+    <string name="header_end_date_option">종료 날짜 설정</string>
+    <string name="icon_editor_dialog_title">아이콘 변경</string>
+    <string name="repeat_count">%s %s번</string>
+
+    <!-- 토스트 메시지 -->
+    <string name="toast_end_date_before_start_date">종료 날짜가 시작 날짜보다 이전입니다.</string>
+
 </resources>
