@@ -30,7 +30,7 @@ compose-coil = "3.3.0"
 compose-navigation = "2.9.4"
 
 # Ktor
-ktor = "3.3.3"
+ktor = "3.4.0"
 
 # Ktrofit
 ktorfit = "2.7.2"
