@@ -8,7 +8,7 @@ import de.jensklingenberg.ktorfit.http.Body
 import de.jensklingenberg.ktorfit.http.POST
 
 interface AuthService {
-    @POST("auth/google")
+    @POST("auth/google/token")
     suspend fun googleLogin(
         @Body request: LoginRequest,
     ): LoginResponse
