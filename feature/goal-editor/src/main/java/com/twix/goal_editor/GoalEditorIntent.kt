@@ -1,7 +1,7 @@
 package com.twix.goal_editor
 
 import com.twix.domain.model.enums.GoalIconType
-import com.twix.domain.model.enums.RepeatType
+import com.twix.domain.model.enums.RepeatCycle
 import com.twix.ui.base.Intent
 import java.time.LocalDate
 
@@ -15,7 +15,7 @@ sealed interface GoalEditorIntent : Intent {
     ) : GoalEditorIntent
 
     data class SetRepeatType(
-        val repeatType: RepeatType,
+        val repeatCycle: RepeatCycle,
     ) : GoalEditorIntent
 
     data class SetRepeatCount(

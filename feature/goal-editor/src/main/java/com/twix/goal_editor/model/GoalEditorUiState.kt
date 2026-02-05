@@ -2,7 +2,7 @@ package com.twix.goal_editor.model
 
 import androidx.compose.runtime.Immutable
 import com.twix.domain.model.enums.GoalIconType
-import com.twix.domain.model.enums.RepeatType
+import com.twix.domain.model.enums.RepeatCycle
 import com.twix.ui.base.State
 import java.time.LocalDate
 
@@ -10,7 +10,7 @@ import java.time.LocalDate
 data class GoalEditorUiState(
     val selectedIcon: GoalIconType = GoalIconType.DEFAULT,
     val goalTitle: String = "",
-    val selectedRepeatType: RepeatType = RepeatType.DAILY,
+    val selectedRepeatCycle: RepeatCycle = RepeatCycle.DAILY,
     val repeatCount: Int = 0,
     val startDate: LocalDate = LocalDate.now(),
     val endDateEnabled: Boolean = false,
