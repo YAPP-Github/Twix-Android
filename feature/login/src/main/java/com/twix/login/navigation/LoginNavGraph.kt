@@ -13,8 +13,6 @@ object LoginNavGraph : NavGraphContributor {
         get() = NavRoutes.LoginGraph
     override val startDestination: String
         get() = NavRoutes.LoginRoute.route
-    override val priority: Int
-        get() = 1
 
     override fun NavGraphBuilder.registerGraph(navController: NavHostController) {
         navigation(

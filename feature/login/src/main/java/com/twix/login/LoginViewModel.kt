@@ -21,11 +21,14 @@ class LoginViewModel(
     private fun login(result: LoginResult) {
         viewModelScope.launch {
             when (result) {
-                LoginResult.Cancel -> Unit
-                is LoginResult.Success -> authRepository.login(result.idToken, result.type)
+                is LoginResult.Success -> {
+                    authRepository.login(result.idToken, result.type)
+                    emitSideEffect(LoginSideEffect.NavigateToHome)
+                }
                 is LoginResult.Failure -> {
                     emitSideEffect(LoginSideEffect.ShowLoginFailToast)
                 }
+                LoginResult.Cancel -> Unit
             }
         }
     }
