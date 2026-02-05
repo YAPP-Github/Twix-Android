@@ -1,6 +1,7 @@
 package com.twix.goal_editor
 
 import androidx.lifecycle.viewModelScope
+import com.twix.designsystem.R
 import com.twix.designsystem.components.toast.model.ToastType
 import com.twix.domain.model.enums.GoalIconType
 import com.twix.domain.model.enums.RepeatType
@@ -63,7 +64,7 @@ class GoalEditorViewModel :
 
         if (currentState.endDateEnabled && currentState.endDate.isBefore(currentState.startDate)) {
             viewModelScope.launch {
-                emitSideEffect(GoalEditorSideEffect.ShowToast("종료 날짜가 시작 날짜보다 이전입니다.", ToastType.ERROR))
+                emitSideEffect(GoalEditorSideEffect.ShowToast(R.string.toast_end_date_before_start_date, ToastType.ERROR))
             }
             return
         }

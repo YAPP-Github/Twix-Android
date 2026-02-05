@@ -25,11 +25,13 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -71,11 +73,17 @@ fun GoalEditorRoute(
     navigateToBack: () -> Unit,
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val context = LocalContext.current
+    /**
+     * LaunchedEffect 내부에서는 stringResource를 사용할 수 없고, context.getString을 그대로 사용하면 경고 발생
+     * LaunchedEffect가 예전 context를 들고 있지 않도록 막아주는 용도
+     * */
+    val currentContext by rememberUpdatedState(context)
 
     LaunchedEffect(Unit) {
         viewModel.sideEffect.collect { effect ->
             when (effect) {
-                is GoalEditorSideEffect.ShowToast -> toastManager.tryShow(ToastData(effect.message, effect.type))
+                is GoalEditorSideEffect.ShowToast -> toastManager.tryShow(ToastData(currentContext.getString(effect.resId), effect.type))
             }
         }
     }
