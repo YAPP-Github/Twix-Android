@@ -13,7 +13,7 @@ interface AuthService {
         @Body request: LoginRequest,
     ): LoginResponse
 
-    @POST("auth/refresh")
+    @POST("api/v1/auth/refresh")
     suspend fun refresh(
         @Body request: RefreshRequest,
     ): RefreshResponse
