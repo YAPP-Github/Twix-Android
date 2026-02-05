@@ -23,6 +23,7 @@ fun initKoin(
                 addAll(dataModule)
                 add(uiModule)
                 add(dataStoreModule)
+                add(appModule)
             },
         )
     }
