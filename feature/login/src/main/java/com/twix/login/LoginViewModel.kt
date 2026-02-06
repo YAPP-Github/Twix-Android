@@ -28,23 +28,37 @@ class LoginViewModel(
                     authRepository.login(result.idToken, result.type)
                     checkOnboardingStatus()
                 }
+
                 is LoginResult.Failure -> {
                     emitSideEffect(LoginSideEffect.ShowLoginFailToast)
                 }
+
                 LoginResult.Cancel -> Unit
             }
         }
     }
 
     private fun checkOnboardingStatus() {
-        viewModelScope.launch {
-            when (val status = onBoardingRepository.fetchOnboardingStatus()) {
-                OnboardingStatus.COUPLE_CONNECTION,
-                OnboardingStatus.PROFILE_SETUP,
-                OnboardingStatus.ANNIVERSARY_SETUP,
-                -> emitSideEffect(LoginSideEffect.NavigateToOnBoarding(status))
-                OnboardingStatus.COMPLETED -> emitSideEffect(LoginSideEffect.NavigateToHome)
-            }
-        }
+        launchResult(
+            block = { onBoardingRepository.fetchOnboardingStatus() },
+            onSuccess = { onboardingStatus ->
+                viewModelScope.launch {
+                    val sideEffect =
+                        when (onboardingStatus) {
+                            OnboardingStatus.COUPLE_CONNECTION,
+                            OnboardingStatus.PROFILE_SETUP,
+                            OnboardingStatus.ANNIVERSARY_SETUP,
+                            -> LoginSideEffect.NavigateToOnBoarding(onboardingStatus)
+
+                            OnboardingStatus.COMPLETED -> LoginSideEffect.NavigateToHome
+                        }
+
+                    emitSideEffect(sideEffect)
+                }
+            },
+            onError = {
+                emitSideEffect(LoginSideEffect.ShowFetchOnBoardingStatusFailToast)
+            },
+        )
     }
 }

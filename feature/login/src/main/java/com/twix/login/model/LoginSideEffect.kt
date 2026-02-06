@@ -11,4 +11,6 @@ sealed interface LoginSideEffect : SideEffect {
     ) : LoginSideEffect
 
     data object ShowLoginFailToast : LoginSideEffect
+
+    data object ShowFetchOnBoardingStatusFailToast : LoginSideEffect
 }

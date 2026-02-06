@@ -38,6 +38,8 @@ fun LoginRoute(
     val coroutineScope = rememberCoroutineScope()
 
     val loginFailMessage = stringResource(R.string.login_fail_message)
+    val fetchOnboardingStatusFailMessage =
+        stringResource(R.string.fetch_onboarding_status_fail_message)
     ObserveAsEvents(viewModel.sideEffect) { sideEffect ->
         when (sideEffect) {
             LoginSideEffect.NavigateToHome -> navigateToHome()
@@ -45,6 +47,9 @@ fun LoginRoute(
             LoginSideEffect.ShowLoginFailToast -> {
                 toastManager.tryShow(ToastData(loginFailMessage, ToastType.ERROR))
             }
+
+            LoginSideEffect.ShowFetchOnBoardingStatusFailToast ->
+                toastManager.tryShow(ToastData(fetchOnboardingStatusFailMessage, ToastType.ERROR))
         }
     }
 
