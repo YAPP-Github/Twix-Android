@@ -133,14 +133,12 @@ fun CoupleConnectScreen(
             )
         }
 
-        if (showRestoreSheet) {
-            CommonBottomSheet(
-                visible = true,
-                config = CommonBottomSheetConfig(showHandle = false),
-                onDismissRequest = onDismissSheet,
-                content = { RestoreCoupleBottomSheetContent() },
-            )
-        }
+        CommonBottomSheet(
+            visible = showRestoreSheet,
+            config = CommonBottomSheetConfig(showHandle = false),
+            onDismissRequest = onDismissSheet,
+            content = { RestoreCoupleBottomSheetContent() },
+        )
     }
 }
 
