@@ -36,6 +36,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.twix.designsystem.R
 import com.twix.designsystem.components.calendar.WeeklyCalendar
+import com.twix.designsystem.components.dialog.CommonDialog
 import com.twix.designsystem.components.goal.GoalCardFrame
 import com.twix.designsystem.components.popup.CommonPopup
 import com.twix.designsystem.components.popup.CommonPopupDivider
@@ -43,9 +44,11 @@ import com.twix.designsystem.components.popup.CommonPopupItem
 import com.twix.designsystem.components.text.AppText
 import com.twix.designsystem.components.topbar.CommonTopBar
 import com.twix.designsystem.extension.label
+import com.twix.designsystem.extension.toRes
 import com.twix.designsystem.theme.CommonColor
 import com.twix.designsystem.theme.GrayColor
 import com.twix.domain.model.enums.AppTextStyle
+import com.twix.domain.model.enums.GoalIconType
 import com.twix.domain.model.goal.GoalSummary
 import com.twix.goal_manage.model.GoalManageUiState
 import com.twix.ui.extension.noRippleClickable
@@ -88,46 +91,100 @@ private fun GoalManageScreen(
     onDelete: (Long) -> Unit = {},
     onEnd: (Long) -> Unit = {},
 ) {
-    Column(
-        modifier =
-            Modifier
-                .fillMaxSize()
-                .background(CommonColor.White),
-    ) {
-        CommonTopBar(
-            title = stringResource(R.string.word_edit),
-            left = {
-                Image(
-                    painter = painterResource(R.drawable.ic_arrow3_left),
-                    contentDescription = "back",
-                    modifier =
-                        Modifier
-                            .padding(18.dp)
-                            .size(24.dp)
-                            .noRippleClickable(onClick = onBack),
-                )
+    var showEndGoalDialog by remember { mutableStateOf(false) }
+    var showDeleteGoalDialog by remember { mutableStateOf(false) }
+    var selectedGoal: GoalSummary? by remember { mutableStateOf(null) }
+
+    Box(modifier = Modifier.fillMaxSize()) {
+        Column(
+            modifier =
+                Modifier
+                    .fillMaxSize()
+                    .background(CommonColor.White),
+        ) {
+            CommonTopBar(
+                title = stringResource(R.string.word_edit),
+                left = {
+                    Image(
+                        painter = painterResource(R.drawable.ic_arrow3_left),
+                        contentDescription = "back",
+                        modifier =
+                            Modifier
+                                .padding(18.dp)
+                                .size(24.dp)
+                                .noRippleClickable(onClick = onBack),
+                    )
+                },
+            )
+
+            Spacer(Modifier.height(4.dp))
+
+            WeeklyCalendar(
+                selectedDate = uiState.selectedDate,
+                referenceDate = uiState.referenceDate,
+                onSelectDate = onSelectDate,
+                onPreviousWeek = onPreviousWeek,
+                onNextWeek = onNextWeek,
+            )
+
+            GoalSummaryList(
+                modifier =
+                    Modifier
+                        .padding(horizontal = 20.dp)
+                        .weight(1f),
+                summaryList = uiState.goalSummaries,
+                onEdit = onEdit,
+                onDelete = {
+                    showDeleteGoalDialog = true
+                    selectedGoal = it
+                },
+                onEnd = {
+                    showEndGoalDialog = true
+                    selectedGoal = it
+                },
+            )
+        }
+
+        CommonDialog(
+            visible = showEndGoalDialog,
+            confirmText = stringResource(R.string.action_complete_goal),
+            dismissText = stringResource(R.string.word_cancel),
+            onDismissRequest = { showEndGoalDialog = false },
+            onConfirm = {
+                showEndGoalDialog = false
+                selectedGoal?.let { onEnd(it.goalId) }
+            },
+            onDismiss = { showEndGoalDialog = false },
+            content = {
+                selectedGoal?.let {
+                    GoalSummaryDialogContent(
+                        title = stringResource(R.string.dialog_end_goal_title, it.name),
+                        content = stringResource(R.string.dialog_end_goal_content),
+                        icon = it.icon,
+                    )
+                }
             },
         )
 
-        Spacer(Modifier.height(4.dp))
-
-        WeeklyCalendar(
-            selectedDate = uiState.selectedDate,
-            referenceDate = uiState.referenceDate,
-            onSelectDate = onSelectDate,
-            onPreviousWeek = onPreviousWeek,
-            onNextWeek = onNextWeek,
-        )
-
-        GoalSummaryList(
-            modifier =
-                Modifier
-                    .padding(horizontal = 20.dp)
-                    .weight(1f),
-            summaryList = uiState.goalSummaries,
-            onEdit = onEdit,
-            onDelete = onDelete,
-            onEnd = onEnd,
+        CommonDialog(
+            visible = showDeleteGoalDialog,
+            confirmText = stringResource(R.string.word_delete),
+            dismissText = stringResource(R.string.word_cancel),
+            onDismissRequest = { showDeleteGoalDialog = false },
+            onConfirm = {
+                showDeleteGoalDialog = false
+                selectedGoal?.let { onDelete(it.goalId) }
+            },
+            onDismiss = { showDeleteGoalDialog = false },
+            content = {
+                selectedGoal?.let {
+                    GoalSummaryDialogContent(
+                        title = stringResource(R.string.dialog_delete_goal_title, it.name),
+                        content = stringResource(R.string.dialog_delete_goal_content),
+                        icon = it.icon,
+                    )
+                }
+            },
         )
     }
 }
@@ -137,8 +194,8 @@ private fun GoalSummaryList(
     modifier: Modifier = Modifier,
     summaryList: List<GoalSummary>,
     onEdit: (Long) -> Unit = {},
-    onDelete: (Long) -> Unit = {},
-    onEnd: (Long) -> Unit = {},
+    onDelete: (GoalSummary) -> Unit = {},
+    onEnd: (GoalSummary) -> Unit = {},
 ) {
     LazyColumn(
         modifier = modifier,
@@ -160,8 +217,8 @@ private fun GoalSummaryList(
 private fun GoalSummaryItem(
     item: GoalSummary,
     onEdit: (Long) -> Unit = {},
-    onDelete: (Long) -> Unit = {},
-    onEnd: (Long) -> Unit = {},
+    onDelete: (GoalSummary) -> Unit = {},
+    onEnd: (GoalSummary) -> Unit = {},
 ) {
     var menuExpanded by remember { mutableStateOf(false) }
     var anchorOffset by remember { mutableStateOf(IntOffset(x = -180, y = 68)) }
@@ -205,7 +262,7 @@ private fun GoalSummaryItem(
                         CommonPopupItem(
                             text = stringResource(R.string.action_finish),
                             onClick = {
-                                onEnd(item.goalId)
+                                onEnd(item)
                                 menuExpanded = false
                             },
                         )
@@ -213,7 +270,7 @@ private fun GoalSummaryItem(
                         CommonPopupItem(
                             text = stringResource(R.string.action_delete),
                             onClick = {
-                                onDelete(item.goalId)
+                                onDelete(item)
                                 menuExpanded = false
                             },
                         )
@@ -283,6 +340,46 @@ private fun GoalSummaryInfo(
             style = AppTextStyle.B4,
             color = GrayColor.C500,
             modifier = Modifier.weight(1f),
+        )
+    }
+}
+
+@Composable
+private fun GoalSummaryDialogContent(
+    title: String = "",
+    content: String = "",
+    icon: GoalIconType,
+) {
+    Column(
+        modifier =
+            Modifier
+                .fillMaxWidth(),
+        horizontalAlignment = Alignment.CenterHorizontally,
+    ) {
+        Image(
+            painter = painterResource(icon.toRes()),
+            contentDescription = "emoji",
+            modifier =
+                Modifier
+                    .size(60.dp),
+        )
+
+        Spacer(Modifier.height(12.dp))
+
+        AppText(
+            text = title,
+            style = AppTextStyle.T1,
+            color = GrayColor.C500,
+            textAlign = TextAlign.Center,
+        )
+
+        Spacer(Modifier.height(8.dp))
+
+        AppText(
+            text = content,
+            style = AppTextStyle.B2,
+            color = GrayColor.C500,
+            textAlign = TextAlign.Center,
         )
     }
 }
