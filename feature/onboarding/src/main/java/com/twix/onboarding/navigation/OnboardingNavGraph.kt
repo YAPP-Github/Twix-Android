@@ -27,27 +27,34 @@ object OnboardingNavGraph : NavGraphContributor {
         ) {
             composable(NavRoutes.CoupleConnectionRoute.route) {
                 CoupleConnectRoute(
-                    onNext = {
+                    navigateToNext = {
                         navController.navigate(NavRoutes.InviteRoute.route) {
                             popUpTo(graphRoute.route) { inclusive = true }
-                            launchSingleTop = true
                         }
                     },
                 )
             }
             composable(NavRoutes.InviteRoute.route) {
                 InviteCodeRoute(
-                    onNext = {
+                    navigateToNext = {
                         navController.navigate(NavRoutes.ProfileRoute.route) {
                             popUpTo(graphRoute.route) { inclusive = true }
-                            launchSingleTop = true
                         }
                     },
                 )
             }
             composable(NavRoutes.ProfileRoute.route) {
                 ProfileRoute(
-                    onNext = { navController.navigate(NavRoutes.DdayRoute.route) },
+                    navigateToDday = {
+                        navController.navigate(NavRoutes.DdayRoute.route) {
+                            popUpTo(graphRoute.route) { inclusive = true }
+                        }
+                    },
+                    navigateToHome = {
+                        navController.navigate(NavRoutes.DdayRoute.route) {
+                            popUpTo(graphRoute.route) { inclusive = true }
+                        }
+                    },
                 )
             }
             composable(NavRoutes.DdayRoute.route) {
@@ -55,7 +62,6 @@ object OnboardingNavGraph : NavGraphContributor {
                     onComplete = {
                         navController.navigate(NavRoutes.MainGraph.route) {
                             popUpTo(graphRoute.route) { inclusive = true }
-                            launchSingleTop = true
                         }
                     },
                     onBack = { navController.popBackStack() },

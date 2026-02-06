@@ -48,7 +48,8 @@ import com.twix.designsystem.R as DesR
 
 @Composable
 fun ProfileRoute(
-    onNext: () -> Unit,
+    navigateToDday: () -> Unit,
+    navigateToHome: () -> Unit,
     toastManager: ToastManager = koinInject(),
     viewModel: OnBoardingViewModel = koinViewModel(),
 ) {
@@ -68,7 +69,8 @@ fun ProfileRoute(
                     )
                 }
 
-                OnBoardingSideEffect.ProfileSetting.NavigateToNext -> onNext()
+                OnBoardingSideEffect.ProfileSetting.NavigateToHome -> navigateToHome()
+                OnBoardingSideEffect.ProfileSetting.NavigateToDDaySetting -> navigateToDday()
                 else -> Unit
             }
         }

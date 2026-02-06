@@ -38,7 +38,7 @@ import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun CoupleConnectRoute(
-    onNext: () -> Unit,
+    navigateToNext: () -> Unit,
     viewModel: OnBoardingViewModel = koinViewModel(),
 ) {
     var showRestoreSheet by rememberSaveable { mutableStateOf(false) }
@@ -46,7 +46,7 @@ fun CoupleConnectRoute(
     CoupleConnectScreen(
         showRestoreSheet = showRestoreSheet,
         onClickSend = { },
-        onClickConnect = onNext,
+        onClickConnect = navigateToNext,
         onClickRestore = { showRestoreSheet = true },
         onDismissSheet = { showRestoreSheet = false },
     )

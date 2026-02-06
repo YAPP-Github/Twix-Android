@@ -61,7 +61,7 @@ import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 internal fun InviteCodeRoute(
-    onNext: () -> Unit,
+    navigateToNext: () -> Unit,
     toastManager: ToastManager = koinInject(),
     viewModel: OnBoardingViewModel = koinViewModel(),
 ) {
@@ -80,7 +80,7 @@ internal fun InviteCodeRoute(
                 )
             }
 
-            OnBoardingSideEffect.InviteCode.NavigateToNext -> onNext()
+            OnBoardingSideEffect.InviteCode.NavigateToNext -> navigateToNext()
             else -> Unit
         }
     }
