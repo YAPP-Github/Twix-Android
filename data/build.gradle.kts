@@ -5,3 +5,8 @@ plugins {
 android {
     namespace = "com.twix.data"
 }
+
+dependencies {
+    implementation(projects.core.datastore)
+    implementation(projects.core.token)
+}

@@ -1,5 +1,6 @@
 package com.twix.onboarding.profile
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -27,6 +28,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.twix.designsystem.components.button.AppButton
 import com.twix.designsystem.components.text.AppText
+import com.twix.designsystem.components.text_field.UnderlineTextField
 import com.twix.designsystem.components.toast.ToastManager
 import com.twix.designsystem.components.toast.model.ToastData
 import com.twix.designsystem.components.toast.model.ToastType
@@ -38,8 +40,8 @@ import com.twix.domain.model.enums.AppTextStyle
 import com.twix.onboarding.R
 import com.twix.onboarding.model.OnBoardingIntent
 import com.twix.onboarding.model.OnBoardingSideEffect
-import com.twix.onboarding.profile.component.NameTextField
 import com.twix.onboarding.vm.OnBoardingViewModel
+import com.twix.ui.extension.noRippleClickable
 import org.koin.androidx.compose.koinViewModel
 import org.koin.compose.koinInject
 import com.twix.designsystem.R as DesR
@@ -111,9 +113,18 @@ private fun ProfileScreen(
 
         Spacer(modifier = Modifier.height(32.dp))
 
-        NameTextField(
+        UnderlineTextField(
             value = uiModel.nickname,
-            onValueChange = { onChangeNickName(it) },
+            placeHolder = stringResource(R.string.onboarding_name_placeholder),
+            showTrailing = true,
+            onValueChange = onChangeNickName,
+            trailing = {
+                Image(
+                    imageVector = ImageVector.vectorResource(DesR.drawable.ic_clear_text),
+                    contentDescription = null,
+                    modifier = Modifier.noRippleClickable { onChangeNickName("") },
+                )
+            },
             modifier =
                 Modifier
                     .focusRequester(focusRequester)

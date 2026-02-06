@@ -40,6 +40,7 @@ android {
 }
 
 dependencies {
+    implementation(projects.core.token)
     implementation(projects.core.result)
 
     implementation(libs.bundles.ktor)
