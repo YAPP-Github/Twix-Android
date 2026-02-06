@@ -1,5 +1,7 @@
 package com.twix.navigation
 
+import java.time.LocalDate
+
 /**
  * 앱 전반에서 사용하는 Navigation Route를 여기에서 정의합니다.
  *
@@ -36,5 +38,20 @@ sealed class NavRoutes(
      * */
     object GoalEditorGraph : NavRoutes("goal_editor_graph")
 
-    object GoalEditorRoute : NavRoutes("goal_editor")
+    object GoalEditorRoute : NavRoutes("goal_editor/{id}") {
+        const val ARG_ID = "id"
+
+        fun createRoute(id: Long) = "goal_editor/$id"
+    }
+
+    /**
+     * GoalManageGraph
+     * */
+    object GoalManageGraph : NavRoutes("goal_manage_graph")
+
+    object GoalManageRoute : NavRoutes("goal_manage/{date}") {
+        const val ARG_DATE = "date"
+
+        fun createRoute(date: LocalDate) = "goal_manage/$date"
+    }
 }
