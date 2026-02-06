@@ -6,10 +6,12 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navigation
 import com.twix.navigation.NavRoutes
 import com.twix.navigation.base.NavGraphContributor
+import com.twix.navigation.graphViewModel
 import com.twix.onboarding.couple.CoupleConnectRoute
 import com.twix.onboarding.dday.DdayRoute
 import com.twix.onboarding.invite.InviteCodeRoute
 import com.twix.onboarding.profile.ProfileRoute
+import com.twix.onboarding.vm.OnBoardingViewModel
 
 object OnboardingNavGraph : NavGraphContributor {
     override val graphRoute: NavRoutes
@@ -25,30 +27,34 @@ object OnboardingNavGraph : NavGraphContributor {
             route = graphRoute.route,
             startDestination = startDestination,
         ) {
-            composable(NavRoutes.CoupleConnectionRoute.route) {
+            composable(NavRoutes.CoupleConnectionRoute.route) { backStackEntry ->
+                val vm: OnBoardingViewModel = backStackEntry.graphViewModel(navController, graphRoute.route)
+
                 CoupleConnectRoute(
                     navigateToNext = {
-                        navController.navigate(NavRoutes.InviteRoute.route) {
-                            popUpTo(graphRoute.route) { inclusive = true }
-                        }
+                        navController.navigate(NavRoutes.InviteRoute.route)
                     },
+                    viewModel = vm,
                 )
             }
-            composable(NavRoutes.InviteRoute.route) {
+            composable(NavRoutes.InviteRoute.route) { backStackEntry ->
+                val vm: OnBoardingViewModel = backStackEntry.graphViewModel(navController, graphRoute.route)
+
                 InviteCodeRoute(
                     navigateToNext = {
-                        navController.navigate(NavRoutes.ProfileRoute.route) {
-                            popUpTo(graphRoute.route) { inclusive = true }
-                        }
+                        navController.navigate(NavRoutes.ProfileRoute.route)
                     },
+                    navigateToBack = navController::popBackStack,
+                    viewModel = vm,
                 )
             }
-            composable(NavRoutes.ProfileRoute.route) {
+            composable(NavRoutes.ProfileRoute.route) { backStackEntry ->
+                val vm: OnBoardingViewModel = backStackEntry.graphViewModel(navController, graphRoute.route)
+
                 ProfileRoute(
+                    viewModel = vm,
                     navigateToDday = {
-                        navController.navigate(NavRoutes.DdayRoute.route) {
-                            popUpTo(graphRoute.route) { inclusive = true }
-                        }
+                        navController.navigate(NavRoutes.DdayRoute.route)
                     },
                     navigateToHome = {
                         navController.navigate(NavRoutes.MainGraph.route) {
@@ -57,19 +63,18 @@ object OnboardingNavGraph : NavGraphContributor {
                     },
                 )
             }
-            composable(NavRoutes.DdayRoute.route) {
+            composable(NavRoutes.DdayRoute.route) { backStackEntry ->
+                val vm: OnBoardingViewModel = backStackEntry.graphViewModel(navController, graphRoute.route)
+
                 DdayRoute(
+                    viewModel = vm,
                     navigateToHome = {
                         navController.navigate(NavRoutes.MainGraph.route) {
                             popUpTo(graphRoute.route) { inclusive = true }
                         }
                     },
                     navigateToBack = {
-                        navController.navigate(NavRoutes.ProfileRoute.route) {
-                            popUpTo(graphRoute.route) {
-                                inclusive = true
-                            }
-                        }
+                        navController.navigate(NavRoutes.ProfileRoute.route)
                     },
                 )
             }

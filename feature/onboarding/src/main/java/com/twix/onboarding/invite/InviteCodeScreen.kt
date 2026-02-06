@@ -18,6 +18,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
@@ -57,7 +58,6 @@ import com.twix.ui.base.ObserveAsEvents
 import com.twix.ui.extension.noRippleClickable
 import kotlinx.coroutines.launch
 import org.koin.compose.koinInject
-import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 internal fun InviteCodeRoute(
@@ -250,6 +250,7 @@ private fun InviteCodeScreenPreview() {
             uiModel = InViteCodeUiModel(),
             onChangeInviteCode = {},
             onComplete = {},
+            navigateToBack = {},
             keyboardState = Keyboard.Opened,
         )
     }

@@ -35,16 +35,15 @@ import com.twix.onboarding.model.OnBoardingIntent
 import com.twix.onboarding.model.OnBoardingSideEffect
 import com.twix.onboarding.vm.OnBoardingViewModel
 import com.twix.ui.base.ObserveAsEvents
-import org.koin.androidx.compose.koinViewModel
 import org.koin.compose.koinInject
 import java.time.LocalDate
 
 @Composable
 fun DdayRoute(
+    viewModel: OnBoardingViewModel,
     navigateToHome: () -> Unit,
     navigateToBack: () -> Unit,
     toastManager: ToastManager = koinInject(),
-    viewModel: OnBoardingViewModel = koinViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     var showCalendarBottomSheet by remember { mutableStateOf(false) }

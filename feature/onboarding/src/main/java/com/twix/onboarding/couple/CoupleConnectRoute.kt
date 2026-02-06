@@ -35,12 +35,11 @@ import com.twix.onboarding.couple.component.ConnectButton
 import com.twix.onboarding.couple.component.RestoreCoupleBottomSheetContent
 import com.twix.onboarding.vm.OnBoardingViewModel
 import com.twix.ui.extension.noRippleClickable
-import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun CoupleConnectRoute(
+    viewModel: OnBoardingViewModel,
     navigateToNext: () -> Unit,
-    viewModel: OnBoardingViewModel = koinViewModel(),
 ) {
     var showRestoreSheet by rememberSaveable { mutableStateOf(false) }
 

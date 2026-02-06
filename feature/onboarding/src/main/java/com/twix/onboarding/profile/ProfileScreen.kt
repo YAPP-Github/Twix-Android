@@ -42,16 +42,15 @@ import com.twix.onboarding.model.OnBoardingIntent
 import com.twix.onboarding.model.OnBoardingSideEffect
 import com.twix.onboarding.vm.OnBoardingViewModel
 import com.twix.ui.extension.noRippleClickable
-import org.koin.androidx.compose.koinViewModel
 import org.koin.compose.koinInject
 import com.twix.designsystem.R as DesR
 
 @Composable
 fun ProfileRoute(
+    viewModel: OnBoardingViewModel,
     navigateToDday: () -> Unit,
     navigateToHome: () -> Unit,
     toastManager: ToastManager = koinInject(),
-    viewModel: OnBoardingViewModel = koinViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
