@@ -30,6 +30,7 @@ dependencies {
     implementation(projects.core.network)
     implementation(projects.core.navigation)
     implementation(projects.core.ui)
+    implementation(projects.core.datastore)
     implementation(projects.core.util)
     implementation(projects.data)
     implementation(projects.domain)

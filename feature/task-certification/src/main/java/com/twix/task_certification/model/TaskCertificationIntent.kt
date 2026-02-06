@@ -8,7 +8,13 @@ sealed interface TaskCertificationIntent : Intent {
         val uri: Uri?,
     ) : TaskCertificationIntent
 
+    data class PickPicture(
+        val uri: Uri?,
+    ) : TaskCertificationIntent
+
     data object ToggleLens : TaskCertificationIntent
 
     data object ToggleTorch : TaskCertificationIntent
+
+    data object RetakePicture : TaskCertificationIntent
 }
