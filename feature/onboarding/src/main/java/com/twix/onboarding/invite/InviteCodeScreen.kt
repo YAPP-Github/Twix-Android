@@ -1,5 +1,6 @@
 package com.twix.onboarding.invite
 
+import android.content.ClipData
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -23,15 +24,16 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.platform.LocalClipboardManager
+import androidx.compose.ui.platform.LocalClipboard
+import androidx.compose.ui.platform.toClipEntry
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
-import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -52,6 +54,7 @@ import com.twix.onboarding.model.OnBoardingIntent
 import com.twix.onboarding.model.OnBoardingSideEffect
 import com.twix.onboarding.vm.OnBoardingViewModel
 import com.twix.ui.extension.noRippleClickable
+import kotlinx.coroutines.launch
 import org.koin.compose.koinInject
 import org.koin.compose.viewmodel.koinViewModel
 
@@ -95,8 +98,9 @@ private fun InviteCodeScreen(
     onChangeInviteCode: (String) -> Unit,
     onComplete: () -> Unit,
 ) {
+    val scope = rememberCoroutineScope()
     val focusRequester = remember { FocusRequester() }
-    val clipboardManager = LocalClipboardManager.current
+    val clipboard = LocalClipboard.current
 
     LaunchedEffect(Unit) {
         focusRequester.requestFocus()
@@ -162,7 +166,14 @@ private fun InviteCodeScreen(
                         contentDescription = null,
                         modifier =
                             Modifier.noRippleClickable {
-                                clipboardManager.setText(AnnotatedString(uiModel.myInviteCode))
+                                scope.launch {
+                                    val clipData =
+                                        ClipData.newPlainText(
+                                            "inviteCode",
+                                            uiModel.myInviteCode,
+                                        )
+                                    clipboard.setClipEntry(clipData.toClipEntry())
+                                }
                             },
                     )
                 }
