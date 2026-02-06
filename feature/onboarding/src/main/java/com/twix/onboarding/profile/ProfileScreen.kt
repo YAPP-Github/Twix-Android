@@ -41,6 +41,7 @@ import com.twix.onboarding.R
 import com.twix.onboarding.model.OnBoardingIntent
 import com.twix.onboarding.model.OnBoardingSideEffect
 import com.twix.onboarding.vm.OnBoardingViewModel
+import com.twix.ui.base.ObserveAsEvents
 import com.twix.ui.extension.noRippleClickable
 import org.koin.compose.koinInject
 import com.twix.designsystem.R as DesR
@@ -56,22 +57,20 @@ fun ProfileRoute(
 
     val notValidNickNameMessage =
         stringResource(R.string.onboarding_profile_invalid_name_length_toast)
-    LaunchedEffect(viewModel.sideEffect) {
-        viewModel.sideEffect.collect { sideEffect ->
-            when (sideEffect) {
-                OnBoardingSideEffect.ProfileSetting.ShowInvalidNickNameToast -> {
-                    toastManager.tryShow(
-                        ToastData(
-                            message = notValidNickNameMessage,
-                            type = ToastType.ERROR,
-                        ),
-                    )
-                }
-
-                OnBoardingSideEffect.ProfileSetting.NavigateToHome -> navigateToHome()
-                OnBoardingSideEffect.ProfileSetting.NavigateToDDaySetting -> navigateToDday()
-                else -> Unit
+    ObserveAsEvents(viewModel.sideEffect) { sideEffect ->
+        when (sideEffect) {
+            OnBoardingSideEffect.ProfileSetting.ShowInvalidNickNameToast -> {
+                toastManager.tryShow(
+                    ToastData(
+                        message = notValidNickNameMessage,
+                        type = ToastType.ERROR,
+                    ),
+                )
             }
+
+            OnBoardingSideEffect.ProfileSetting.NavigateToHome -> navigateToHome()
+            OnBoardingSideEffect.ProfileSetting.NavigateToDDaySetting -> navigateToDday()
+            else -> Unit
         }
     }
 
