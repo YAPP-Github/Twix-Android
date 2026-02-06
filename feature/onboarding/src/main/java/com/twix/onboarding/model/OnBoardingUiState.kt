@@ -17,5 +17,5 @@ data class OnBoardingUiState(
 
     fun updateMyInviteCode(value: String) = copy(inviteCode = inviteCode.updateMyInviteCode(value))
 
-    fun updateInviteCode(value: String) = copy(inviteCode = inviteCode.updateInviteCode(value))
+    fun updatePartnerInviteCode(value: String) = copy(inviteCode = inviteCode.updatePartnerInviteCode(value))
 }

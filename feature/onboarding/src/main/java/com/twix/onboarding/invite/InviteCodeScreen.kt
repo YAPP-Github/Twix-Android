@@ -84,7 +84,7 @@ internal fun InviteCodeRoute(
         uiModel = uiState.inviteCode,
         keyboardState = keyboardState,
         onChangeInviteCode = { viewModel.dispatch(OnBoardingIntent.WriteInviteCode(it)) },
-        onComplete = onNext,
+        onComplete = { viewModel.dispatch(OnBoardingIntent.ConnectCouple) },
     )
 }
 
@@ -180,7 +180,7 @@ private fun InviteCodeScreen(
             Spacer(modifier = Modifier.height(12.dp))
 
             InviteCodeTextField(
-                inviteCode = uiModel.inviteCode,
+                inviteCode = uiModel.partnerInviteCode,
                 onValueChange = onChangeInviteCode,
                 modifier =
                     Modifier

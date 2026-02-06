@@ -24,18 +24,10 @@ class OnBoardingViewModel(
 
     override suspend fun handleIntent(intent: OnBoardingIntent) {
         when (intent) {
-            is OnBoardingIntent.WriteNickName -> {
-                reduceNickName(intent.value)
-            }
-
-            OnBoardingIntent.SubmitNickName -> {
-                handleSubmitNickname()
-            }
-
-            is OnBoardingIntent.WriteInviteCode -> {
-                reduceInviteCode(intent.value)
-            }
-
+            is OnBoardingIntent.WriteNickName -> reduceNickName(intent.value)
+            OnBoardingIntent.SubmitNickName -> handleSubmitNickname()
+            is OnBoardingIntent.WriteInviteCode -> reduceInviteCode(intent.value)
+            OnBoardingIntent.ConnectCouple -> connectCouple()
             OnBoardingIntent.CopyInviteCode -> {
                 emitSideEffect(OnBoardingSideEffect.InviteCode.ShowCopyInviteCodeSuccessToast)
             }
@@ -48,7 +40,7 @@ class OnBoardingViewModel(
 
     private fun handleSubmitNickname() {
         val sideEffect =
-            if (uiState.value.isValidNickName) {
+            if (currentState.isValidNickName) {
                 OnBoardingSideEffect.ProfileSetting.NavigateToNext
             } else {
                 OnBoardingSideEffect.ProfileSetting.ShowInvalidNickNameToast
@@ -60,6 +52,16 @@ class OnBoardingViewModel(
     }
 
     private fun reduceInviteCode(value: String) {
-        reduce { updateInviteCode(value) }
+        reduce { updatePartnerInviteCode(value) }
+    }
+
+    private fun connectCouple() {
+        val currentUiState = currentState.inviteCode
+        if (!currentUiState.isValid) return
+
+        viewModelScope.launch {
+            onBoardingRepository.coupleConnection(currentUiState.partnerInviteCode)
+            emitSideEffect(OnBoardingSideEffect.CoupleConnection.NavigateToNext)
+        }
     }
 }

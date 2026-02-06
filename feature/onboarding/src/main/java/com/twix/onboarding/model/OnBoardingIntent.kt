@@ -14,4 +14,6 @@ sealed interface OnBoardingIntent : Intent {
     ) : OnBoardingIntent
 
     data object CopyInviteCode : OnBoardingIntent
+
+    data object ConnectCouple : OnBoardingIntent
 }

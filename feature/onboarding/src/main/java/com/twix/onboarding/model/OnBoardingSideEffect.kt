@@ -9,7 +9,9 @@ sealed interface OnBoardingSideEffect : SideEffect {
         data object NavigateToNext : ProfileSetting
     }
 
-    sealed interface CoupleConnection : OnBoardingSideEffect
+    sealed interface CoupleConnection : OnBoardingSideEffect {
+        data object NavigateToNext : CoupleConnection
+    }
 
     sealed interface InviteCode : OnBoardingSideEffect {
         data object ShowCopyInviteCodeSuccessToast : InviteCode
