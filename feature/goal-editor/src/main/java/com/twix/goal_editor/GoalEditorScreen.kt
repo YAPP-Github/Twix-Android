@@ -69,7 +69,6 @@ import java.time.LocalDate
 fun GoalEditorRoute(
     viewModel: GoalEditorViewModel = koinViewModel(),
     toastManager: ToastManager = koinInject(),
-    isEdit: Boolean = false,
     goalId: Long,
     navigateToBack: () -> Unit,
 ) {
@@ -96,7 +95,7 @@ fun GoalEditorRoute(
 
     GoalEditorScreen(
         uiState = uiState,
-        isEdit = isEdit,
+        isEdit = goalId != -1L,
         onBack = navigateToBack,
         onCommitTitle = { viewModel.dispatch(GoalEditorIntent.SetTitle(it)) },
         onSelectRepeatType = { viewModel.dispatch(GoalEditorIntent.SetRepeatType(it)) },
@@ -165,6 +164,7 @@ fun GoalEditorScreen(
                 startDate = uiState.startDate,
                 endDateEnabled = uiState.endDateEnabled,
                 endDate = uiState.endDate,
+                isEdit = isEdit,
                 onSelectedRepeatType = onSelectRepeatType,
                 onShowRepeatCountBottomSheet = { showRepeatCountBottomSheet = true },
                 onShowCalendarBottomSheet = {
