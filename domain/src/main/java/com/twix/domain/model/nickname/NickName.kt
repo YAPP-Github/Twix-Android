@@ -1,7 +1,7 @@
 package com.twix.domain.model.nickname
 
 @JvmInline
-value class NickName private constructor(
+value class NickName(
     val value: String,
 ) {
     companion object {

@@ -6,7 +6,6 @@ import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.imePadding
-import androidx.compose.foundation.layout.safeContentPadding
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import com.twix.designsystem.components.toast.ToastHost
@@ -26,7 +25,7 @@ class MainActivity : ComponentActivity() {
                 Box(
                     modifier =
                         Modifier
-                            .safeContentPadding()
+                            // .safeContentPadding()
                             .fillMaxSize(),
                 ) {
                     AppNavHost()

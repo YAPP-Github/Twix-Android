@@ -1,7 +1,7 @@
 package com.twix.data.repository
 
-import com.twix.domain.model.InviteCode
 import com.twix.domain.model.OnboardingStatus
+import com.twix.domain.model.invitecode.InviteCode
 import com.twix.domain.repository.OnBoardingRepository
 import com.twix.network.model.request.AnniversaryRequest
 import com.twix.network.model.request.CoupleConnectionRequest
