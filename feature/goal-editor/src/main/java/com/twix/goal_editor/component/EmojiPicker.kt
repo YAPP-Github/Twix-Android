@@ -12,7 +12,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import com.twix.designsystem.R
 import com.twix.designsystem.extension.toRes
 import com.twix.designsystem.theme.GrayColor
 import com.twix.domain.model.enums.GoalIconType
