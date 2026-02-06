@@ -33,18 +33,18 @@ import com.twix.designsystem.components.text.AppText
 import com.twix.designsystem.theme.CommonColor
 import com.twix.designsystem.theme.GrayColor
 import com.twix.domain.model.enums.AppTextStyle
-import com.twix.domain.model.enums.RepeatType
+import com.twix.domain.model.enums.RepeatCycle
 import com.twix.ui.extension.noRippleClickable
 import java.time.LocalDate
 
 @Composable
 fun GoalInfoCard(
-    selectedRepeatType: RepeatType,
+    selectedRepeatCycle: RepeatCycle,
     repeatCount: Int,
     startDate: LocalDate,
     endDateEnabled: Boolean,
     endDate: LocalDate,
-    onSelectedRepeatType: (RepeatType) -> Unit,
+    onSelectedRepeatType: (RepeatCycle) -> Unit,
     onShowRepeatCountBottomSheet: () -> Unit,
     onShowCalendarBottomSheet: (Boolean) -> Unit, // true면 endDate
     onToggleEndDateEnabled: (Boolean) -> Unit,
@@ -57,7 +57,7 @@ fun GoalInfoCard(
                 .border(1.dp, GrayColor.C500, RoundedCornerShape(12.dp)),
     ) {
         RepeatTypeSettings(
-            selectedRepeatType = selectedRepeatType,
+            selectedRepeatCycle = selectedRepeatCycle,
             repeatCount = repeatCount,
             onSelectedRepeatType = onSelectedRepeatType,
             onShowRepeatCountBottomSheet = onShowRepeatCountBottomSheet,
@@ -97,9 +97,9 @@ fun GoalInfoCard(
 
 @Composable
 private fun RepeatTypeSettings(
-    selectedRepeatType: RepeatType,
+    selectedRepeatCycle: RepeatCycle,
     repeatCount: Int,
-    onSelectedRepeatType: (RepeatType) -> Unit,
+    onSelectedRepeatType: (RepeatCycle) -> Unit,
     onShowRepeatCountBottomSheet: () -> Unit,
 ) {
     val animationDuration = 160
@@ -119,8 +119,8 @@ private fun RepeatTypeSettings(
                     .fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically,
         ) {
-            RepeatType.entries.forEachIndexed { index, type ->
-                val isSelected = selectedRepeatType == type
+            RepeatCycle.entries.forEachIndexed { index, type ->
+                val isSelected = selectedRepeatCycle == type
 
                 AppText(
                     text = type.label(),
@@ -135,13 +135,13 @@ private fun RepeatTypeSettings(
                             .noRippleClickable(onClick = { onSelectedRepeatType(type) }),
                 )
 
-                if (index != RepeatType.entries.lastIndex) Spacer(Modifier.width(8.dp))
+                if (index != RepeatCycle.entries.lastIndex) Spacer(Modifier.width(8.dp))
             }
 
             Spacer(Modifier.weight(1f))
 
             AnimatedVisibility(
-                visible = selectedRepeatType != RepeatType.DAILY,
+                visible = selectedRepeatCycle != RepeatCycle.DAILY,
                 enter = fadeIn(animationSpec = tween(durationMillis = animationDuration)),
                 exit = fadeOut(animationSpec = tween(durationMillis = animationDuration)),
             ) {
@@ -153,7 +153,7 @@ private fun RepeatTypeSettings(
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
                     AppText(
-                        text = stringResource(R.string.repeat_count, selectedRepeatType.label(), repeatCount),
+                        text = stringResource(R.string.repeat_count, selectedRepeatCycle.label(), repeatCount),
                         style = AppTextStyle.B2,
                         color = GrayColor.C500,
                     )
@@ -245,9 +245,9 @@ private fun HeaderText(text: String) {
 }
 
 @Composable
-fun RepeatType.label(): String =
+fun RepeatCycle.label(): String =
     when (this) {
-        RepeatType.DAILY -> stringResource(R.string.word_daily)
-        RepeatType.WEEKLY -> stringResource(R.string.word_weekly)
-        RepeatType.MONTHLY -> stringResource(R.string.word_monthly)
+        RepeatCycle.DAILY -> stringResource(R.string.word_daily)
+        RepeatCycle.WEEKLY -> stringResource(R.string.word_weekly)
+        RepeatCycle.MONTHLY -> stringResource(R.string.word_monthly)
     }

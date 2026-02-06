@@ -8,5 +8,6 @@ android {
 
 dependencies {
     implementation(projects.core.datastore)
+    implementation(projects.core.result)
     implementation(projects.core.token)
 }
