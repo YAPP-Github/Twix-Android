@@ -73,6 +73,7 @@ internal fun InviteCodeRoute(
 
     val inviteCodeSuccessMessage = stringResource(R.string.onboarding_invite_code_copy)
     val invalidInviteCodeMessage = stringResource(R.string.onboarding_invite_invalid_invite_code_fail)
+    val coupleConnectionFailMessage = stringResource(R.string.onboarding_couple_connection_fail)
 
     ObserveAsEvents(viewModel.sideEffect) { sideEffect ->
         when (sideEffect) {
@@ -88,6 +89,14 @@ internal fun InviteCodeRoute(
                 toastManager.tryShow(
                     ToastData(
                         message = invalidInviteCodeMessage,
+                        type = ToastType.ERROR,
+                    ),
+                )
+            }
+            OnBoardingSideEffect.InviteCode.ShowConnectCoupleConnectFailToast -> {
+                toastManager.tryShow(
+                    ToastData(
+                        message = coupleConnectionFailMessage,
                         type = ToastType.ERROR,
                     ),
                 )

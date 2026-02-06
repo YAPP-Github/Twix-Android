@@ -22,6 +22,8 @@ sealed interface OnBoardingSideEffect : SideEffect {
 
         data object ShowInvalidInviteCodeToast : InviteCode
 
+        data object ShowConnectCoupleConnectFailToast : InviteCode
+
         data object NavigateToNext : InviteCode
     }
 

@@ -22,6 +22,7 @@
     <string name="onboarding_couple_restore_content_partner_email">짝꿍의 로그인 계정 메일</string>
     <string name="onboarding_couple_restore_content_restore_date">해지 일시</string>
     <string name="onboarding_couple_fetch_my_invite_code_fail">내 조회코드 조회에 실패했습니다.</string>
+    <string name="onboarding_couple_connection_fail">커플 연결 요청에 실패했어요</string>
 
     <!-- 초대 코드 입력 화면 -->
     <string name="onboarding_invite_code_plz_write_invite_code">짝꿍에게 받은\n초대 코드를 써주세요</string>

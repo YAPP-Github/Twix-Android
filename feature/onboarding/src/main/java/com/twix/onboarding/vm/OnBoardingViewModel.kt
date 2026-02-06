@@ -66,12 +66,13 @@ class OnBoardingViewModel(
              * */
             if (error.message == INVALID_INVITE_CODE_MESSAGE) {
                 emitSideEffect(OnBoardingSideEffect.InviteCode.ShowInvalidInviteCodeToast)
-            }
-            /**
-             * 상대방이 이미 연결한 경우
-             * */
-            if (error.message == ALREADY_USED_INVITE_CODE_MESSAGE) {
+            } else if (error.message == ALREADY_USED_INVITE_CODE_MESSAGE) {
+                /**
+                 * 상대방이 이미 연결한 경우
+                 * */
                 emitSideEffect(OnBoardingSideEffect.InviteCode.NavigateToNext)
+            } else {
+                emitSideEffect(OnBoardingSideEffect.InviteCode.ShowConnectCoupleConnectFailToast)
             }
         }
     }
