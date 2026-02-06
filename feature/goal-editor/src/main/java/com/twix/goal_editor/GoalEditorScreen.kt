@@ -46,18 +46,18 @@ import com.twix.designsystem.components.dialog.CommonDialog
 import com.twix.designsystem.components.text.AppText
 import com.twix.designsystem.components.toast.ToastManager
 import com.twix.designsystem.components.toast.model.ToastData
+import com.twix.designsystem.extension.toRes
 import com.twix.designsystem.theme.CommonColor
 import com.twix.designsystem.theme.GrayColor
 import com.twix.designsystem.theme.TwixTheme
 import com.twix.domain.model.enums.AppTextStyle
 import com.twix.domain.model.enums.GoalIconType
-import com.twix.domain.model.enums.RepeatType
+import com.twix.domain.model.enums.RepeatCycle
 import com.twix.goal_editor.component.EmojiPicker
 import com.twix.goal_editor.component.GoalEditorTopBar
 import com.twix.goal_editor.component.GoalInfoCard
 import com.twix.goal_editor.component.GoalTextField
 import com.twix.goal_editor.component.label
-import com.twix.goal_editor.component.toRes
 import com.twix.goal_editor.model.GoalEditorUiState
 import com.twix.ui.extension.dismissKeyboardOnTap
 import com.twix.ui.extension.noRippleClickable
@@ -110,7 +110,7 @@ fun GoalEditorScreen(
     isEdit: Boolean = false,
     onBack: () -> Unit,
     onCommitTitle: (String) -> Unit,
-    onSelectRepeatType: (RepeatType) -> Unit,
+    onSelectRepeatType: (RepeatCycle) -> Unit,
     onCommitIcon: (GoalIconType) -> Unit,
     onCommitEndDate: (LocalDate) -> Unit,
     onCommitStartDate: (LocalDate) -> Unit,
@@ -155,7 +155,7 @@ fun GoalEditorScreen(
             Spacer(Modifier.height(44.dp))
 
             GoalInfoCard(
-                selectedRepeatType = uiState.selectedRepeatType,
+                selectedRepeatCycle = uiState.selectedRepeatCycle,
                 repeatCount = uiState.repeatCount,
                 startDate = uiState.startDate,
                 endDateEnabled = uiState.endDateEnabled,
@@ -204,7 +204,7 @@ fun GoalEditorScreen(
             content = {
                 RepeatCountBottomSheetContent(
                     repeatCount = uiState.repeatCount,
-                    selectedRepeatType = uiState.selectedRepeatType,
+                    selectedRepeatCycle = uiState.selectedRepeatCycle,
                     onCommit = { repeatType, repeatCount ->
                         onSelectRepeatType(repeatType)
                         onCommitRepeatCount(repeatCount)
@@ -289,12 +289,12 @@ private fun IconEditorDialogContent(
 @Composable
 private fun RepeatCountBottomSheetContent(
     repeatCount: Int,
-    selectedRepeatType: RepeatType,
-    onCommit: (RepeatType, Int) -> Unit,
+    selectedRepeatCycle: RepeatCycle,
+    onCommit: (RepeatCycle, Int) -> Unit,
 ) {
     var internalRepeatCount by remember { mutableIntStateOf(repeatCount) }
-    var internalSelectedRepeatType by remember { mutableStateOf(selectedRepeatType) }
-    val maxCount = if (internalSelectedRepeatType == RepeatType.WEEKLY) 6 else 25
+    var internalSelectedRepeatType by remember { mutableStateOf(selectedRepeatCycle) }
+    val maxCount = if (internalSelectedRepeatType == RepeatCycle.WEEKLY) 6 else 25
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -306,33 +306,33 @@ private fun RepeatCountBottomSheetContent(
             horizontalArrangement = Arrangement.spacedBy(8.dp),
         ) {
             AppText(
-                text = RepeatType.WEEKLY.label(),
+                text = RepeatCycle.WEEKLY.label(),
                 style = AppTextStyle.B2,
-                color = if (internalSelectedRepeatType == RepeatType.WEEKLY) CommonColor.White else GrayColor.C500,
+                color = if (internalSelectedRepeatType == RepeatCycle.WEEKLY) CommonColor.White else GrayColor.C500,
                 modifier =
                     Modifier
                         .clip(RoundedCornerShape(8.dp))
-                        .background(if (internalSelectedRepeatType == RepeatType.WEEKLY) GrayColor.C500 else CommonColor.White)
+                        .background(if (internalSelectedRepeatType == RepeatCycle.WEEKLY) GrayColor.C500 else CommonColor.White)
                         .border(1.dp, GrayColor.C500, RoundedCornerShape(8.dp))
                         .padding(horizontal = 12.dp, vertical = 5.5.dp)
                         .noRippleClickable(onClick = {
-                            internalSelectedRepeatType = RepeatType.WEEKLY
+                            internalSelectedRepeatType = RepeatCycle.WEEKLY
                             internalRepeatCount = 0
                         }),
             )
 
             AppText(
-                text = RepeatType.MONTHLY.label(),
+                text = RepeatCycle.MONTHLY.label(),
                 style = AppTextStyle.B2,
-                color = if (internalSelectedRepeatType == RepeatType.MONTHLY) CommonColor.White else GrayColor.C500,
+                color = if (internalSelectedRepeatType == RepeatCycle.MONTHLY) CommonColor.White else GrayColor.C500,
                 modifier =
                     Modifier
                         .clip(RoundedCornerShape(8.dp))
-                        .background(if (internalSelectedRepeatType == RepeatType.MONTHLY) GrayColor.C500 else CommonColor.White)
+                        .background(if (internalSelectedRepeatType == RepeatCycle.MONTHLY) GrayColor.C500 else CommonColor.White)
                         .border(1.dp, GrayColor.C500, RoundedCornerShape(8.dp))
                         .padding(horizontal = 12.dp, vertical = 5.5.dp)
                         .noRippleClickable(onClick = {
-                            internalSelectedRepeatType = RepeatType.MONTHLY
+                            internalSelectedRepeatType = RepeatCycle.MONTHLY
                             internalRepeatCount = 0
                         }),
             )

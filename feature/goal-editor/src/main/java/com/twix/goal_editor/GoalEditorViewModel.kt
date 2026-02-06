@@ -4,7 +4,7 @@ import androidx.lifecycle.viewModelScope
 import com.twix.designsystem.R
 import com.twix.designsystem.components.toast.model.ToastType
 import com.twix.domain.model.enums.GoalIconType
-import com.twix.domain.model.enums.RepeatType
+import com.twix.domain.model.enums.RepeatCycle
 import com.twix.goal_editor.model.GoalEditorUiState
 import com.twix.ui.base.BaseViewModel
 import kotlinx.coroutines.launch
@@ -20,7 +20,7 @@ class GoalEditorViewModel :
             is GoalEditorIntent.SetIcon -> setIcon(intent.icon)
             is GoalEditorIntent.SetEndDate -> setEndDate(intent.endDate)
             is GoalEditorIntent.SetRepeatCount -> setRepeatCount(intent.repeatCount)
-            is GoalEditorIntent.SetRepeatType -> setRepeatType(intent.repeatType)
+            is GoalEditorIntent.SetRepeatType -> setRepeatType(intent.repeatCycle)
             is GoalEditorIntent.SetStartDate -> setStartDate(intent.startDate)
             is GoalEditorIntent.SetTitle -> setTitle(intent.title)
             is GoalEditorIntent.SetEndDateEnabled -> setEndDateEnabled(intent.enabled)
@@ -37,8 +37,8 @@ class GoalEditorViewModel :
         reduce { copy(goalTitle = title) }
     }
 
-    private fun setRepeatType(repeatType: RepeatType) {
-        reduce { copy(selectedRepeatType = repeatType) }
+    private fun setRepeatType(repeatCycle: RepeatCycle) {
+        reduce { copy(selectedRepeatCycle = repeatCycle) }
     }
 
     private fun setRepeatCount(repeatCount: Int) {

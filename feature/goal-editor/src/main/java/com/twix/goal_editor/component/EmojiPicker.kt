@@ -12,7 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import com.twix.designsystem.R
+import com.twix.designsystem.extension.toRes
 import com.twix.designsystem.theme.GrayColor
 import com.twix.domain.model.enums.GoalIconType
 import com.twix.ui.extension.noRippleClickable
@@ -40,16 +40,3 @@ fun EmojiPicker(
         )
     }
 }
-
-@Composable
-fun GoalIconType.toRes(): Int =
-    when (this) {
-        GoalIconType.DEFAULT -> R.drawable.ic_default
-        GoalIconType.CLEAN -> R.drawable.ic_clean
-        GoalIconType.EXERCISE -> R.drawable.ic_exercise
-        GoalIconType.BOOK -> R.drawable.ic_book
-        GoalIconType.PENCIL -> R.drawable.ic_pencil
-        GoalIconType.HEALTH -> R.drawable.ic_health
-        GoalIconType.HEART -> R.drawable.ic_heart
-        GoalIconType.LAPTOP -> R.drawable.ic_laptop
-    }

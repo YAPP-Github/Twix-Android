@@ -1,8 +1,10 @@
 package com.twix.home
 
 import androidx.lifecycle.viewModelScope
-import com.twix.designsystem.components.toast.ToastManager
+import com.twix.designsystem.R
+import com.twix.designsystem.components.toast.model.ToastType
 import com.twix.domain.model.enums.WeekNavigation
+import com.twix.domain.repository.GoalRepository
 import com.twix.home.model.CalendarState
 import com.twix.home.model.HomeUiState
 import com.twix.ui.base.BaseViewModel
@@ -14,7 +16,7 @@ import kotlinx.coroutines.flow.stateIn
 import java.time.LocalDate
 
 class HomeViewModel(
-    private val toastManager: ToastManager,
+    private val goalRepository: GoalRepository,
 ) : BaseViewModel<HomeUiState, HomeIntent, HomeSideEffect>(
         HomeUiState(),
     ) {
@@ -38,6 +40,10 @@ class HomeViewModel(
                     ),
             )
 
+    init {
+        fetchGoalList()
+    }
+
     override suspend fun handleIntent(intent: HomeIntent) {
         when (intent) {
             is HomeIntent.SelectDate -> updateDate(intent.date)
@@ -54,6 +60,8 @@ class HomeViewModel(
         if (date.month != currentState.visibleDate.month) updateVisibleDate(date)
 
         reduce { copy(selectedDate = date, referenceDate = date) }
+
+        fetchGoalList()
     }
 
     private fun shiftWeek(action: WeekNavigation) {
@@ -64,7 +72,10 @@ class HomeViewModel(
                 WeekNavigation.TODAY -> LocalDate.now()
             }
         if (currentState.referenceDate == newReference) return
-        if (action == WeekNavigation.TODAY) updateDate(newReference)
+        if (action == WeekNavigation.TODAY) {
+            updateDate(newReference)
+            return
+        }
         reduce { copy(referenceDate = newReference) }
     }
 
@@ -72,5 +83,20 @@ class HomeViewModel(
         if (currentState.visibleDate.month == date.month) return
 
         reduce { copy(visibleDate = date) }
+    }
+
+    /**
+     * 서버에서 데이터를 가져오는 부분
+     * */
+    private fun fetchGoalList() {
+        val date = currentState.selectedDate.toString()
+
+        launchResult(
+            block = { goalRepository.fetchGoalList(date = date) },
+            onSuccess = { goalList -> reduce { copy(goalList = goalList) } },
+            onError = {
+                emitSideEffect(HomeSideEffect.ShowToast(R.string.toast_goal_fetch_failed, ToastType.ERROR))
+            },
+        )
     }
 }
