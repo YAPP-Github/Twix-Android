@@ -111,6 +111,7 @@ fun DdayScreen(
                 onClick = { onCompleted() },
                 backgroundColor = if (uiModel.isSelected) GrayColor.C500 else GrayColor.C100,
                 textColor = if (uiModel.isSelected) CommonColor.White else GrayColor.C300,
+                enabled = uiModel.isSelected,
                 modifier =
                     Modifier
                         .fillMaxWidth()
