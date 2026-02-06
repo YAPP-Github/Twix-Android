@@ -74,19 +74,17 @@ class OnBoardingViewModel(
         }
     }
 
-    private fun fetchOnboardingStatus() {
-        viewModelScope.launch {
-            when (onBoardingRepository.fetchOnboardingStatus()) {
-                OnboardingStatus.ANNIVERSARY_SETUP -> {
-                    emitSideEffect(OnBoardingSideEffect.ProfileSetting.NavigateToDDaySetting)
-                }
-
-                OnboardingStatus.COMPLETED -> {
-                    emitSideEffect(OnBoardingSideEffect.ProfileSetting.NavigateToHome)
-                }
-
-                else -> Unit
+    private suspend fun fetchOnboardingStatus() {
+        when (onBoardingRepository.fetchOnboardingStatus()) {
+            OnboardingStatus.ANNIVERSARY_SETUP -> {
+                emitSideEffect(OnBoardingSideEffect.ProfileSetting.NavigateToDDaySetting)
             }
+
+            OnboardingStatus.COMPLETED -> {
+                emitSideEffect(OnBoardingSideEffect.ProfileSetting.NavigateToHome)
+            }
+
+            else -> Unit
         }
     }
 
