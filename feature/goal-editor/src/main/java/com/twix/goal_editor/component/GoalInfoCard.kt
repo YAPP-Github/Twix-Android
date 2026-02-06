@@ -45,6 +45,7 @@ fun GoalInfoCard(
     startDate: LocalDate,
     endDateEnabled: Boolean,
     endDate: LocalDate,
+    isEdit: Boolean,
     onSelectedRepeatType: (RepeatCycle) -> Unit,
     onShowRepeatCountBottomSheet: () -> Unit,
     onShowCalendarBottomSheet: (Boolean) -> Unit, // true면 endDate
@@ -66,10 +67,12 @@ fun GoalInfoCard(
 
         HorizontalDivider(thickness = 1.dp, color = GrayColor.C500)
 
-        DateSettings(
-            date = startDate,
-            onShowCalendarBottomSheet = { onShowCalendarBottomSheet(false) },
-        )
+        if (!isEdit) {
+            DateSettings(
+                date = startDate,
+                onShowCalendarBottomSheet = { onShowCalendarBottomSheet(false) },
+            )
+        }
 
         HorizontalDivider(thickness = 1.dp, color = GrayColor.C500)
 
