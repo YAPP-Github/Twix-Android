@@ -1,4 +1,4 @@
-package com.twix.task_certification
+package com.twix.task_certification.certification
 
 import android.Manifest
 import android.content.pm.PackageManager
@@ -54,15 +54,16 @@ import com.twix.designsystem.theme.DimmedColor
 import com.twix.designsystem.theme.GrayColor
 import com.twix.designsystem.theme.TwixTheme
 import com.twix.domain.model.enums.AppTextStyle
-import com.twix.task_certification.camera.Camera
-import com.twix.task_certification.component.CameraControlBar
-import com.twix.task_certification.component.CameraPreviewBox
-import com.twix.task_certification.component.CommentErrorText
-import com.twix.task_certification.component.TaskCertificationTopBar
-import com.twix.task_certification.model.CameraPreview
-import com.twix.task_certification.model.TaskCertificationIntent
-import com.twix.task_certification.model.TaskCertificationSideEffect
-import com.twix.task_certification.model.TaskCertificationUiState
+import com.twix.task_certification.R
+import com.twix.task_certification.certification.camera.Camera
+import com.twix.task_certification.certification.component.CameraControlBar
+import com.twix.task_certification.certification.component.CameraPreviewBox
+import com.twix.task_certification.certification.component.CommentErrorText
+import com.twix.task_certification.certification.component.TaskCertificationTopBar
+import com.twix.task_certification.certification.model.CameraPreview
+import com.twix.task_certification.certification.model.TaskCertificationIntent
+import com.twix.task_certification.certification.model.TaskCertificationSideEffect
+import com.twix.task_certification.certification.model.TaskCertificationUiState
 import com.twix.ui.base.ObserveAsEvents
 import com.twix.ui.extension.noRippleClickable
 import kotlinx.coroutines.launch

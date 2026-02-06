@@ -1,4 +1,4 @@
-package com.twix.task_certification.component
+package com.twix.task_certification.certification.component
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box

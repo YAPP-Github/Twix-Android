@@ -6,7 +6,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navigation
 import com.twix.navigation.NavRoutes
 import com.twix.navigation.base.NavGraphContributor
-import com.twix.task_certification.TaskCertificationRoute
+import com.twix.task_certification.certification.TaskCertificationRoute
 
 object TaskCertificationGraph : NavGraphContributor {
     override val graphRoute: NavRoutes

@@ -1,4 +1,4 @@
-package com.twix.task_certification.model
+package com.twix.task_certification.certification.model
 
 import android.net.Uri
 import androidx.compose.ui.text.input.TextFieldValue

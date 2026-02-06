@@ -1,4 +1,4 @@
-package com.twix.task_certification.component
+package com.twix.task_certification.certification.component
 
 import androidx.camera.compose.CameraXViewfinder
 import androidx.compose.foundation.Image
@@ -25,9 +25,9 @@ import com.twix.designsystem.components.comment.model.CommentUiModel
 import com.twix.designsystem.theme.GrayColor
 import com.twix.designsystem.theme.TwixTheme
 import com.twix.task_certification.R
-import com.twix.task_certification.model.CameraPreview
-import com.twix.task_certification.model.CaptureStatus
-import com.twix.task_certification.model.TorchStatus
+import com.twix.task_certification.certification.model.CameraPreview
+import com.twix.task_certification.certification.model.CaptureStatus
+import com.twix.task_certification.certification.model.TorchStatus
 import com.twix.ui.extension.noRippleClickable
 
 @Composable
