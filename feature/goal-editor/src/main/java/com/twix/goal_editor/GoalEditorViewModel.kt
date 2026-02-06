@@ -4,7 +4,10 @@ import androidx.lifecycle.viewModelScope
 import com.twix.designsystem.R
 import com.twix.designsystem.components.toast.model.ToastType
 import com.twix.domain.model.enums.GoalIconType
+import com.twix.domain.model.enums.GoalReactionType
 import com.twix.domain.model.enums.RepeatCycle
+import com.twix.domain.model.goal.Goal
+import com.twix.domain.model.goal.GoalVerification
 import com.twix.goal_editor.model.GoalEditorUiState
 import com.twix.ui.base.BaseViewModel
 import kotlinx.coroutines.launch
@@ -24,6 +27,7 @@ class GoalEditorViewModel :
             is GoalEditorIntent.SetStartDate -> setStartDate(intent.startDate)
             is GoalEditorIntent.SetTitle -> setTitle(intent.title)
             is GoalEditorIntent.SetEndDateEnabled -> setEndDateEnabled(intent.enabled)
+            is GoalEditorIntent.InitGoal -> initGoal(intent.id)
         }
     }
 
@@ -67,6 +71,46 @@ class GoalEditorViewModel :
                 emitSideEffect(GoalEditorSideEffect.ShowToast(R.string.toast_end_date_before_start_date, ToastType.ERROR))
             }
             return
+        }
+    }
+
+    private fun initGoal(id: Long) {
+        val goal =
+            Goal(
+                goalId = 4,
+                name = "밥무라",
+                icon = GoalIconType.DEFAULT,
+                repeatCycle = RepeatCycle.WEEKLY,
+                myCompleted = true,
+                partnerCompleted = true,
+                myVerification =
+                    GoalVerification(
+                        photologId = 1,
+                        imageUrl = "https://picsum.photos/400/300",
+                        comment = null,
+                        reaction = GoalReactionType.LOVE,
+                        uploadedAt = "2023-05-05",
+                    ),
+                partnerVerification =
+                    GoalVerification(
+                        photologId = 1,
+                        imageUrl = "https://picsum.photos/400/300",
+                        comment = null,
+                        reaction = GoalReactionType.LOVE,
+                        uploadedAt = "2023-05-05",
+                    ),
+            )
+
+        reduce {
+            copy(
+                goalTitle = goal.name,
+                selectedIcon = goal.icon,
+                selectedRepeatCycle = goal.repeatCycle,
+                repeatCount = 4,
+                startDate = LocalDate.now(),
+                endDate = LocalDate.now().plusWeeks(1),
+                endDateEnabled = true,
+            )
         }
     }
 }

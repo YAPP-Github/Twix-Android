@@ -3,6 +3,7 @@ package com.twix.goal_editor.navigation
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
+import androidx.navigation.navArgument
 import androidx.navigation.navigation
 import com.twix.goal_editor.GoalEditorRoute
 import com.twix.navigation.NavRoutes
@@ -19,8 +20,16 @@ object GoalEditorNavGraph : NavGraphContributor {
             route = graphRoute.route,
             startDestination = startDestination,
         ) {
-            composable(NavRoutes.GoalEditorRoute.route) {
+            composable(
+                route = NavRoutes.GoalEditorRoute.route,
+                arguments = listOf(
+                    navArgument(NavRoutes.GoalEditorRoute.ARG_ID) { defaultValue = -1L },
+                )
+            ) { backStackEntry ->
+                val id = backStackEntry.arguments?.getLong(NavRoutes.GoalEditorRoute.ARG_ID) ?: -1L
+
                 GoalEditorRoute(
+                    goalId = id,
                     navigateToBack = navController::popBackStack,
                 )
             }
