@@ -30,6 +30,7 @@ import androidx.compose.ui.unit.dp
 import com.twix.designsystem.R
 import com.twix.designsystem.components.common.CommonSwitch
 import com.twix.designsystem.components.text.AppText
+import com.twix.designsystem.extension.label
 import com.twix.designsystem.theme.CommonColor
 import com.twix.designsystem.theme.GrayColor
 import com.twix.domain.model.enums.AppTextStyle
@@ -243,11 +244,3 @@ private fun HeaderText(text: String) {
         color = GrayColor.C500,
     )
 }
-
-@Composable
-fun RepeatCycle.label(): String =
-    when (this) {
-        RepeatCycle.DAILY -> stringResource(R.string.word_daily)
-        RepeatCycle.WEEKLY -> stringResource(R.string.word_weekly)
-        RepeatCycle.MONTHLY -> stringResource(R.string.word_monthly)
-    }
