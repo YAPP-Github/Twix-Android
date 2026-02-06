@@ -61,9 +61,10 @@ import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 internal fun InviteCodeRoute(
+    viewModel: OnBoardingViewModel,
     navigateToNext: () -> Unit,
+    navigateToBack: () -> Unit,
     toastManager: ToastManager = koinInject(),
-    viewModel: OnBoardingViewModel = koinViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val keyboardState by keyboardAsState()
@@ -88,6 +89,7 @@ internal fun InviteCodeRoute(
     InviteCodeScreen(
         uiModel = uiState.inviteCode,
         keyboardState = keyboardState,
+        navigateToBack = navigateToBack,
         onChangeInviteCode = { viewModel.dispatch(OnBoardingIntent.WriteInviteCode(it)) },
         onComplete = { viewModel.dispatch(OnBoardingIntent.ConnectCouple) },
     )
@@ -97,6 +99,7 @@ internal fun InviteCodeRoute(
 private fun InviteCodeScreen(
     uiModel: InViteCodeUiModel,
     keyboardState: Keyboard,
+    navigateToBack: () -> Unit,
     onChangeInviteCode: (String) -> Unit,
     onComplete: () -> Unit,
 ) {
@@ -114,7 +117,27 @@ private fun InviteCodeScreen(
                 .fillMaxSize()
                 .background(CommonColor.White),
     ) {
+        Box(
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .height(72.dp)
+                    .padding(horizontal = 10.dp, vertical = 14.dp),
+            contentAlignment = Alignment.CenterStart,
+        ) {
+            Image(
+                imageVector = ImageVector.vectorResource(com.twix.designsystem.R.drawable.ic_arrow1_m_left),
+                contentDescription = null,
+                modifier =
+                    Modifier
+                        .size(44.dp)
+                        .noRippleClickable(onClick = navigateToBack),
+            )
+        }
+
         Column {
+            Spacer(modifier = Modifier.height(8.dp))
+
             AnimatedVisibility(
                 visible = keyboardState == Keyboard.Closed,
                 enter = fadeIn(),
