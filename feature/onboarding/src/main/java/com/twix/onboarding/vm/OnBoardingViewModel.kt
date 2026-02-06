@@ -6,6 +6,7 @@ import com.twix.domain.repository.OnBoardingRepository
 import com.twix.onboarding.model.OnBoardingIntent
 import com.twix.onboarding.model.OnBoardingSideEffect
 import com.twix.onboarding.model.OnBoardingUiState
+import com.twix.result.AppError
 import com.twix.ui.base.BaseViewModel
 import kotlinx.coroutines.launch
 import java.time.LocalDate
@@ -14,10 +15,11 @@ class OnBoardingViewModel(
     private val onBoardingRepository: OnBoardingRepository,
 ) : BaseViewModel<OnBoardingUiState, OnBoardingIntent, OnBoardingSideEffect>(OnBoardingUiState()) {
     fun fetchMyInviteCode() {
-        viewModelScope.launch {
-            val result = onBoardingRepository.fetchInviteCode()
-            reduce { updateMyInviteCode(result.value) }
-        }
+        launchResult(
+            block = { onBoardingRepository.fetchInviteCode() },
+            onSuccess = { reduce { updateMyInviteCode(it.value) } },
+            onError = { emitSideEffect(OnBoardingSideEffect.CoupleConnection.ShowFetchMyInviteCodeFailToast) },
+        )
     }
 
     override suspend fun handleIntent(intent: OnBoardingIntent) {
@@ -46,10 +48,31 @@ class OnBoardingViewModel(
         val currentUiState = currentState.inviteCode
         if (!currentUiState.isValid) return
 
-        viewModelScope.launch {
-            // TODO : 상대방이 이미 연결했을 때 에러처리 구현
-            onBoardingRepository.coupleConnection(currentUiState.partnerInviteCode)
-            emitSideEffect(OnBoardingSideEffect.InviteCode.NavigateToNext)
+        launchResult(
+            block = { onBoardingRepository.coupleConnection(currentUiState.partnerInviteCode) },
+            onSuccess = {
+                viewModelScope.launch {
+                    emitSideEffect(OnBoardingSideEffect.InviteCode.NavigateToNext)
+                }
+            },
+            onError = { error -> handleCoupleConnectException(error) },
+        )
+    }
+
+    private suspend fun handleCoupleConnectException(error: AppError) {
+        if (error is AppError.Http && error.status == 404) {
+            /**
+             * 초대 코드를 잘못 입력한 경우
+             * */
+            if (error.message == INVALID_INVITE_CODE_MESSAGE) {
+                emitSideEffect(OnBoardingSideEffect.InviteCode.ShowInvalidInviteCodeToast)
+            }
+            /**
+             * 상대방이 이미 연결한 경우
+             * */
+            if (error.message == ALREADY_USED_INVITE_CODE_MESSAGE) {
+                emitSideEffect(OnBoardingSideEffect.InviteCode.NavigateToNext)
+            }
         }
     }
 
@@ -74,18 +97,28 @@ class OnBoardingViewModel(
         }
     }
 
-    private suspend fun fetchOnboardingStatus() {
-        when (onBoardingRepository.fetchOnboardingStatus()) {
-            OnboardingStatus.ANNIVERSARY_SETUP -> {
-                emitSideEffect(OnBoardingSideEffect.ProfileSetting.NavigateToDDaySetting)
-            }
+    private fun fetchOnboardingStatus() {
+        launchResult(
+            block = { onBoardingRepository.fetchOnboardingStatus() },
+            onSuccess = { onboardingStatus ->
+                viewModelScope.launch {
+                    val sideEffect =
+                        when (onboardingStatus) {
+                            OnboardingStatus.ANNIVERSARY_SETUP ->
+                                OnBoardingSideEffect.ProfileSetting.NavigateToDDaySetting
 
-            OnboardingStatus.COMPLETED -> {
-                emitSideEffect(OnBoardingSideEffect.ProfileSetting.NavigateToHome)
-            }
+                            OnboardingStatus.COMPLETED ->
+                                OnBoardingSideEffect.ProfileSetting.NavigateToHome
 
-            else -> Unit
-        }
+                            else -> return@launch
+                        }
+                    emitSideEffect(sideEffect)
+                }
+            },
+            onError = {
+                // 에러처리 추가
+            },
+        )
     }
 
     private fun reduceDday(value: LocalDate) {
@@ -93,9 +126,19 @@ class OnBoardingViewModel(
     }
 
     private fun anniversarySetup() {
-        viewModelScope.launch {
-            onBoardingRepository.anniversarySetup(currentState.dDay.anniversaryDate.toString())
-            emitSideEffect(OnBoardingSideEffect.DdaySetting.NavigateToHome)
-        }
+        launchResult(
+            block = { onBoardingRepository.anniversarySetup(currentState.dDay.anniversaryDate.toString()) },
+            onSuccess = {
+                viewModelScope.launch { emitSideEffect(OnBoardingSideEffect.DdaySetting.NavigateToHome) }
+            },
+            onError = {
+                emitSideEffect(OnBoardingSideEffect.DdaySetting.ShowAnniversarySetupFailToast)
+            },
+        )
+    }
+
+    companion object {
+        private const val ALREADY_USED_INVITE_CODE_MESSAGE = "이미 사용된 초대 코드입니다."
+        private const val INVALID_INVITE_CODE_MESSAGE = "유효하지 않은 초대 코드입니다."
     }
 }

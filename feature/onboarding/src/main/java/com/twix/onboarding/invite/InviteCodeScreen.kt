@@ -70,6 +70,8 @@ internal fun InviteCodeRoute(
     val keyboardState by keyboardAsState()
 
     val inviteCodeSuccessMessage = stringResource(R.string.onboarding_invite_code_copy)
+    val invalidInviteCodeMessage = stringResource(R.string.onboarding_invite_invalid_invite_code_fail)
+
     ObserveAsEvents(viewModel.sideEffect) { sideEffect ->
         when (sideEffect) {
             OnBoardingSideEffect.InviteCode.ShowCopyInviteCodeSuccessToast -> {
@@ -80,7 +82,14 @@ internal fun InviteCodeRoute(
                     ),
                 )
             }
-
+            OnBoardingSideEffect.InviteCode.ShowInvalidInviteCodeToast -> {
+                toastManager.tryShow(
+                    ToastData(
+                        message = invalidInviteCodeMessage,
+                        type = ToastType.ERROR,
+                    ),
+                )
+            }
             OnBoardingSideEffect.InviteCode.NavigateToNext -> navigateToNext()
             else -> Unit
         }

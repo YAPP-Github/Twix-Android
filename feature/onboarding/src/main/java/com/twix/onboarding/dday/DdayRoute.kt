@@ -24,6 +24,8 @@ import com.twix.designsystem.components.button.AppButton
 import com.twix.designsystem.components.calendar.Calendar
 import com.twix.designsystem.components.text.AppText
 import com.twix.designsystem.components.toast.ToastManager
+import com.twix.designsystem.components.toast.model.ToastData
+import com.twix.designsystem.components.toast.model.ToastType
 import com.twix.designsystem.theme.CommonColor
 import com.twix.designsystem.theme.GrayColor
 import com.twix.designsystem.theme.TwixTheme
@@ -48,9 +50,19 @@ fun DdayRoute(
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     var showCalendarBottomSheet by remember { mutableStateOf(false) }
 
+    val ddaySetUpFailMessage = stringResource(R.string.onboarding_dday_setup_fail)
     ObserveAsEvents(viewModel.sideEffect) { sideEffect ->
         when (sideEffect) {
             OnBoardingSideEffect.DdaySetting.NavigateToHome -> navigateToHome()
+            OnBoardingSideEffect.DdaySetting.ShowAnniversarySetupFailToast -> {
+                toastManager.tryShow(
+                    ToastData(
+                        message = ddaySetUpFailMessage,
+                        type = ToastType.ERROR,
+                    ),
+                )
+            }
+
             else -> Unit
         }
     }
