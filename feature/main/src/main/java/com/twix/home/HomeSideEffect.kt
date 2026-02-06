@@ -4,7 +4,7 @@ import androidx.annotation.StringRes
 import com.twix.designsystem.components.toast.model.ToastType
 import com.twix.ui.base.SideEffect
 
-interface HomeSideEffect : SideEffect {
+sealed interface HomeSideEffect : SideEffect {
     data object ShowMonthPickerBottomSheet : HomeSideEffect
 
     data class ShowToast(
