@@ -10,15 +10,12 @@ import org.koin.compose.viewmodel.koinViewModel
 @Composable
 inline fun <reified VM : ViewModel> NavBackStackEntry.graphViewModel(
     navController: NavHostController,
-    route: String
+    route: String,
 ): VM {
-    val parentEntry = remember(this) {
-        navController.getBackStackEntry(route)
-    }
+    val parentEntry =
+        remember(this) {
+            navController.getBackStackEntry(route)
+        }
 
     return koinViewModel(viewModelStoreOwner = parentEntry)
 }
-
-
-
-
