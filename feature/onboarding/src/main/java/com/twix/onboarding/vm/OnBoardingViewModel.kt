@@ -91,10 +91,11 @@ class OnBoardingViewModel(
     }
 
     private fun profileSetup() {
-        viewModelScope.launch {
-            onBoardingRepository.profileSetup(currentState.profile.nickname)
-            fetchOnboardingStatus()
-        }
+        launchResult(
+            block = { onBoardingRepository.profileSetup(currentState.profile.nickname) },
+            onSuccess = { fetchOnboardingStatus() },
+            onError = { emitSideEffect(OnBoardingSideEffect.ProfileSetting.ShowProfileSetupFailToast) },
+        )
     }
 
     private fun fetchOnboardingStatus() {

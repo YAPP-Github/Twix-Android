@@ -57,12 +57,24 @@ fun ProfileRoute(
 
     val notValidNickNameMessage =
         stringResource(R.string.onboarding_profile_invalid_name_length_toast)
+
+    val profileSetupFailMessage = stringResource(R.string.onboarding_profile_setup_fail)
+
     ObserveAsEvents(viewModel.sideEffect) { sideEffect ->
         when (sideEffect) {
             OnBoardingSideEffect.ProfileSetting.ShowInvalidNickNameToast -> {
                 toastManager.tryShow(
                     ToastData(
                         message = notValidNickNameMessage,
+                        type = ToastType.ERROR,
+                    ),
+                )
+            }
+
+            OnBoardingSideEffect.ProfileSetting.ShowProfileSetupFailToast -> {
+                toastManager.tryShow(
+                    ToastData(
+                        message = profileSetupFailMessage,
                         type = ToastType.ERROR,
                     ),
                 )

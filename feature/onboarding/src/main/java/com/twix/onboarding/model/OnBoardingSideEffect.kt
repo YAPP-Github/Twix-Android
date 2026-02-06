@@ -6,6 +6,8 @@ sealed interface OnBoardingSideEffect : SideEffect {
     sealed interface ProfileSetting : OnBoardingSideEffect {
         data object ShowInvalidNickNameToast : ProfileSetting
 
+        data object ShowProfileSetupFailToast : ProfileSetting
+
         data object NavigateToDDaySetting : ProfileSetting
 
         data object NavigateToHome : ProfileSetting
