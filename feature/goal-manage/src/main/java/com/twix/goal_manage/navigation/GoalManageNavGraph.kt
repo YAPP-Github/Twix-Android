@@ -43,7 +43,7 @@ object GoalManageNavGraph : NavGraphContributor {
                         navController.navigate(NavRoutes.GoalEditorRoute.createRoute(it)) {
                             launchSingleTop = true
                         }
-                    }
+                    },
                 )
             }
         }

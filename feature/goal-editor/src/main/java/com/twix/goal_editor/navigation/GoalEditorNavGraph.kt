@@ -22,9 +22,10 @@ object GoalEditorNavGraph : NavGraphContributor {
         ) {
             composable(
                 route = NavRoutes.GoalEditorRoute.route,
-                arguments = listOf(
-                    navArgument(NavRoutes.GoalEditorRoute.ARG_ID) { defaultValue = -1L },
-                )
+                arguments =
+                    listOf(
+                        navArgument(NavRoutes.GoalEditorRoute.ARG_ID) { defaultValue = -1L },
+                    ),
             ) { backStackEntry ->
                 val id = backStackEntry.arguments?.getLong(NavRoutes.GoalEditorRoute.ARG_ID) ?: -1L
 
