@@ -12,11 +12,7 @@ import kotlinx.coroutines.launch
 class OnBoardingViewModel(
     private val onBoardingRepository: OnBoardingRepository,
 ) : BaseViewModel<OnBoardingUiState, OnBoardingIntent, OnBoardingSideEffect>(OnBoardingUiState()) {
-    init {
-        fetchMyInviteCode()
-    }
-
-    private fun fetchMyInviteCode() {
+    fun fetchMyInviteCode() {
         viewModelScope.launch {
             val result = onBoardingRepository.fetchInviteCode()
             reduce { updateMyInviteCode(result.value) }
