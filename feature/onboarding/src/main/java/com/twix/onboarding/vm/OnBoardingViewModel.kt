@@ -8,6 +8,7 @@ import com.twix.onboarding.model.OnBoardingSideEffect
 import com.twix.onboarding.model.OnBoardingUiState
 import com.twix.ui.base.BaseViewModel
 import kotlinx.coroutines.launch
+import java.time.LocalDate
 
 class OnBoardingViewModel(
     private val onBoardingRepository: OnBoardingRepository,
@@ -21,27 +22,19 @@ class OnBoardingViewModel(
 
     override suspend fun handleIntent(intent: OnBoardingIntent) {
         when (intent) {
-            is OnBoardingIntent.WriteNickName -> reduceNickName(intent.value)
-            OnBoardingIntent.SubmitNickName -> handleSubmitNickname()
+            // 커플 연결 화면
             is OnBoardingIntent.WriteInviteCode -> reduceInviteCode(intent.value)
             OnBoardingIntent.ConnectCouple -> connectCouple()
-            OnBoardingIntent.CopyInviteCode -> {
+            OnBoardingIntent.CopyInviteCode ->
                 emitSideEffect(OnBoardingSideEffect.InviteCode.ShowCopyInviteCodeSuccessToast)
-            }
-        }
-    }
 
-    private fun reduceNickName(value: String) {
-        reduce { updateNickName(value) }
-    }
+            // 프로필 설정 화면
+            is OnBoardingIntent.WriteNickName -> reduceNickName(intent.value)
+            OnBoardingIntent.SubmitNickName -> handleSubmitNickname()
 
-    private fun handleSubmitNickname() {
-        if (currentState.isValidNickName) {
-            profileSetup()
-        } else {
-            viewModelScope.launch {
-                emitSideEffect(OnBoardingSideEffect.ProfileSetting.ShowInvalidNickNameToast)
-            }
+            // 디데이 설정 화면
+            is OnBoardingIntent.SelectDate -> reduceDday(intent.value)
+            OnBoardingIntent.SubmitDday -> anniversarySetup()
         }
     }
 
@@ -57,6 +50,20 @@ class OnBoardingViewModel(
             // TODO : 상대방이 이미 연결했을 때 에러처리 구현
             onBoardingRepository.coupleConnection(currentUiState.partnerInviteCode)
             emitSideEffect(OnBoardingSideEffect.InviteCode.NavigateToNext)
+        }
+    }
+
+    private fun reduceNickName(value: String) {
+        reduce { updateNickName(value) }
+    }
+
+    private fun handleSubmitNickname() {
+        if (currentState.isValidNickName) {
+            profileSetup()
+        } else {
+            viewModelScope.launch {
+                emitSideEffect(OnBoardingSideEffect.ProfileSetting.ShowInvalidNickNameToast)
+            }
         }
     }
 
@@ -80,6 +87,17 @@ class OnBoardingViewModel(
 
                 else -> Unit
             }
+        }
+    }
+
+    private fun reduceDday(value: LocalDate) {
+        reduce { updateDday(value) }
+    }
+
+    private fun anniversarySetup() {
+        viewModelScope.launch {
+            onBoardingRepository.anniversarySetup(currentState.dDay.anniversaryDate.toString())
+            emitSideEffect(OnBoardingSideEffect.DdaySetting.NavigateToHome)
         }
     }
 }

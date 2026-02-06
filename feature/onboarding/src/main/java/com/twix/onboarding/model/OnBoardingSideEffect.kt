@@ -19,5 +19,7 @@ sealed interface OnBoardingSideEffect : SideEffect {
         data object NavigateToNext : CoupleConnection
     }
 
-    sealed interface DDaySetting : OnBoardingSideEffect
+    sealed interface DdaySetting : OnBoardingSideEffect {
+        data object NavigateToHome : DdaySetting
+    }
 }

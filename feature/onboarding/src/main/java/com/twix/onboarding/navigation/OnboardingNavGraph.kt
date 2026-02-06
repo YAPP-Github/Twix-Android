@@ -51,7 +51,7 @@ object OnboardingNavGraph : NavGraphContributor {
                         }
                     },
                     navigateToHome = {
-                        navController.navigate(NavRoutes.DdayRoute.route) {
+                        navController.navigate(NavRoutes.MainGraph.route) {
                             popUpTo(graphRoute.route) { inclusive = true }
                         }
                     },
@@ -59,12 +59,18 @@ object OnboardingNavGraph : NavGraphContributor {
             }
             composable(NavRoutes.DdayRoute.route) {
                 DdayRoute(
-                    onComplete = {
+                    navigateToHome = {
                         navController.navigate(NavRoutes.MainGraph.route) {
                             popUpTo(graphRoute.route) { inclusive = true }
                         }
                     },
-                    onBack = { navController.popBackStack() },
+                    navigateToBack = {
+                        navController.navigate(NavRoutes.ProfileRoute.route) {
+                            popUpTo(graphRoute.route) {
+                                inclusive = true
+                            }
+                        }
+                    },
                 )
             }
         }
