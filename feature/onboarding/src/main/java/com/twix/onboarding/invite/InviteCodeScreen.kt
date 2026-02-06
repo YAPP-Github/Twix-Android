@@ -67,7 +67,9 @@ internal fun InviteCodeRoute(
     toastManager: ToastManager = koinInject(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val coroutineScope = rememberCoroutineScope()
     val keyboardState by keyboardAsState()
+    val clipboard = LocalClipboard.current
 
     val inviteCodeSuccessMessage = stringResource(R.string.onboarding_invite_code_copy)
     val invalidInviteCodeMessage = stringResource(R.string.onboarding_invite_invalid_invite_code_fail)
@@ -101,6 +103,17 @@ internal fun InviteCodeRoute(
         navigateToBack = navigateToBack,
         onChangeInviteCode = { viewModel.dispatch(OnBoardingIntent.WriteInviteCode(it)) },
         onComplete = { viewModel.dispatch(OnBoardingIntent.ConnectCouple) },
+        onCopyInviteCode = {
+            val clipData =
+                ClipData.newPlainText(
+                    "inviteCode",
+                    uiState.inviteCode.myInviteCode,
+                )
+            coroutineScope.launch {
+                clipboard.setClipEntry(clipData.toClipEntry())
+            }
+            viewModel.dispatch(OnBoardingIntent.CopyInviteCode)
+        },
     )
 }
 
@@ -111,10 +124,9 @@ private fun InviteCodeScreen(
     navigateToBack: () -> Unit,
     onChangeInviteCode: (String) -> Unit,
     onComplete: () -> Unit,
+    onCopyInviteCode: () -> Unit,
 ) {
-    val scope = rememberCoroutineScope()
     val focusRequester = remember { FocusRequester() }
-    val clipboard = LocalClipboard.current
 
     LaunchedEffect(Unit) {
         focusRequester.requestFocus()
@@ -198,17 +210,7 @@ private fun InviteCodeScreen(
                     Image(
                         imageVector = ImageVector.vectorResource(R.drawable.ic_copy),
                         contentDescription = null,
-                        modifier =
-                            Modifier.noRippleClickable {
-                                scope.launch {
-                                    val clipData =
-                                        ClipData.newPlainText(
-                                            "inviteCode",
-                                            uiModel.myInviteCode,
-                                        )
-                                    clipboard.setClipEntry(clipData.toClipEntry())
-                                }
-                            },
+                        modifier = Modifier.noRippleClickable(onClick = onCopyInviteCode),
                     )
                 }
             }
@@ -261,6 +263,7 @@ private fun InviteCodeScreenPreview() {
             onComplete = {},
             navigateToBack = {},
             keyboardState = Keyboard.Opened,
+            onCopyInviteCode = {},
         )
     }
 }
