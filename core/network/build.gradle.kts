@@ -40,7 +40,9 @@ android {
 }
 
 dependencies {
+    implementation(projects.core.token)
     implementation(projects.core.result)
+    implementation(projects.domain)
 
     implementation(libs.bundles.ktor)
     implementation(libs.ktorfit.lib)

@@ -4,7 +4,7 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
-import com.twix.login.LoginScreen
+import com.twix.login.LoginRoute
 import com.twix.navigation.NavRoutes
 import com.twix.navigation.base.NavGraphContributor
 
@@ -20,7 +20,16 @@ object LoginNavGraph : NavGraphContributor {
             startDestination = startDestination,
         ) {
             composable(NavRoutes.LoginRoute.route) {
-                LoginScreen()
+                LoginRoute(
+                    navigateToHome = {
+                        navController.navigate(NavRoutes.MainGraph.route) {
+                            popUpTo(NavRoutes.LoginGraph.route) {
+                                inclusive = true
+                            }
+                        }
+                    },
+                    navigateToOnBoarding = { },
+                )
             }
         }
     }

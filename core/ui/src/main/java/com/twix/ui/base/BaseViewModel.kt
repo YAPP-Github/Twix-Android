@@ -81,7 +81,7 @@ abstract class BaseViewModel<S : State, I : Intent, SE : SideEffect>(
         onStart: (() -> Unit)? = null, // 비동기 시작 전 처리해야 할 로직 ex) 로딩
         onFinally: (() -> Unit)? = null, // 비동기 종료 후 리소스 정리
         onSuccess: (D) -> Unit, // 비동기 메서드 호출이 성공했을 때 처리해야 할 로직
-        onError: ((AppError) -> Unit)? = null, // 비동기 메서드 호출에 실패했을 때 처리해야 할 로직
+        onError: (suspend (AppError) -> Unit)? = null, // 비동기 메서드 호출에 실패했을 때 처리해야 할 로직
         block: suspend () -> AppResult<D>, // 비동기 메서드 ex) 서버 통신 메서드
     ): Job =
         viewModelScope.launch {

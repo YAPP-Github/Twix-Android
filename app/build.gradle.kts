@@ -30,12 +30,14 @@ dependencies {
     implementation(projects.core.network)
     implementation(projects.core.navigation)
     implementation(projects.core.ui)
+    implementation(projects.core.datastore)
     implementation(projects.core.util)
     implementation(projects.data)
     implementation(projects.domain)
     implementation(projects.feature.login)
     implementation(projects.feature.main)
     implementation(projects.feature.taskCertification)
+    implementation(projects.feature.goalEditor)
 
     // Firebase
     implementation(platform(libs.google.firebase.bom))

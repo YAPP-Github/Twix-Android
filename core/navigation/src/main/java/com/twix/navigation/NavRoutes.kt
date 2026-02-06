@@ -30,4 +30,11 @@ sealed class NavRoutes(
     object TaskCertificationGraph : NavRoutes("task_certification_graph")
 
     object TaskCertificationRoute : NavRoutes("task_certification")
+
+    /**
+     * GoalEditorGraph
+     * */
+    object GoalEditorGraph : NavRoutes("goal_editor_graph")
+
+    object GoalEditorRoute : NavRoutes("goal_editor")
 }
