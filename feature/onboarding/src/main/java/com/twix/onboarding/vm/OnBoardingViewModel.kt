@@ -1,6 +1,5 @@
 package com.twix.onboarding.vm
 
-import android.util.Log
 import androidx.lifecycle.viewModelScope
 import com.twix.domain.repository.OnBoardingRepository
 import com.twix.onboarding.model.OnBoardingIntent
@@ -13,15 +12,13 @@ class OnBoardingViewModel(
     private val onBoardingRepository: OnBoardingRepository,
 ) : BaseViewModel<OnBoardingUiState, OnBoardingIntent, OnBoardingSideEffect>(OnBoardingUiState()) {
     init {
-        // TODO : 로그인 기능 후 주석 제거
-        // fetchInviteCode()
+        fetchMyInviteCode()
     }
 
-    private fun fetchInviteCode() {
+    private fun fetchMyInviteCode() {
         viewModelScope.launch {
-            runCatching { onBoardingRepository.fetchInviteCode() }
-                .onSuccess { reduce { updateMyInviteCode(it.value) } }
-                .onFailure { Log.d("FetchInviteCodeException", "$it") }
+            val result = onBoardingRepository.fetchInviteCode()
+            reduce { updateMyInviteCode(result.value) }
         }
     }
 
