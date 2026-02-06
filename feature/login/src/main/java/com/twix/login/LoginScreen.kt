@@ -18,7 +18,7 @@ import com.twix.designsystem.components.toast.model.ToastData
 import com.twix.designsystem.components.toast.model.ToastType
 import com.twix.designsystem.theme.TwixTheme
 import com.twix.domain.login.LoginType
-import com.twix.login.LoginProviderFactory
+import com.twix.domain.model.OnboardingStatus
 import com.twix.login.component.LoginButton
 import com.twix.login.model.LoginIntent
 import com.twix.login.model.LoginSideEffect
@@ -30,7 +30,7 @@ import org.koin.compose.koinInject
 @Composable
 fun LoginRoute(
     navigateToHome: () -> Unit,
-    navigateToOnBoarding: () -> Unit,
+    navigateToOnBoarding: (OnboardingStatus) -> Unit,
     toastManager: ToastManager = koinInject(),
     loginProvider: LoginProviderFactory = koinInject(),
     viewModel: LoginViewModel = koinViewModel(),
@@ -38,13 +38,18 @@ fun LoginRoute(
     val coroutineScope = rememberCoroutineScope()
 
     val loginFailMessage = stringResource(R.string.login_fail_message)
+    val fetchOnboardingStatusFailMessage =
+        stringResource(R.string.fetch_onboarding_status_fail_message)
     ObserveAsEvents(viewModel.sideEffect) { sideEffect ->
         when (sideEffect) {
             LoginSideEffect.NavigateToHome -> navigateToHome()
-            LoginSideEffect.NavigateToOnBoarding -> navigateToOnBoarding()
+            is LoginSideEffect.NavigateToOnBoarding -> navigateToOnBoarding(sideEffect.status)
             LoginSideEffect.ShowLoginFailToast -> {
                 toastManager.tryShow(ToastData(loginFailMessage, ToastType.ERROR))
             }
+
+            LoginSideEffect.ShowFetchOnBoardingStatusFailToast ->
+                toastManager.tryShow(ToastData(fetchOnboardingStatusFailMessage, ToastType.ERROR))
         }
     }
 

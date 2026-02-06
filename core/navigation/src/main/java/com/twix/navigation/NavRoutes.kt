@@ -32,6 +32,21 @@ sealed class NavRoutes(
     object TaskCertificationRoute : NavRoutes("task_certification")
 
     /**
+     * OnboardingGraph
+     * */
+    object OnboardingGraph : NavRoutes("onboarding_graph")
+
+    object OnboardingRoute : NavRoutes("onboarding")
+
+    object CoupleConnectionRoute : NavRoutes("couple_connect")
+
+    object InviteRoute : NavRoutes("invite")
+
+    object ProfileRoute : NavRoutes("profile")
+
+    object DdayRoute : NavRoutes("dday")
+
+    /**
      * GoalEditorGraph
      * */
     object GoalEditorGraph : NavRoutes("goal_editor_graph")

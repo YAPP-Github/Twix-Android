@@ -10,24 +10,24 @@ import de.jensklingenberg.ktorfit.http.GET
 import de.jensklingenberg.ktorfit.http.POST
 
 interface OnboardingService {
-    @POST("onboarding/anniversary")
+    @POST("api/v1/onboarding/anniversary")
     suspend fun anniversarySetup(
         @Body request: AnniversaryRequest,
     )
 
-    @POST("onboarding/couple-connection")
+    @POST("api/v1/onboarding/couple-connection")
     suspend fun coupleConnection(
         @Body request: CoupleConnectionRequest,
     )
 
-    @POST("onboarding/profile")
+    @POST("api/v1/onboarding/profile")
     suspend fun profileSetup(
         @Body request: ProfileRequest,
     )
 
-    @GET("onboarding/invite-code")
+    @GET("api/v1/onboarding/invite-code")
     suspend fun fetchInviteCode(): InviteCodeResponse
 
-    @GET("onboarding/status")
+    @GET("api/v1/onboarding/status")
     suspend fun fetchOnBoardingStatus(): OnBoardingStatusResponse
 }
