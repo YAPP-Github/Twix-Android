@@ -62,7 +62,7 @@ class OnBoardingViewModel(
         viewModelScope.launch {
             // TODO : 상대방이 이미 연결했을 때 에러처리 구현
             onBoardingRepository.coupleConnection(currentUiState.partnerInviteCode)
-            emitSideEffect(OnBoardingSideEffect.CoupleConnection.NavigateToNext)
+            emitSideEffect(OnBoardingSideEffect.InviteCode.NavigateToNext)
         }
     }
 }

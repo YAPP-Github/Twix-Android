@@ -9,12 +9,12 @@ sealed interface OnBoardingSideEffect : SideEffect {
         data object NavigateToNext : ProfileSetting
     }
 
-    sealed interface CoupleConnection : OnBoardingSideEffect {
-        data object NavigateToNext : CoupleConnection
-    }
+    sealed interface CoupleConnection : OnBoardingSideEffect
 
     sealed interface InviteCode : OnBoardingSideEffect {
         data object ShowCopyInviteCodeSuccessToast : InviteCode
+
+        data object NavigateToNext : CoupleConnection
     }
 
     sealed interface DDaySetting : OnBoardingSideEffect

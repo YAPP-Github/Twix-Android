@@ -32,9 +32,7 @@ import com.twix.domain.model.enums.AppTextStyle
 import com.twix.onboarding.R
 import com.twix.onboarding.couple.component.ConnectButton
 import com.twix.onboarding.couple.component.RestoreCoupleBottomSheetContent
-import com.twix.onboarding.model.OnBoardingSideEffect
 import com.twix.onboarding.vm.OnBoardingViewModel
-import com.twix.ui.base.ObserveAsEvents
 import com.twix.ui.extension.noRippleClickable
 import org.koin.androidx.compose.koinViewModel
 
@@ -44,13 +42,6 @@ fun CoupleConnectRoute(
     viewModel: OnBoardingViewModel = koinViewModel(),
 ) {
     var showRestoreSheet by rememberSaveable { mutableStateOf(false) }
-
-    ObserveAsEvents(viewModel.sideEffect) { sideEffect ->
-        when (sideEffect) {
-            OnBoardingSideEffect.CoupleConnection.NavigateToNext -> onNext()
-            else -> Unit
-        }
-    }
 
     CoupleConnectScreen(
         showRestoreSheet = showRestoreSheet,

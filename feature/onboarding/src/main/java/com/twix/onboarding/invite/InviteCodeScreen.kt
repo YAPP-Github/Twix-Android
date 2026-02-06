@@ -53,6 +53,7 @@ import com.twix.onboarding.invite.component.InviteCodeTextField
 import com.twix.onboarding.model.OnBoardingIntent
 import com.twix.onboarding.model.OnBoardingSideEffect
 import com.twix.onboarding.vm.OnBoardingViewModel
+import com.twix.ui.base.ObserveAsEvents
 import com.twix.ui.extension.noRippleClickable
 import kotlinx.coroutines.launch
 import org.koin.compose.koinInject
@@ -68,8 +69,8 @@ internal fun InviteCodeRoute(
     val keyboardState by keyboardAsState()
 
     val inviteCodeSuccessMessage = stringResource(R.string.onboarding_invite_code_copy)
-    LaunchedEffect(viewModel.sideEffect) {
-        when (viewModel.sideEffect) {
+    ObserveAsEvents(viewModel.sideEffect) { sideEffect ->
+        when (sideEffect) {
             OnBoardingSideEffect.InviteCode.ShowCopyInviteCodeSuccessToast -> {
                 toastManager.tryShow(
                     ToastData(
@@ -79,6 +80,7 @@ internal fun InviteCodeRoute(
                 )
             }
 
+            OnBoardingSideEffect.InviteCode.NavigateToNext -> onNext()
             else -> Unit
         }
     }
