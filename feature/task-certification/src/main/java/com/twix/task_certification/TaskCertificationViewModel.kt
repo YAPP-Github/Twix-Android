@@ -18,12 +18,20 @@ class TaskCertificationViewModel :
                 reducePicture(intent.uri)
             }
 
+            is TaskCertificationIntent.PickPicture -> {
+                reducePicture(intent.uri)
+            }
+
             is TaskCertificationIntent.ToggleLens -> {
                 reduceLens()
             }
 
             is TaskCertificationIntent.ToggleTorch -> {
                 reduceTorch()
+            }
+
+            is TaskCertificationIntent.RetakePicture -> {
+                setupRetake()
             }
         }
     }
@@ -46,5 +54,9 @@ class TaskCertificationViewModel :
 
     private fun reduceTorch() {
         reduce { toggleTorch() }
+    }
+
+    private fun setupRetake() {
+        reduce { removePicture() }
     }
 }

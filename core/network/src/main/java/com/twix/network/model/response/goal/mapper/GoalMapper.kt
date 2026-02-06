@@ -1,0 +1,38 @@
+package com.twix.network.model.response.goal.mapper
+
+import com.twix.domain.model.enums.GoalIconType
+import com.twix.domain.model.enums.RepeatCycle
+import com.twix.domain.model.goal.Goal
+import com.twix.domain.model.goal.GoalList
+import com.twix.domain.model.goal.GoalVerification
+import com.twix.network.model.response.goal.model.GoalListResponse
+import com.twix.network.model.response.goal.model.GoalResponse
+import com.twix.network.model.response.goal.model.VerificationResponse
+
+fun GoalListResponse.toDomain(): GoalList =
+    GoalList(
+        completedCount = completedCount,
+        totalCount = totalCount,
+        goals = goals.map { it.toDomain() },
+    )
+
+fun GoalResponse.toDomain(): Goal =
+    Goal(
+        goalId = goalId,
+        name = name,
+        icon = GoalIconType.fromApi(icon),
+        repeatCycle = RepeatCycle.fromApi(repeatCycle),
+        myCompleted = myCompleted,
+        partnerCompleted = partnerCompleted,
+        myVerification = myVerification?.toDomainOrNull(),
+        partnerVerification = partnerVerification?.toDomainOrNull(),
+    )
+
+fun VerificationResponse.toDomainOrNull(): GoalVerification? =
+    GoalVerification(
+        photologId = photologId,
+        imageUrl = imageUrl,
+        comment = comment,
+        reaction = reaction,
+        uploadedAt = uploadedAt,
+    )

@@ -3,6 +3,7 @@ package com.twix.task_certification
 import android.Manifest
 import android.content.pm.PackageManager
 import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
@@ -26,6 +27,9 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.twix.designsystem.components.text.AppText
+import com.twix.designsystem.components.toast.ToastManager
+import com.twix.designsystem.components.toast.model.ToastData
+import com.twix.designsystem.components.toast.model.ToastType
 import com.twix.designsystem.theme.GrayColor
 import com.twix.designsystem.theme.TwixTheme
 import com.twix.domain.model.enums.AppTextStyle
@@ -35,13 +39,16 @@ import com.twix.task_certification.component.CameraPreviewBox
 import com.twix.task_certification.component.TaskCertificationTopBar
 import com.twix.task_certification.model.CameraPreview
 import com.twix.task_certification.model.TaskCertificationIntent
+import com.twix.task_certification.model.TaskCertificationSideEffect
 import com.twix.task_certification.model.TaskCertificationUiState
+import com.twix.ui.base.ObserveAsEvents
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 import org.koin.compose.koinInject
 
 @Composable
 fun TaskCertificationRoute(
+    toastManager: ToastManager = koinInject(),
     camera: Camera = koinInject(),
     viewModel: TaskCertificationViewModel = koinViewModel(),
     navigateToBack: () -> Unit,
@@ -69,6 +76,11 @@ fun TaskCertificationRoute(
             hasPermission = granted
         }
 
+    val pickMedia =
+        rememberLauncherForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
+            viewModel.dispatch(TaskCertificationIntent.PickPicture(uri))
+        }
+
     LaunchedEffect(Unit) {
         if (!hasPermission) {
             permissionLauncher.launch(Manifest.permission.CAMERA)
@@ -93,6 +105,20 @@ fun TaskCertificationRoute(
         }
     }
 
+    val imageCaptureFailMessage = stringResource(R.string.task_certification_image_capture_fail)
+    ObserveAsEvents(viewModel.sideEffect) { event ->
+        when (event) {
+            TaskCertificationSideEffect.ShowImageCaptureFailToast -> {
+                toastManager.tryShow(
+                    ToastData(
+                        message = imageCaptureFailMessage,
+                        type = ToastType.ERROR,
+                    ),
+                )
+            }
+        }
+    }
+
     TaskCertificationScreen(
         uiState = uiState,
         cameraPreview = cameraPreview,
@@ -105,6 +131,8 @@ fun TaskCertificationRoute(
                     .takePicture()
                     .onSuccess {
                         viewModel.dispatch(TaskCertificationIntent.TakePicture(it))
+                    }.onFailure {
+                        viewModel.dispatch(TaskCertificationIntent.TakePicture(null))
                     }
             }
         },
@@ -114,6 +142,13 @@ fun TaskCertificationRoute(
         onClickFlash = {
             viewModel.dispatch(TaskCertificationIntent.ToggleTorch)
         },
+        onClickGallery = {
+            pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
+        },
+        onClickRefresh = {
+            viewModel.dispatch(TaskCertificationIntent.RetakePicture)
+        },
+        onClickUpload = { },
     )
 }
 
@@ -125,6 +160,9 @@ private fun TaskCertificationScreen(
     onCaptureClick: () -> Unit,
     onToggleCameraClick: () -> Unit,
     onClickFlash: () -> Unit,
+    onClickGallery: () -> Unit,
+    onClickRefresh: () -> Unit,
+    onClickUpload: () -> Unit,
 ) {
     Column(
         Modifier
@@ -157,8 +195,12 @@ private fun TaskCertificationScreen(
         Spacer(modifier = Modifier.height(52.dp))
 
         CameraControlBar(
+            capture = uiState.capture,
             onCaptureClick = onCaptureClick,
             onToggleCameraClick = onToggleCameraClick,
+            onClickGallery = onClickGallery,
+            onClickRefresh = onClickRefresh,
+            onClickUpload = onClickUpload,
         )
     }
 }
@@ -174,6 +216,9 @@ fun TaskCertificationScreenPreview() {
             onCaptureClick = {},
             onToggleCameraClick = {},
             onClickFlash = {},
+            onClickGallery = {},
+            onClickRefresh = {},
+            onClickUpload = {},
         )
     }
 }

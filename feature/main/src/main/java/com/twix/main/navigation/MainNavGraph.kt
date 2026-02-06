@@ -20,7 +20,13 @@ object MainNavGraph : NavGraphContributor {
             startDestination = startDestination,
         ) {
             composable(NavRoutes.MainRoute.route) {
-                MainRoute()
+                MainRoute(
+                    navigateToGoalEditor = {
+                        navController.navigate(NavRoutes.GoalEditorRoute.route) {
+                            launchSingleTop = true
+                        }
+                    },
+                )
             }
         }
     }

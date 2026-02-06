@@ -97,7 +97,7 @@ private fun TorchIcon(
         contentDescription = null,
         modifier =
             Modifier
-                .noRippleClickable(onClickFlash)
+                .noRippleClickable(onClick = onClickFlash)
                 .padding(start = 30.33.dp, top = 31.82.dp),
     )
 }

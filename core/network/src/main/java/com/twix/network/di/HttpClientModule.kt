@@ -11,6 +11,8 @@ internal val httpClientModule =
 
         single<HttpClient> {
             HttpClientProvider.createHttpClient(
+                tokenProvider = get(),
+                authService = lazy { get() },
                 baseUrl = BuildConfig.BASE_URL,
                 isDebug = BuildConfig.DEBUG,
             )

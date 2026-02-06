@@ -48,9 +48,11 @@ jobs:
         env:
           DEV_BASE_URL: ${{ secrets.DEV_BASE_URL }}
           PROD_BASE_URL: ${{ secrets.PROD_BASE_URL }}
+          GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
         run: |
           echo "dev_base_url=$DEV_BASE_URL" >> local.properties
           echo "prod_base_url=$PROD_BASE_URL" >> local.properties
+          echo "google_client_id=$GOOGLE_CLIENT_ID" >> local.properties
 
       - name: Create google-services.json
         env:

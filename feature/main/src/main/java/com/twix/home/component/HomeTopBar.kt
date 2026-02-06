@@ -32,6 +32,7 @@ fun HomeTopBar(
     onNotificationClick: () -> Unit,
     onSettingClick: () -> Unit,
     onMoveToToday: () -> Unit,
+    onShowCalendarBottomSheet: () -> Unit,
 ) {
     Row(
         modifier =
@@ -47,6 +48,9 @@ fun HomeTopBar(
             Spacer(Modifier.height(12.dp))
 
             Row(
+                modifier =
+                    Modifier
+                        .noRippleClickable(onClick = onShowCalendarBottomSheet),
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 AppText(
@@ -71,7 +75,7 @@ fun HomeTopBar(
             ) {
                 AppText(
                     text = stringResource(R.string.home_today_goal),
-                    style = AppTextStyle.H3,
+                    style = AppTextStyle.H3Brand,
                     color = GrayColor.C400,
                 )
 
@@ -127,6 +131,7 @@ private fun Preview() {
     TwixTheme {
         HomeTopBar(
             monthYearText = "1월 22일",
+            {},
             {},
             {},
             {},

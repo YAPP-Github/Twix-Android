@@ -60,7 +60,7 @@ fun WeeklyCalendar(
     LaunchedEffect(days.first()) {
         if (dragSumPx > 0) {
             onUpdateVisibleDate(days.first())
-        } else {
+        } else if (dragSumPx < 0) {
             onUpdateVisibleDate(days.last())
         }
     }

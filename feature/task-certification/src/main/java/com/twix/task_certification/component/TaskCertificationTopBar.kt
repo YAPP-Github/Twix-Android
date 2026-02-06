@@ -34,7 +34,7 @@ internal fun TaskCertificationTopBar(
                 Modifier
                     .padding(24.dp)
                     .align(Alignment.CenterEnd)
-                    .noRippleClickable(onClickClose),
+                    .noRippleClickable(onClick = onClickClose),
         )
     }
 }
