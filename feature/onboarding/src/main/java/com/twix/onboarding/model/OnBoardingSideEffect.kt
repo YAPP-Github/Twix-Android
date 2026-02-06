@@ -26,6 +26,6 @@ sealed interface OnBoardingSideEffect : SideEffect {
     sealed interface DdaySetting : OnBoardingSideEffect {
         data object NavigateToHome : DdaySetting
 
-        data object ShowAnniversarySetupFailToast : ProfileSetting
+        data object ShowAnniversarySetupFailToast : DdaySetting
     }
 }
