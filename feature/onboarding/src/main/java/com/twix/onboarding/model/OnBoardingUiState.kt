@@ -2,7 +2,7 @@ package com.twix.onboarding.model
 
 import androidx.compose.runtime.Immutable
 import com.twix.onboarding.dday.DdayUiModel
-import com.twix.onboarding.invite.InViteCodeUiModel
+import com.twix.onboarding.invite.InviteCodeUiModel
 import com.twix.onboarding.profile.ProfileUiModel
 import com.twix.ui.base.State
 import java.time.LocalDate
@@ -10,7 +10,7 @@ import java.time.LocalDate
 @Immutable
 data class OnBoardingUiState(
     val profile: ProfileUiModel = ProfileUiModel(),
-    val inviteCode: InViteCodeUiModel = InViteCodeUiModel(),
+    val inviteCode: InviteCodeUiModel = InviteCodeUiModel(),
     val dDay: DdayUiModel = DdayUiModel(),
 ) : State {
     val isValidNickName: Boolean

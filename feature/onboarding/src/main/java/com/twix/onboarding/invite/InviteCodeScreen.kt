@@ -106,7 +106,7 @@ internal fun InviteCodeRoute(
 
 @Composable
 private fun InviteCodeScreen(
-    uiModel: InViteCodeUiModel,
+    uiModel: InviteCodeUiModel,
     keyboardState: Keyboard,
     navigateToBack: () -> Unit,
     onChangeInviteCode: (String) -> Unit,
@@ -256,7 +256,7 @@ private fun InviteCodeScreen(
 private fun InviteCodeScreenPreview() {
     TwixTheme {
         InviteCodeScreen(
-            uiModel = InViteCodeUiModel(),
+            uiModel = InviteCodeUiModel(),
             onChangeInviteCode = {},
             onComplete = {},
             navigateToBack = {},
