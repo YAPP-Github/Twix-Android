@@ -7,6 +7,10 @@
     <string name="word_today">오늘</string>
     <string name="word_completion">완료</string>
     <string name="word_count">번</string>
+    <string name="word_edit">편집</string>
+    <string name="word_start_date">시작일</string>
+    <string name="word_end_date">종료일</string>
+    <string name="word_not_set">미설정</string>
 
     <string name="word_daily">매일</string>
     <string name="word_weekly">매주</string>
@@ -19,6 +23,11 @@
     <string name="word_thursday">목</string>
     <string name="word_friday">금</string>
     <string name="word_saturday">토</string>
+
+    <!-- 동작 -->
+    <string name="action_edit">수정하기</string>
+    <string name="action_delete">삭제하기</string>
+    <string name="action_finish">끝내기</string>
 
     <!-- 홈 화면 -->
     <string name="home_today_goal">오늘 우리 목표</string>
@@ -38,6 +47,7 @@
     <string name="goal_list_title_previous">지난 우리 목표</string>
     <string name="goal_list_title_today">오늘 우리 목표</string>
     <string name="goal_list_title_next">다음 우리 목표</string>
+    <string name="date_year_month_day">%s년 %02d월 %02d일</string>
     
     <!-- 토스트 메시지 -->
     <string name="toast_end_date_before_start_date">종료 날짜가 시작 날짜보다 이전입니다.</string>
