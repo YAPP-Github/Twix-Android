@@ -134,7 +134,7 @@ fun DdayScreen(
 
 @Preview
 @Composable
-fun DdayScreenPrview() {
+fun DdayScreenPreview() {
     TwixTheme {
         DdayScreen(
             uiModel =
