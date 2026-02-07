@@ -5,7 +5,6 @@ import androidx.lifecycle.viewModelScope
 import com.twix.task_certification.certification.model.TaskCertificationIntent
 import com.twix.task_certification.certification.model.TaskCertificationSideEffect
 import com.twix.task_certification.certification.model.TaskCertificationUiState
-import com.twix.task_certification.certification.model.TorchStatus
 import com.twix.ui.base.BaseViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -64,10 +63,6 @@ class TaskCertificationViewModel :
 
     private fun reducePicture(uri: Uri) {
         reduce { updatePicture(uri) }
-        if (uiState.value.torch == TorchStatus.On) {
-            reduce { toggleTorch() }
-        }
-
         if (uiState.value.hasMaxCommentLength.not()) {
             updateCommentFocus(true)
         }
