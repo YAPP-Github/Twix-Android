@@ -1,7 +1,5 @@
 package com.twix.designsystem.components.comment
 
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
@@ -39,6 +37,7 @@ import com.twix.designsystem.keyboard.Keyboard
 import com.twix.designsystem.keyboard.keyboardAsState
 import com.twix.designsystem.theme.GrayColor
 import com.twix.designsystem.theme.TwixTheme
+import com.twix.ui.extension.noRippleClickable
 import kotlinx.coroutines.android.awaitFrame
 
 val CIRCLE_PADDING_START: Dp = 50.dp
@@ -56,7 +55,6 @@ fun CommentTextField(
     val focusManager = LocalFocusManager.current
     val focusRequester = remember { FocusRequester() }
     val keyboardController = LocalSoftwareKeyboardController.current
-    val interactionSource = remember { MutableInteractionSource() }
     val placeholder = stringResource(R.string.comment_text_field_placeholder)
 
     val keyboardVisibility by keyboardAsState()
@@ -86,12 +84,9 @@ fun CommentTextField(
             modifier
                 .onGloballyPositioned { coordinates ->
                     onPositioned(coordinates.boundsInRoot())
-                }.clickable(
-                    // TODO : noClickableRipple 로 수정
-                    interactionSource = interactionSource,
-                    indication = null,
-                    onClick = { focusRequester.requestFocus() },
-                ),
+                }.noRippleClickable {
+                    focusRequester.requestFocus()
+                },
     ) {
         BasicTextField(
             value = uiModel.comment,
@@ -143,10 +138,7 @@ fun CommentTextField(
                     showPlaceholder = !uiModel.hidePlaceholder,
                     showCursor = uiModel.showCursor(index),
                     modifier =
-                        Modifier.clickable(
-                            indication = null,
-                            interactionSource = interactionSource,
-                        ) {
+                        Modifier.noRippleClickable {
                             focusRequester.requestFocus()
                             onCommentChanged(uiModel.comment.copy(selection = TextRange(uiModel.comment.text.length)))
                         },
