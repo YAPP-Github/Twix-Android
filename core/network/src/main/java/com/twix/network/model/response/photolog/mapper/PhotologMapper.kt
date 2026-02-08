@@ -3,16 +3,18 @@ package com.twix.network.model.response.photolog.mapper
 import com.twix.domain.model.photolog.PhotoLogs
 import com.twix.domain.model.photolog.PhotologDetail
 import com.twix.network.model.response.photolog.PhotoLogResponse
-import com.twix.network.model.response.photolog.Photolog
+import com.twix.network.model.response.photolog.PhotologDetailResponse
+import kotlin.time.ExperimentalTime
 
-fun Photolog.toDomain(): PhotologDetail =
+@OptIn(ExperimentalTime::class)
+fun PhotologDetailResponse.toDomain(): PhotologDetail =
     PhotologDetail(
         comment = comment,
         goalId = goalId,
         imageUrl = imageUrl,
         isMine = isMine,
         photologId = photologId,
-        uploadedAt = uploadedAt,
+        uploadedAt = uploadedAt.toString(),
         uploaderName = uploaderName,
         verificationDate = verificationDate,
     )

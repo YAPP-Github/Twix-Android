@@ -7,5 +7,5 @@ data class PhotoLogResponse(
     val goalId: Long,
     val myNickname: String,
     val partnerNickname: String,
-    val photologs: List<Photolog>,
+    val photologs: List<PhotologDetailResponse>,
 )
