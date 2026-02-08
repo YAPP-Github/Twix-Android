@@ -29,7 +29,6 @@ import org.koin.compose.koinInject
 @Composable
 fun TaskCertificationDetailRoute(
     goalId: Long,
-    goalTitle: String,
     toastManager: ToastManager = koinInject(),
     viewModel: TaskCertificationDetailViewModel = koinViewModel(),
 ) {
@@ -37,14 +36,9 @@ fun TaskCertificationDetailRoute(
     val context = LocalContext.current
     val currentContext by rememberUpdatedState(context)
 
-    LaunchedEffect(goalId, goalTitle) {
+    LaunchedEffect(goalId) {
         if (goalId != -1L) {
-            viewModel.dispatch(
-                TaskCertificationDetailIntent.InitGoal(
-                    goalId,
-                    goalTitle,
-                ),
-            )
+            viewModel.dispatch(TaskCertificationDetailIntent.InitGoal(goalId))
         }
     }
 

@@ -24,5 +24,6 @@ fun PhotoLogResponse.toDomain(): PhotoLogs =
         goalId = goalId,
         myNickname = myNickname,
         partnerNickname = partnerNickname,
+        goalTitle = goalTitle,
         photologDetails = photologs.map { it.toDomain() },
     )

@@ -17,18 +17,12 @@ class TaskCertificationDetailViewModel(
     ) {
     override suspend fun handleIntent(intent: TaskCertificationDetailIntent) {
         when (intent) {
-            is TaskCertificationDetailIntent.InitGoal -> {
-                fetchPhotolog(intent.goalId, intent.goalTitle)
-            }
-
+            is TaskCertificationDetailIntent.InitGoal -> fetchPhotolog(intent.goalId)
             is TaskCertificationDetailIntent.Reaction -> reduceReaction(intent.type)
         }
     }
 
-    private fun fetchPhotolog(
-        goalId: Long,
-        goalTitle: String,
-    ) {
+    private fun fetchPhotolog(goalId: Long) {
         launchResult(
             block = { photologRepository.fetchPhotoLogs(goalId) },
             onSuccess = { reduce { copy(photoLogs = it.toUiModel(), goalTitle = goalTitle) } },

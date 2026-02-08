@@ -28,23 +28,13 @@ object TaskCertificationGraph : NavGraphContributor {
                         navArgument(NavRoutes.TaskCertificationDetailRoute.ARG_GOAL_ID) {
                             defaultValue = -1L
                         },
-                        navArgument(NavRoutes.TaskCertificationDetailRoute.ARG_GOAL_TITLE) {
-                            defaultValue = ""
-                        },
                     ),
             ) { backStackEntry ->
                 val id =
                     backStackEntry.arguments?.getLong(NavRoutes.TaskCertificationDetailRoute.ARG_GOAL_ID)
                         ?: -1
 
-                val title =
-                    backStackEntry.arguments?.getString(NavRoutes.TaskCertificationDetailRoute.ARG_GOAL_TITLE)
-                        ?: ""
-
-                TaskCertificationDetailRoute(
-                    goalId = id,
-                    goalTitle = title,
-                )
+                TaskCertificationDetailRoute(goalId = id)
             }
 
             composable(NavRoutes.TaskCertificationRoute.route) {
