@@ -62,7 +62,7 @@ fun TaskCertificationDetailRoute(
         onClickModify = { },
         onClickReaction = { viewModel.dispatch(TaskCertificationDetailIntent.Reaction(it)) },
         onClickUpload = { },
-        onClickSting = { },
+        onClickSting = { viewModel.dispatch(TaskCertificationDetailIntent.Sting) },
     )
 }
 

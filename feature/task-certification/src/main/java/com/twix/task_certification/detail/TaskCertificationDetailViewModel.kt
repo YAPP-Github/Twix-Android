@@ -19,6 +19,7 @@ class TaskCertificationDetailViewModel(
         when (intent) {
             is TaskCertificationDetailIntent.InitGoal -> fetchPhotolog(intent.goalId)
             is TaskCertificationDetailIntent.Reaction -> reduceReaction(intent.type)
+            TaskCertificationDetailIntent.Sting -> TODO("찌르기 API 연동")
         }
     }
 

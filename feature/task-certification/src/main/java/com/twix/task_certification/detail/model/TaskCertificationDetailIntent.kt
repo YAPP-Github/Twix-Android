@@ -11,4 +11,6 @@ sealed interface TaskCertificationDetailIntent : Intent {
     data class Reaction(
         val type: GoalReactionType,
     ) : TaskCertificationDetailIntent
+
+    data object Sting : TaskCertificationDetailIntent
 }
