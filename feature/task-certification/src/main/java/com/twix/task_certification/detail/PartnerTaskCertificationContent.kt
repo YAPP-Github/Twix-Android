@@ -10,6 +10,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import com.twix.designsystem.theme.TwixTheme
 import com.twix.domain.model.enums.GoalReactionType
@@ -18,12 +19,13 @@ import com.twix.task_certification.certification.component.ReactionBox
 import com.twix.task_certification.detail.component.BackgroundCard
 import com.twix.task_certification.detail.component.ForegroundCard
 import com.twix.task_certification.detail.model.PhotologDetailUiModel
-import java.time.LocalDate
+import com.twix.task_certification.detail.preview.PhotologPreviewProvider
 
 @Composable
 fun PartnerTaskCertificationContent(
     uiModel: PhotologDetailUiModel,
     onClickReaction: (GoalReactionType) -> Unit,
+    onClickSting: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Column(modifier = modifier) {
@@ -31,6 +33,7 @@ fun PartnerTaskCertificationContent(
             BackgroundCard(
                 uiModel = uiModel,
                 buttonTitle = stringResource(R.string.task_certification_detail_partner_sting),
+                onClick = onClickSting,
             )
 
             ForegroundCard(
@@ -63,38 +66,17 @@ private fun ReactionSection(
     }
 }
 
-@Preview(name = "파트너의 인증이 완료된 상태", showBackground = true)
+@Preview(showBackground = true)
 @Composable
-private fun PartnerTaskCertificationContentPreview1() {
+private fun PartnerTaskCertificationPreview(
+    @PreviewParameter(PhotologPreviewProvider::class)
+    uiModel: PhotologDetailUiModel,
+) {
     TwixTheme {
         PartnerTaskCertificationContent(
-            uiModel =
-                PhotologDetailUiModel(
-                    nickName = "민정",
-                    goalId = 1,
-                    photologId = 1,
-                    imageUrl = "https://picsum.photos/400/300",
-                    comment = "아이수쿠림",
-                    verificationDate = LocalDate.now(),
-                    uploaderName = "민정",
-                    uploadedAt = "6시간 전",
-                    reaction = GoalReactionType.FUCK,
-                ),
+            uiModel = uiModel,
             onClickReaction = {},
-        )
-    }
-}
-
-@Preview(name = "파트너의 인증이 완료되지 않은 상태", showBackground = true)
-@Composable
-private fun PartnerTaskCertificationContentPreview2() {
-    TwixTheme {
-        PartnerTaskCertificationContent(
-            uiModel =
-                PhotologDetailUiModel(
-                    nickName = "민정",
-                ),
-            onClickReaction = {},
+            onClickSting = {},
         )
     }
 }

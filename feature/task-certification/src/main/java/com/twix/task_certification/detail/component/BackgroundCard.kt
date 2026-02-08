@@ -24,12 +24,14 @@ import com.twix.designsystem.theme.TwixTheme
 import com.twix.domain.model.enums.AppTextStyle
 import com.twix.task_certification.R
 import com.twix.task_certification.detail.model.PhotologDetailUiModel
+import com.twix.ui.extension.noRippleClickable
 import com.twix.designsystem.R as DesR
 
 @Composable
 fun BackgroundCard(
     uiModel: PhotologDetailUiModel,
     buttonTitle: String,
+    onClick: () -> Unit,
     rotation: Float = 0f,
 ) {
     Column {
@@ -58,7 +60,8 @@ fun BackgroundCard(
                         modifier =
                             Modifier
                                 .width(150.dp)
-                                .height(74.dp),
+                                .height(74.dp)
+                                .noRippleClickable { onClick() },
                         text = buttonTitle,
                         textColor = GrayColor.C500,
                         backgroundColor = CommonColor.White,
@@ -88,6 +91,7 @@ fun PreviewBackgroundCard() {
                 PhotologDetailUiModel(
                     uploadedAt = "2023.10.31 23:59",
                 ),
+            onClick = {},
         )
     }
 }
