@@ -1,10 +1,13 @@
 <resources>
+    <!-- 인증샷 보기 촬영 화면 !-->
     <string name="task_certification_title">인증샷 찍기</string>
     <string name="task_certification_image_capture_fail">이미지 캡처에 실패했습니다. 다시 시도해 주세요.</string>
     <string name="task_certification_image_pick_fail">이미지를 불러오는 데 실패했습니다. 다시 시도해 주세요.</string>
     <string name="task_certification_image_upload">업로드</string>
     <string name="comment_error_message">코멘트는 5글자로 입력해주세요!</string>
-    <string name="partner_not_task_certification">%s님은\n아직…</string>
 
-    <string name="fetch_photolog_fail">인증샷 조회에 실패했습니다.</string>
+    <!-- 인증샷 보기 화면 !-->
+    <string name="task_certification_detail_partner_not_task_certification">%s님은\n아직…</string>
+    <string name="task_certification_detail_fetch_photolog_fail">인증샷 조회에 실패했습니다.</string>
+    <string name="task_certification_detail_partner_sting">찌르기</string>
 </resources>
