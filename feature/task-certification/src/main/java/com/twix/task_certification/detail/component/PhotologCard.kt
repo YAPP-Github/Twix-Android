@@ -22,12 +22,13 @@ import com.twix.designsystem.theme.TwixTheme
 internal fun PhotologCard(
     background: Color,
     borderColor: Color,
+    modifier: Modifier = Modifier,
     rotation: Float = 0f,
     content: @Composable BoxScope.() -> Unit = {},
 ) {
     Box(
         modifier =
-            Modifier
+            modifier
                 .padding(horizontal = 27.dp)
                 .fillMaxWidth()
                 .aspectRatio(1f)
