@@ -1,4 +1,5 @@
 <resources>
+    <string name="keep_it_up">keep it up!</string>
 
     <!-- 단어 -->
     <string name="word_home">홈</string>
@@ -7,6 +8,7 @@
     <string name="word_today">오늘</string>
     <string name="word_completion">완료</string>
     <string name="word_count">번</string>
+    <string name="word_modify">수정</string>
 
     <string name="word_daily">매일</string>
     <string name="word_weekly">매주</string>
@@ -42,7 +44,7 @@
     <string name="goal_list_title_previous">지난 우리 목표</string>
     <string name="goal_list_title_today">오늘 우리 목표</string>
     <string name="goal_list_title_next">다음 우리 목표</string>
-    
+
     <!-- 토스트 메시지 -->
     <string name="toast_end_date_before_start_date">종료 날짜가 시작 날짜보다 이전입니다.</string>
     <string name="toast_goal_fetch_failed">목표 조회에 실패했습니다.</string>
