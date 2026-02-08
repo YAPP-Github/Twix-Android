@@ -3,24 +3,15 @@ package com.twix.task_certification.detail
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import coil3.compose.AsyncImage
-import coil3.request.ImageRequest
-import coil3.request.crossfade
-import com.twix.designsystem.components.comment.CommentTextField
-import com.twix.designsystem.components.comment.model.CommentUiModel
 import com.twix.designsystem.components.text.AppText
 import com.twix.designsystem.theme.CommonColor
 import com.twix.designsystem.theme.GrayColor
@@ -29,8 +20,9 @@ import com.twix.domain.model.enums.AppTextStyle
 import com.twix.domain.model.enums.GoalReactionType
 import com.twix.task_certification.R
 import com.twix.task_certification.certification.component.ReactionBox
-import com.twix.task_certification.detail.component.CertificationCard
+import com.twix.task_certification.detail.component.CertificatedCard
 import com.twix.task_certification.detail.component.NoCertificationContent
+import com.twix.task_certification.detail.component.PhotologCard
 import com.twix.task_certification.detail.model.PhotologDetailUiModel
 import java.time.LocalDate
 
@@ -42,7 +34,7 @@ fun PartnerTaskCertificationContent(
 ) {
     Column(modifier = modifier) {
         Box(Modifier.fillMaxWidth()) {
-            PhotoLogCard(uiModel)
+            BackgroundCard(uiModel)
 
             ForegroundCard(uiModel)
         }
@@ -52,9 +44,9 @@ fun PartnerTaskCertificationContent(
 }
 
 @Composable
-fun PhotoLogCard(uiModel: PhotologDetailUiModel) {
+fun BackgroundCard(uiModel: PhotologDetailUiModel) {
     Column {
-        CertificationCard(
+        PhotologCard(
             background = GrayColor.C200,
             borderColor = GrayColor.C500,
         )
@@ -78,57 +70,24 @@ fun PhotoLogCard(uiModel: PhotologDetailUiModel) {
 
 @Composable
 private fun ForegroundCard(uiModel: PhotologDetailUiModel) {
-    CertificationCard(
+    PhotologCard(
         rotation = -8f,
         background = CommonColor.White,
         borderColor = GrayColor.C500,
     ) {
         if (uiModel.isCertificated) {
-            CertificatedCardContent(uiModel)
+            CertificatedCard(uiModel)
         } else {
-            NotCertificatedCardContent(uiModel.nickName)
+            AppText(
+                text =
+                    stringResource(
+                        R.string.task_certification_detail_partner_not_task_certification,
+                    ).format(uiModel.nickName),
+                style = AppTextStyle.H2,
+                color = GrayColor.C500,
+            )
         }
     }
-}
-
-@Composable
-private fun CertificatedCardContent(uiModel: PhotologDetailUiModel) {
-    Box(Modifier.fillMaxSize()) {
-        AsyncImage(
-            model =
-                ImageRequest
-                    .Builder(LocalContext.current)
-                    .data(uiModel.imageUrl)
-                    .crossfade(true)
-                    .build(),
-            contentDescription = null,
-            contentScale = ContentScale.Crop,
-            modifier = Modifier.fillMaxSize(),
-        )
-
-        CommentTextField(
-            uiModel = CommentUiModel(TextFieldValue(uiModel.comment ?: "")),
-            onCommentChanged = {},
-            onFocusChanged = {},
-            onPositioned = {},
-            modifier =
-                Modifier
-                    .align(Alignment.BottomCenter)
-                    .padding(bottom = 28.dp),
-        )
-    }
-}
-
-@Composable
-private fun NotCertificatedCardContent(nickname: String) {
-    AppText(
-        text =
-            stringResource(
-                R.string.task_certification_detail_partner_not_task_certification,
-            ).format(nickname),
-        style = AppTextStyle.H2,
-        color = GrayColor.C500,
-    )
 }
 
 @Composable

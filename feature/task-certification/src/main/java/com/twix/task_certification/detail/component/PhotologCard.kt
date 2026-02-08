@@ -19,7 +19,7 @@ import androidx.compose.ui.unit.dp
 import com.twix.designsystem.theme.TwixTheme
 
 @Composable
-internal fun CertificationCard(
+internal fun PhotologCard(
     background: Color,
     borderColor: Color,
     rotation: Float = 0f,
@@ -45,9 +45,9 @@ internal fun CertificationCard(
 
 @Preview
 @Composable
-fun CertificationCardPreview() {
+fun PhotologCardPreview() {
     TwixTheme {
-        CertificationCard(
+        PhotologCard(
             rotation = 0f,
             background = Color.White,
             borderColor = Color.Black,
