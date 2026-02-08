@@ -47,10 +47,11 @@ private val CIRCLE_GAP: Dp = CIRCLE_PADDING_START - CIRCLE_SIZE
 @Composable
 fun CommentTextField(
     uiModel: CommentUiModel,
-    onCommentChanged: (TextFieldValue) -> Unit,
-    onFocusChanged: (Boolean) -> Unit,
-    onPositioned: (Rect) -> Unit,
     modifier: Modifier = Modifier,
+    enabled: Boolean = true,
+    onCommentChanged: (TextFieldValue) -> Unit = {},
+    onFocusChanged: (Boolean) -> Unit = {},
+    onPositioned: (Rect) -> Unit = {},
 ) {
     val focusManager = LocalFocusManager.current
     val focusRequester = remember { FocusRequester() }
@@ -91,6 +92,7 @@ fun CommentTextField(
         BasicTextField(
             value = uiModel.comment,
             onValueChange = { newValue -> onCommentChanged(newValue) },
+            enabled = enabled,
             modifier =
                 Modifier
                     .alpha(0f)

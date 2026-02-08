@@ -36,9 +36,7 @@ internal fun CertificatedCard(uiModel: PhotologDetailUiModel) {
 
         CommentTextField(
             uiModel = CommentUiModel(TextFieldValue(uiModel.comment ?: "")),
-            onCommentChanged = {},
-            onFocusChanged = {},
-            onPositioned = {},
+            enabled = false,
             modifier =
                 Modifier
                     .align(Alignment.BottomCenter)
