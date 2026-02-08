@@ -7,22 +7,16 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.twix.designsystem.components.text.AppText
-import com.twix.designsystem.theme.CommonColor
-import com.twix.designsystem.theme.GrayColor
 import com.twix.designsystem.theme.TwixTheme
-import com.twix.domain.model.enums.AppTextStyle
 import com.twix.domain.model.enums.GoalReactionType
 import com.twix.task_certification.R
 import com.twix.task_certification.certification.component.ReactionBox
-import com.twix.task_certification.detail.component.CertificatedCard
-import com.twix.task_certification.detail.component.NoCertificationContent
-import com.twix.task_certification.detail.component.PhotologCard
+import com.twix.task_certification.detail.component.BackgroundCard
+import com.twix.task_certification.detail.component.ForegroundCard
 import com.twix.task_certification.detail.model.PhotologDetailUiModel
 import java.time.LocalDate
 
@@ -34,59 +28,12 @@ fun PartnerTaskCertificationContent(
 ) {
     Column(modifier = modifier) {
         Box(Modifier.fillMaxWidth()) {
-            BackgroundCard(uiModel)
+            BackgroundCard(uiModel, stringResource(R.string.task_certification_detail_partner_sting))
 
-            ForegroundCard(uiModel)
+            ForegroundCard(uiModel = uiModel, rotation = -8f)
         }
 
         ReactionSection(uiModel.isCertificated, uiModel.reaction, onClickReaction)
-    }
-}
-
-@Composable
-fun BackgroundCard(uiModel: PhotologDetailUiModel) {
-    Column {
-        PhotologCard(
-            background = GrayColor.C200,
-            borderColor = GrayColor.C500,
-        )
-        if (uiModel.isCertificated) {
-            AppText(
-                text = uiModel.uploadedAt,
-                style = AppTextStyle.B4,
-                color = GrayColor.C500,
-                modifier =
-                    Modifier
-                        .padding(end = 36.dp, top = 14.dp)
-                        .align(Alignment.End),
-            )
-        } else {
-            NoCertificationContent(
-                buttonTitle = stringResource(R.string.task_certification_detail_partner_sting),
-            )
-        }
-    }
-}
-
-@Composable
-private fun ForegroundCard(uiModel: PhotologDetailUiModel) {
-    PhotologCard(
-        rotation = -8f,
-        background = CommonColor.White,
-        borderColor = GrayColor.C500,
-    ) {
-        if (uiModel.isCertificated) {
-            CertificatedCard(uiModel)
-        } else {
-            AppText(
-                text =
-                    stringResource(
-                        R.string.task_certification_detail_partner_not_task_certification,
-                    ).format(uiModel.nickName),
-                style = AppTextStyle.H2,
-                color = GrayColor.C500,
-            )
-        }
     }
 }
 
