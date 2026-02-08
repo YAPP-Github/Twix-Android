@@ -6,6 +6,7 @@ import com.twix.task_certification.R
 import com.twix.task_certification.detail.model.TaskCertificationDetailIntent
 import com.twix.task_certification.detail.model.TaskCertificationDetailSideEffect
 import com.twix.task_certification.detail.model.TaskCertificationDetailUiState
+import com.twix.task_certification.detail.model.toUiModel
 import com.twix.ui.base.BaseViewModel
 
 class TaskCertificationDetailViewModel(
@@ -27,11 +28,11 @@ class TaskCertificationDetailViewModel(
     ) {
         launchResult(
             block = { photologRepository.fetchPhotoLogs(goalId) },
-            onSuccess = { reduce { copy(photoLogs = it, goalTitle = goalTitle) } },
+            onSuccess = { reduce { copy(photoLogs = it.toUiModel(), goalTitle = goalTitle) } },
             onError = {
                 emitSideEffect(
                     TaskCertificationDetailSideEffect.ShowToast(
-                        R.string.fetch_photolog_fail,
+                        R.string.task_certification_detail_fetch_photolog_fail,
                         ToastType.ERROR,
                     ),
                 )
