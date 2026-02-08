@@ -13,4 +13,6 @@ sealed interface TaskCertificationDetailIntent : Intent {
     ) : TaskCertificationDetailIntent
 
     data object Sting : TaskCertificationDetailIntent
+
+    data object Upload : TaskCertificationDetailIntent
 }

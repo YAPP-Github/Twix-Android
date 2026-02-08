@@ -8,4 +8,8 @@ sealed interface TaskCertificationDetailSideEffect : SideEffect {
         val message: Int,
         val type: ToastType,
     ) : TaskCertificationDetailSideEffect
+
+    data class NavigateToUpload(
+        val goalId: Long,
+    ) : TaskCertificationDetailSideEffect
 }

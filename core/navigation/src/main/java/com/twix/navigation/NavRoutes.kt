@@ -35,7 +35,11 @@ sealed class NavRoutes(
         fun createRoute(goalId: Long) = "task_certification_detail/$goalId"
     }
 
-    object TaskCertificationRoute : NavRoutes("task_certification")
+    object TaskCertificationRoute : NavRoutes("task_certification/{goalId}") {
+        const val ARG_GOAL_ID = "goalId"
+
+        fun createRoute(goalId: Long) = "task_certification/$goalId"
+    }
 
     /**
      * GoalEditorGraph

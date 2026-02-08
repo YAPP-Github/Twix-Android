@@ -33,6 +33,7 @@ import org.koin.compose.koinInject
 @Composable
 fun TaskCertificationDetailRoute(
     goalId: Long,
+    navigateToUpload: (Long) -> Unit,
     toastManager: ToastManager = koinInject(),
     viewModel: TaskCertificationDetailViewModel = koinViewModel(),
 ) {
@@ -53,6 +54,10 @@ fun TaskCertificationDetailRoute(
                     ToastData(currentContext.getString(sideEffect.message), sideEffect.type),
                 )
             }
+
+            is TaskCertificationDetailSideEffect.NavigateToUpload -> {
+                navigateToUpload(sideEffect.goalId)
+            }
         }
     }
 
@@ -61,7 +66,7 @@ fun TaskCertificationDetailRoute(
         onBack = { },
         onClickModify = { },
         onClickReaction = { viewModel.dispatch(TaskCertificationDetailIntent.Reaction(it)) },
-        onClickUpload = { },
+        onClickUpload = { viewModel.dispatch(TaskCertificationDetailIntent.Upload) },
         onClickSting = { viewModel.dispatch(TaskCertificationDetailIntent.Sting) },
     )
 }

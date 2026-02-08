@@ -1,5 +1,6 @@
 package com.twix.task_certification.detail
 
+import androidx.lifecycle.viewModelScope
 import com.twix.designsystem.components.toast.model.ToastType
 import com.twix.domain.model.enums.GoalReactionType
 import com.twix.domain.repository.PhotoLogsRepository
@@ -9,6 +10,7 @@ import com.twix.task_certification.detail.model.TaskCertificationDetailSideEffec
 import com.twix.task_certification.detail.model.TaskCertificationDetailUiState
 import com.twix.task_certification.detail.model.toUiModel
 import com.twix.ui.base.BaseViewModel
+import kotlinx.coroutines.launch
 
 class TaskCertificationDetailViewModel(
     private val photologRepository: PhotoLogsRepository,
@@ -20,6 +22,7 @@ class TaskCertificationDetailViewModel(
             is TaskCertificationDetailIntent.InitGoal -> fetchPhotolog(intent.goalId)
             is TaskCertificationDetailIntent.Reaction -> reduceReaction(intent.type)
             TaskCertificationDetailIntent.Sting -> TODO("찌르기 API 연동")
+            TaskCertificationDetailIntent.Upload -> navigateToUpload()
         }
     }
 
@@ -40,5 +43,12 @@ class TaskCertificationDetailViewModel(
 
     private fun reduceReaction(reaction: GoalReactionType) {
         reduce { updatePartnerReaction(reaction) }
+    }
+
+    private fun navigateToUpload() {
+        viewModelScope.launch {
+            val goalId = currentState.photoLogs.goalId
+            emitSideEffect(TaskCertificationDetailSideEffect.NavigateToUpload(goalId))
+        }
     }
 }
