@@ -22,6 +22,7 @@ import com.twix.designsystem.theme.CommonColor
 import com.twix.designsystem.theme.GrayColor
 import com.twix.designsystem.theme.TwixTheme
 import com.twix.domain.model.enums.AppTextStyle
+import com.twix.domain.model.enums.BetweenUs
 import com.twix.task_certification.R
 import com.twix.task_certification.detail.model.PhotologDetailUiModel
 import com.twix.ui.extension.noRippleClickable
@@ -30,9 +31,10 @@ import com.twix.designsystem.R as DesR
 @Composable
 fun BackgroundCard(
     uiModel: PhotologDetailUiModel,
+    currentShow: BetweenUs = BetweenUs.PARTNER,
     buttonTitle: String,
     onClick: () -> Unit,
-    rotation: Float = 0f,
+    rotation: Float,
 ) {
     Column {
         PhotologCard(
@@ -91,7 +93,9 @@ fun PreviewBackgroundCard() {
                 PhotologDetailUiModel(
                     uploadedAt = "2023.10.31 23:59",
                 ),
+            currentShow = BetweenUs.PARTNER,
             onClick = {},
+            rotation = -8f,
         )
     }
 }

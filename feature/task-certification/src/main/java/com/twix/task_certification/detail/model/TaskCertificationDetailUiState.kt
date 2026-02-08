@@ -14,5 +14,10 @@ data class TaskCertificationDetailUiState(
     val canModify: Boolean
         get() = currentShow == BetweenUs.ME && photoLogs.myPhotologs.isCertificated
 
+    val canReaction: Boolean
+        get() =
+            currentShow == BetweenUs.PARTNER &&
+                photoLogs.partnerPhotologs.isCertificated
+
     fun updatePartnerReaction(type: GoalReactionType) = copy(photoLogs = photoLogs.updatePartnerReaction(type))
 }

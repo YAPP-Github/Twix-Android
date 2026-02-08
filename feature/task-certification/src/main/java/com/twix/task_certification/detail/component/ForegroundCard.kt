@@ -8,14 +8,16 @@ import com.twix.designsystem.theme.CommonColor
 import com.twix.designsystem.theme.GrayColor
 import com.twix.designsystem.theme.TwixTheme
 import com.twix.domain.model.enums.AppTextStyle
+import com.twix.domain.model.enums.BetweenUs
 import com.twix.task_certification.R
 import com.twix.task_certification.detail.model.PhotologDetailUiModel
+import com.twix.designsystem.R as DesR
 
 @Composable
 internal fun ForegroundCard(
     uiModel: PhotologDetailUiModel,
-    noCertificatedText: String,
-    rotation: Float = 0f,
+    currentShow: BetweenUs,
+    rotation: Float,
 ) {
     PhotologCard(
         rotation = rotation,
@@ -26,7 +28,13 @@ internal fun ForegroundCard(
             CertificatedCard(uiModel)
         } else {
             AppText(
-                text = noCertificatedText,
+                text =
+                    when (currentShow) {
+                        BetweenUs.ME -> stringResource(DesR.string.keep_it_up)
+                        BetweenUs.PARTNER ->
+                            stringResource(R.string.task_certification_detail_partner_not_task_certification)
+                                .format(uiModel.nickName)
+                    },
                 style = AppTextStyle.H2,
                 color = GrayColor.C500,
             )
@@ -50,10 +58,8 @@ private fun ForegroundCardPreview() {
                     uploaderName = "참치",
                     uploadedAt = "1시간 전",
                 ),
+            currentShow = BetweenUs.ME,
             rotation = -8f,
-            noCertificatedText =
-                stringResource(R.string.task_certification_detail_partner_not_task_certification)
-                    .format("페토"),
         )
     }
 }
