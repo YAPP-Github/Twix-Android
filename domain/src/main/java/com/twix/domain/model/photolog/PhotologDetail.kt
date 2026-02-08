@@ -1,13 +1,11 @@
 package com.twix.domain.model.photolog
 
-import java.time.LocalDate
-
 data class PhotologDetail(
     val photologId: Long?,
     val goalId: Long,
     val imageUrl: String?,
     val comment: String?,
-    val verificationDate: LocalDate?,
+    val verificationDate: String?,
     val isMine: Boolean,
     val uploaderName: String?,
     val uploadedAt: String?,

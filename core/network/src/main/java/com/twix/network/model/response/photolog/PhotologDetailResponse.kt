@@ -1,8 +1,6 @@
 package com.twix.network.model.response.photolog
 
 import kotlinx.serialization.Serializable
-import java.time.LocalDate
-import kotlin.time.Instant
 
 @Serializable
 data class PhotologDetailResponse(
@@ -10,8 +8,8 @@ data class PhotologDetailResponse(
     val goalId: Long,
     val imageUrl: String?,
     val comment: String?,
-    val verificationDate: LocalDate?,
+    val verificationDate: String?,
     val isMine: Boolean,
     val uploaderName: String?,
-    val uploadedAt: Instant?,
+    val uploadedAt: String?,
 )

@@ -10,7 +10,6 @@ import com.twix.designsystem.theme.TwixTheme
 import com.twix.domain.model.enums.AppTextStyle
 import com.twix.task_certification.R
 import com.twix.task_certification.detail.model.PhotologDetailUiModel
-import java.time.LocalDate
 
 @Composable
 internal fun ForegroundCard(
@@ -47,7 +46,7 @@ private fun ForegroundCardPreview() {
                     photologId = 1,
                     imageUrl = "",
                     comment = "아이수크림",
-                    verificationDate = LocalDate.now(),
+                    verificationDate = "",
                     uploaderName = "참치",
                     uploadedAt = "1시간 전",
                 ),
