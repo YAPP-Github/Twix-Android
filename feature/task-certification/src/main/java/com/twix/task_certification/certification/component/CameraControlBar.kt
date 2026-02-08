@@ -1,4 +1,4 @@
-package com.twix.task_certification.component
+package com.twix.task_certification.certification.component
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
@@ -31,7 +31,7 @@ import com.twix.designsystem.theme.GrayColor
 import com.twix.designsystem.theme.TwixTheme
 import com.twix.domain.model.enums.AppTextStyle
 import com.twix.task_certification.R
-import com.twix.task_certification.model.CaptureStatus
+import com.twix.task_certification.certification.model.CaptureStatus
 import com.twix.ui.extension.noRippleClickable
 
 @Composable

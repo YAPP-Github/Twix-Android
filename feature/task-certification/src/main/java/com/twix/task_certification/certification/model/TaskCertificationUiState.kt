@@ -1,8 +1,10 @@
-package com.twix.task_certification.model
+package com.twix.task_certification.certification.model
 
 import android.net.Uri
 import androidx.camera.core.CameraSelector
 import androidx.compose.runtime.Immutable
+import androidx.compose.ui.text.input.TextFieldValue
+import com.twix.designsystem.components.comment.model.CommentUiModel
 import com.twix.ui.base.State
 
 @Immutable
@@ -11,7 +13,12 @@ data class TaskCertificationUiState(
     val torch: TorchStatus = TorchStatus.Off,
     val lens: CameraSelector = CameraSelector.DEFAULT_BACK_CAMERA,
     val preview: CameraPreview? = null,
+    val commentUiModel: CommentUiModel = CommentUiModel(),
+    val showCommentError: Boolean = false,
 ) : State {
+    val hasMaxCommentLength: Boolean
+        get() = commentUiModel.hasMaxCommentLength
+
     val showTorch: Boolean
         get() = capture is CaptureStatus.NotCaptured && lens == CameraSelector.DEFAULT_BACK_CAMERA
 
@@ -33,8 +40,6 @@ data class TaskCertificationUiState(
         return copy(torch = newFlashMode)
     }
 
-    fun updateCapturedImage(uri: Uri) = copy(capture = CaptureStatus.Captured(uri))
-
     fun updatePicture(uri: Uri): TaskCertificationUiState =
         copy(
             capture = CaptureStatus.Captured(uri),
@@ -42,4 +47,12 @@ data class TaskCertificationUiState(
         )
 
     fun removePicture(): TaskCertificationUiState = copy(capture = CaptureStatus.NotCaptured)
+
+    fun updateComment(comment: TextFieldValue) = copy(commentUiModel = commentUiModel.updateComment(comment))
+
+    fun updateCommentFocus(isFocused: Boolean) = copy(commentUiModel = commentUiModel.updateFocus(isFocused))
+
+    fun showCommentError() = copy(showCommentError = true)
+
+    fun hideCommentError() = copy(showCommentError = false)
 }
