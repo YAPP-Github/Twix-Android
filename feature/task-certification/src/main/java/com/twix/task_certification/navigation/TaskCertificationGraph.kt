@@ -36,6 +36,7 @@ object TaskCertificationGraph : NavGraphContributor {
 
                 TaskCertificationDetailRoute(
                     goalId = id,
+                    navigateToBack = navController::popBackStack,
                     navigateToUpload = { goalId ->
                         val destination = NavRoutes.TaskCertificationRoute.createRoute(goalId)
                         navController.navigate(destination)

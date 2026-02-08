@@ -33,6 +33,7 @@ import org.koin.compose.koinInject
 @Composable
 fun TaskCertificationDetailRoute(
     goalId: Long,
+    navigateToBack: () -> Unit,
     navigateToUpload: (Long) -> Unit,
     toastManager: ToastManager = koinInject(),
     viewModel: TaskCertificationDetailViewModel = koinViewModel(),
@@ -63,7 +64,7 @@ fun TaskCertificationDetailRoute(
 
     TaskCertificationDetailScreen(
         uiState = uiState,
-        onBack = { },
+        onBack = navigateToBack,
         onClickModify = { },
         onClickReaction = { viewModel.dispatch(TaskCertificationDetailIntent.Reaction(it)) },
         onClickUpload = { viewModel.dispatch(TaskCertificationDetailIntent.Upload) },

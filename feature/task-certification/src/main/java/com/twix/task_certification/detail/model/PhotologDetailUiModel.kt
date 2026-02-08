@@ -4,7 +4,6 @@ import androidx.compose.runtime.Immutable
 import com.twix.domain.model.enums.GoalReactionType
 import com.twix.domain.model.photolog.PhotologDetail
 import com.twix.util.RelativeTimeFormatter
-import java.time.LocalDate
 
 @Immutable
 data class PhotologDetailUiModel(
@@ -13,7 +12,7 @@ data class PhotologDetailUiModel(
     val photologId: Long? = null,
     val imageUrl: String? = null,
     val comment: String? = null,
-    val verificationDate: LocalDate? = null,
+    val verificationDate: String? = null,
     val uploaderName: String? = null,
     val reaction: GoalReactionType? = null,
     val uploadedAt: String = "",
