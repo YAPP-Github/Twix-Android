@@ -15,6 +15,7 @@ import java.time.LocalDate
 @Composable
 internal fun ForegroundCard(
     uiModel: PhotologDetailUiModel,
+    noCertificatedText: String,
     rotation: Float = 0f,
 ) {
     PhotologCard(
@@ -26,10 +27,7 @@ internal fun ForegroundCard(
             CertificatedCard(uiModel)
         } else {
             AppText(
-                text =
-                    stringResource(
-                        R.string.task_certification_detail_partner_not_task_certification,
-                    ).format(uiModel.nickName),
+                text = noCertificatedText,
                 style = AppTextStyle.H2,
                 color = GrayColor.C500,
             )
@@ -54,19 +52,9 @@ private fun ForegroundCardPreview() {
                     uploadedAt = "1시간 전",
                 ),
             rotation = -8f,
-        )
-    }
-}
-
-@Preview
-@Composable
-private fun ForegroundCardUncertificatedPreview() {
-    TwixTheme {
-        ForegroundCard(
-            uiModel =
-                PhotologDetailUiModel(
-                    nickName = "페토",
-                ),
+            noCertificatedText =
+                stringResource(R.string.task_certification_detail_partner_not_task_certification)
+                    .format("페토"),
         )
     }
 }

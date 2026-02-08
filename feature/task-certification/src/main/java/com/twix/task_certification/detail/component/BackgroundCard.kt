@@ -30,11 +30,13 @@ import com.twix.designsystem.R as DesR
 fun BackgroundCard(
     uiModel: PhotologDetailUiModel,
     buttonTitle: String,
+    rotation: Float = 0f,
 ) {
     Column {
         PhotologCard(
             background = GrayColor.C200,
             borderColor = GrayColor.C500,
+            rotation = rotation,
         )
         if (uiModel.isCertificated) {
             AppText(

@@ -28,9 +28,18 @@ fun PartnerTaskCertificationContent(
 ) {
     Column(modifier = modifier) {
         Box(Modifier.fillMaxWidth()) {
-            BackgroundCard(uiModel, stringResource(R.string.task_certification_detail_partner_sting))
+            BackgroundCard(
+                uiModel = uiModel,
+                buttonTitle = stringResource(R.string.task_certification_detail_partner_sting),
+            )
 
-            ForegroundCard(uiModel = uiModel, rotation = -8f)
+            ForegroundCard(
+                uiModel = uiModel,
+                noCertificatedText =
+                    stringResource(R.string.task_certification_detail_partner_not_task_certification)
+                        .format(uiModel.nickName),
+                rotation = -8f,
+            )
         }
 
         ReactionSection(uiModel.isCertificated, uiModel.reaction, onClickReaction)
