@@ -11,15 +11,13 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.twix.designsystem.components.toast.ToastManager
 import com.twix.designsystem.components.toast.model.ToastData
 import com.twix.designsystem.theme.CommonColor
-import com.twix.designsystem.theme.TwixTheme
 import com.twix.domain.model.enums.BetweenUs
-import com.twix.domain.model.photolog.PhotoLogs
+import com.twix.domain.model.enums.GoalReactionType
 import com.twix.task_certification.detail.component.TaskCertificationDetailTopBar
 import com.twix.task_certification.detail.model.TaskCertificationDetailIntent
 import com.twix.task_certification.detail.model.TaskCertificationDetailSideEffect
@@ -47,6 +45,58 @@ fun TaskCertificationDetailRoute(
                     goalTitle,
                 ),
             )
+        }
+    }
+
+    ObserveAsEvents(viewModel.sideEffect) { sideEffect ->
+        when (sideEffect) {
+            is TaskCertificationDetailSideEffect.ShowToast -> {
+                toastManager.tryShow(
+                    ToastData(currentContext.getString(sideEffect.message), sideEffect.type),
+                )
+            }
+        }
+    }
+
+    TaskCertificationDetailScreen(
+        uiState = uiState,
+        onBack = { },
+        onClickModify = { },
+        onClickReaction = { viewModel.dispatch(TaskCertificationDetailIntent.Reaction(it)) },
+    )
+}
+
+@Composable
+fun TaskCertificationDetailScreen(
+    uiState: TaskCertificationDetailUiState,
+    onBack: () -> Unit,
+    onClickModify: () -> Unit,
+    onClickReaction: (GoalReactionType) -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    Column(
+        modifier
+            .fillMaxSize()
+            .background(color = CommonColor.White),
+    ) {
+        TaskCertificationDetailTopBar(
+            showModify = uiState.canModify,
+            goalTitle = uiState.goalTitle,
+            onBack = onBack,
+            onClickModify = onClickModify,
+        )
+
+        Spacer(Modifier.height(113.dp))
+
+        when (uiState.currentShow) {
+            BetweenUs.ME -> {
+            }
+
+            BetweenUs.PARTNER ->
+                PartnerTaskCertificationContent(
+                    uiModel = uiState.photoLogs.partnerPhotologs,
+                    onClickReaction = onClickReaction,
+                )
         }
     }
 }

@@ -1,6 +1,7 @@
 package com.twix.task_certification.detail.model
 
 import androidx.compose.runtime.Immutable
+import com.twix.domain.model.enums.GoalReactionType
 import com.twix.domain.model.photolog.PhotologDetail
 import com.twix.util.RelativeTimeFormatter
 import java.time.LocalDate
@@ -14,6 +15,7 @@ data class PhotologDetailUiModel(
     val comment: String? = null,
     val verificationDate: LocalDate? = null,
     val uploaderName: String? = null,
+    val reaction: GoalReactionType? = null,
     val uploadedAt: String = "",
 ) {
     val isCertificated: Boolean

@@ -27,9 +27,9 @@ import com.twix.ui.extension.noRippleClickable
 
 @Composable
 fun ReactionBox(
-    selectedIndex: Int,
-    onClickEmoji: (GoalReactionType) -> Unit,
+    onSelectReaction: (GoalReactionType) -> Unit,
     modifier: Modifier = Modifier,
+    selectedReaction: GoalReactionType? = null,
 ) {
     val shape = RoundedCornerShape(999.dp)
     val height = 68.dp
@@ -60,8 +60,8 @@ fun ReactionBox(
                     .clip(shape),
             verticalAlignment = Alignment.CenterVertically,
         ) {
-            ReactionUiModel.entries.forEachIndexed { index, emoji ->
-                val isSelected = index == selectedIndex
+            ReactionUiModel.entries.forEachIndexed { index, reaction ->
+                val isSelected = reaction.type == selectedReaction
 
                 Box(
                     modifier =
@@ -70,11 +70,11 @@ fun ReactionBox(
                             .fillMaxHeight()
                             .background(
                                 if (isSelected) GrayColor.C300 else GrayColor.C100,
-                            ).noRippleClickable(onClick = { onClickEmoji(emoji.type) }),
+                            ).noRippleClickable(onClick = { onSelectReaction(reaction.type) }),
                     contentAlignment = Alignment.Center,
                 ) {
                     Image(
-                        imageVector = ImageVector.vectorResource(emoji.imageResources),
+                        imageVector = ImageVector.vectorResource(reaction.imageResources),
                         contentDescription = null,
                     )
                 }
@@ -95,8 +95,8 @@ fun ReactionBox(
 fun ReactionBoxPreview() {
     TwixTheme {
         ReactionBox(
-            selectedIndex = 1,
-            onClickEmoji = { },
+            selectedReaction = GoalReactionType.FUCK,
+            onSelectReaction = { },
         )
     }
 }

@@ -52,7 +52,7 @@ fun PartnerTaskCertificationContent(
             ForegroundCard(uiModel)
         }
 
-        ReactionSection(uiModel.isCertificated, onClickReaction)
+        ReactionSection(uiModel.isCertificated, uiModel.reaction, onClickReaction)
     }
 }
 
@@ -65,7 +65,7 @@ fun PhotoLogCard(uiModel: PhotologDetailUiModel) {
         )
         if (uiModel.isCertificated) {
             AppText(
-                text = "6시간 전",
+                text = uiModel.uploadedAt,
                 style = AppTextStyle.B4,
                 color = GrayColor.C500,
                 modifier =
@@ -137,14 +137,15 @@ private fun NotCertificatedCardContent(nickname: String) {
 @Composable
 private fun ReactionSection(
     visible: Boolean,
+    reaction: GoalReactionType? = null,
     onClickReaction: (GoalReactionType) -> Unit,
 ) {
     if (visible) {
         Spacer(Modifier.height(85.dp))
 
         ReactionBox(
-            selectedIndex = 1,
-            onClickEmoji = onClickReaction,
+            selectedReaction = reaction,
+            onSelectReaction = onClickReaction,
             modifier = Modifier.padding(horizontal = 20.dp),
         )
     }
@@ -194,6 +195,7 @@ private fun PartnerTaskCertificationContentPreview1() {
                     verificationDate = LocalDate.now(),
                     uploaderName = "민정",
                     uploadedAt = "6시간 전",
+                    reaction = GoalReactionType.FUCK,
                 ),
             onClickReaction = {},
         )

@@ -1,6 +1,7 @@
 package com.twix.task_certification.detail
 
 import com.twix.designsystem.components.toast.model.ToastType
+import com.twix.domain.model.enums.GoalReactionType
 import com.twix.domain.repository.PhotoLogsRepository
 import com.twix.task_certification.R
 import com.twix.task_certification.detail.model.TaskCertificationDetailIntent
@@ -19,6 +20,8 @@ class TaskCertificationDetailViewModel(
             is TaskCertificationDetailIntent.InitGoal -> {
                 fetchPhotolog(intent.goalId, intent.goalTitle)
             }
+
+            is TaskCertificationDetailIntent.Reaction -> reduceReaction(intent.type)
         }
     }
 
@@ -38,5 +41,9 @@ class TaskCertificationDetailViewModel(
                 )
             },
         )
+    }
+
+    private fun reduceReaction(reaction: GoalReactionType) {
+        reduce { updatePartnerReaction(reaction) }
     }
 }
