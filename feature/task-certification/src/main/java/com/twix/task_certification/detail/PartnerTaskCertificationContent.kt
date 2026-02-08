@@ -1,6 +1,5 @@
 package com.twix.task_certification.detail
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -8,22 +7,18 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
 import coil3.request.ImageRequest
 import coil3.request.crossfade
-import com.twix.designsystem.components.button.AppRoundButton
 import com.twix.designsystem.components.comment.CommentTextField
 import com.twix.designsystem.components.comment.model.CommentUiModel
 import com.twix.designsystem.components.text.AppText
@@ -35,9 +30,9 @@ import com.twix.domain.model.enums.GoalReactionType
 import com.twix.task_certification.R
 import com.twix.task_certification.certification.component.ReactionBox
 import com.twix.task_certification.detail.component.CertificationCard
+import com.twix.task_certification.detail.component.NoCertificationContent
 import com.twix.task_certification.detail.model.PhotologDetailUiModel
 import java.time.LocalDate
-import com.twix.designsystem.R as DesR
 
 @Composable
 fun PartnerTaskCertificationContent(
@@ -74,7 +69,9 @@ fun PhotoLogCard(uiModel: PhotologDetailUiModel) {
                         .align(Alignment.End),
             )
         } else {
-            NoCertificationContent()
+            NoCertificationContent(
+                buttonTitle = stringResource(R.string.task_certification_detail_partner_sting),
+            )
         }
     }
 }
@@ -147,35 +144,6 @@ private fun ReactionSection(
             selectedReaction = reaction,
             onSelectReaction = onClickReaction,
             modifier = Modifier.padding(horizontal = 20.dp),
-        )
-    }
-}
-
-@Composable
-private fun NoCertificationContent() {
-    Box(Modifier.fillMaxWidth()) {
-        Column(
-            Modifier.align(Alignment.TopCenter),
-        ) {
-            Spacer(Modifier.height(105.dp))
-            AppRoundButton(
-                modifier =
-                    Modifier
-                        .width(150.dp)
-                        .height(74.dp),
-                text = stringResource(R.string.task_certification_detail_partner_sting),
-                textColor = GrayColor.C500,
-                backgroundColor = CommonColor.White,
-            )
-        }
-
-        Image(
-            imageVector = ImageVector.vectorResource(DesR.drawable.ic_keepi_sting),
-            contentDescription = null,
-            modifier =
-                Modifier
-                    .padding(end = 24.dp, top = 15.dp)
-                    .align(Alignment.TopEnd),
         )
     }
 }
