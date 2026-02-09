@@ -32,8 +32,6 @@ object TaskCertificationPreviewData {
             reaction = GoalReactionType.FUCK,
         )
 
-    fun empty(name: String = "닉네임") = PhotologDetailUiModel(nickName = name)
-
     fun photoLogs() =
         PhotoLogsUiModel(
             goalId = 1,
