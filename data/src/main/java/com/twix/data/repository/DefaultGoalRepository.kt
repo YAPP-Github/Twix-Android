@@ -25,4 +25,9 @@ class DefaultGoalRepository(
         safeApiCall {
             service.updateGoal(body = param.toRequest(), goalId = param.goalId).toDomain()
         }
+
+    override suspend fun fetchGoalDetail(goalId: Long): AppResult<GoalDetail> =
+        safeApiCall {
+            service.fetchGoalDetail(goalId).toDomain()
+        }
 }

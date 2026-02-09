@@ -12,4 +12,6 @@ interface GoalRepository {
     suspend fun createGoal(param: CreateGoalParam): AppResult<GoalDetail>
 
     suspend fun updateGoal(param: UpdateGoalParam): AppResult<GoalDetail>
+
+    suspend fun fetchGoalDetail(goalId: Long): AppResult<GoalDetail>
 }

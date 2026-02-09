@@ -27,4 +27,9 @@ interface GoalService {
         @Body body: UpdateGoalRequest,
         @Path("goalId") goalId: Long,
     ): GoalDetailResponse
+
+    @GET("api/v1/goals/{goalId}")
+    suspend fun fetchGoalDetail(
+        @Path("goalId") goalId: Long,
+    ): GoalDetailResponse
 }
