@@ -25,9 +25,11 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -42,6 +44,8 @@ import com.twix.designsystem.components.popup.CommonPopup
 import com.twix.designsystem.components.popup.CommonPopupDivider
 import com.twix.designsystem.components.popup.CommonPopupItem
 import com.twix.designsystem.components.text.AppText
+import com.twix.designsystem.components.toast.ToastManager
+import com.twix.designsystem.components.toast.model.ToastData
 import com.twix.designsystem.components.topbar.CommonTopBar
 import com.twix.designsystem.extension.label
 import com.twix.designsystem.extension.toRes
@@ -51,21 +55,32 @@ import com.twix.domain.model.enums.AppTextStyle
 import com.twix.domain.model.enums.GoalIconType
 import com.twix.domain.model.goal.GoalSummary
 import com.twix.goal_manage.model.GoalManageUiState
+import com.twix.ui.base.ObserveAsEvents
 import com.twix.ui.extension.noRippleClickable
 import org.koin.androidx.compose.koinViewModel
+import org.koin.compose.koinInject
 import java.time.LocalDate
 
 @Composable
 fun GoalManageRoute(
     selectedDate: LocalDate,
+    toastManager: ToastManager = koinInject(),
     viewModel: GoalManageViewModel = koinViewModel(),
     popBackStack: () -> Unit,
     navigateToGoalEditor: (Long) -> Unit,
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val context = LocalContext.current
+    val currentContext by rememberUpdatedState(context)
 
     LaunchedEffect(selectedDate) {
         viewModel.dispatch(GoalManageIntent.SetSelectedDate(selectedDate))
+    }
+
+    ObserveAsEvents(viewModel.sideEffect) { effect ->
+        when (effect) {
+            is GoalManageSideEffect.ShowToast -> toastManager.tryShow(ToastData(currentContext.getString(effect.resId), effect.type))
+        }
     }
 
     GoalManageScreen(
