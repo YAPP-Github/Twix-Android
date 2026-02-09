@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -155,33 +156,35 @@ fun ReactionEffect(
             /**
              * 파티클마다 랜덤 크기 부여
              */
-            val randomSize = remember { spec.sizeRangeDp.random().dp }
+            key(particle) {
+                val randomSize = remember { spec.sizeRangeDp.random().dp }
 
-            Image(
-                painter = painterResource(id = particle.iconRes),
-                contentDescription = null,
-                modifier =
-                    Modifier
-                        .size(randomSize)
-                        /**
-                         * 위치 이동
-                         */
-                        .offset {
-                            IntOffset(
-                                x = particle.animX.value.toInt(),
-                                y = particle.animY.value.toInt(),
-                            )
-                        }
-                        /**
-                         * 스케일 / 투명도 / 회전 효과
-                         */
-                        .graphicsLayer {
-                            scaleX = particle.animScale.value
-                            scaleY = particle.animScale.value
-                            alpha = particle.animAlpha.value
-                            rotationZ = (particle.animX.value % 50f) - 25f
-                        },
-            )
+                Image(
+                    painter = painterResource(id = particle.iconRes),
+                    contentDescription = null,
+                    modifier =
+                        Modifier
+                            .size(randomSize)
+                            /**
+                             * 위치 이동
+                             */
+                            .offset {
+                                IntOffset(
+                                    x = particle.animX.value.toInt(),
+                                    y = particle.animY.value.toInt(),
+                                )
+                            }
+                            /**
+                             * 스케일 / 투명도 / 회전 효과
+                             */
+                            .graphicsLayer {
+                                scaleX = particle.animScale.value
+                                scaleY = particle.animScale.value
+                                alpha = particle.animAlpha.value
+                                rotationZ = (particle.animX.value % 50f) - 25f
+                            },
+                )
+            }
         }
     }
 }
