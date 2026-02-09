@@ -43,7 +43,7 @@ fun SettingsMenuItem(
     @DrawableRes resId: Int? = null,
     title: String,
     right: (@Composable () -> Unit)? = null,
-    onClick: () -> Unit,
+    onClick: () -> Unit = {},
 ) {
     Row(
         modifier =
