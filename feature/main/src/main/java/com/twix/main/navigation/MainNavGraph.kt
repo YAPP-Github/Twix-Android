@@ -31,6 +31,11 @@ object MainNavGraph : NavGraphContributor {
                             launchSingleTop = true
                         }
                     },
+                    navigateToCertificationDetail = {
+                        navController.navigate(NavRoutes.TaskCertificationDetailRoute.createRoute(it)) {
+                            launchSingleTop = true
+                        }
+                    },
                 )
             }
         }
