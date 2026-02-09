@@ -1,4 +1,4 @@
-package com.twix.home.component
+package com.twix.designsystem.components.calendar
 
 import androidx.compose.foundation.border
 import androidx.compose.foundation.gestures.detectHorizontalDragGestures
@@ -38,7 +38,7 @@ fun WeeklyCalendar(
     onSelectDate: (LocalDate) -> Unit,
     onPreviousWeek: () -> Unit,
     onNextWeek: () -> Unit,
-    onUpdateVisibleDate: (LocalDate) -> Unit,
+    onUpdateVisibleDate: (LocalDate) -> Unit = {},
 ) {
     val today = remember { LocalDate.now() }
     val weekStart = remember(referenceDate) { referenceDate.weekStartSunday() }

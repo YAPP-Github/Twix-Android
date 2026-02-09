@@ -28,6 +28,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.twix.designsystem.R
+import com.twix.designsystem.components.calendar.WeeklyCalendar
 import com.twix.designsystem.components.goal.GoalCardFrame
 import com.twix.designsystem.components.goal.GoalCheckIndicator
 import com.twix.designsystem.components.text.AppText
@@ -39,7 +40,6 @@ import com.twix.domain.model.goal.checkState
 import com.twix.home.component.EmptyGoalGuide
 import com.twix.home.component.GoalVerifications
 import com.twix.home.component.HomeTopBar
-import com.twix.home.component.WeeklyCalendar
 import com.twix.home.model.HomeUiState
 import com.twix.ui.extension.noRippleClickable
 import org.koin.androidx.compose.koinViewModel
@@ -50,6 +50,7 @@ fun HomeRoute(
     viewModel: HomeViewModel = koinViewModel(),
     onShowCalendarBottomSheet: () -> Unit,
     navigateToGoalEditor: () -> Unit,
+    navigateToGoalManage: (LocalDate) -> Unit,
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
@@ -62,6 +63,7 @@ fun HomeRoute(
         onMoveToToday = { viewModel.dispatch(HomeIntent.MoveToToday) },
         onShowCalendarBottomSheet = onShowCalendarBottomSheet,
         onAddNewGoal = navigateToGoalEditor,
+        onEditClick = { navigateToGoalManage(uiState.selectedDate) },
     )
 }
 
@@ -75,6 +77,7 @@ fun HomeScreen(
     onMoveToToday: () -> Unit,
     onShowCalendarBottomSheet: () -> Unit,
     onAddNewGoal: () -> Unit,
+    onEditClick: () -> Unit,
 ) {
     Box(
         modifier =
@@ -116,7 +119,7 @@ fun HomeScreen(
                     goals = uiState.goalList.goals,
                     selectedDate = uiState.selectedDate,
                     onVerificationClick = {},
-                    onEditClick = {},
+                    onEditClick = onEditClick,
                 )
             }
         }

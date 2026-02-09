@@ -22,11 +22,13 @@ import com.twix.home.HomeViewModel
 import com.twix.main.component.MainBottomBar
 import com.twix.main.model.MainTab
 import org.koin.androidx.compose.koinViewModel
+import java.time.LocalDate
 
 @Composable
 fun MainRoute(
     viewModel: MainViewModel = koinViewModel(),
     navigateToGoalEditor: () -> Unit,
+    navigateToGoalManage: (LocalDate) -> Unit,
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val homeViewModel: HomeViewModel = koinViewModel()
@@ -36,6 +38,7 @@ fun MainRoute(
         selectedTab = uiState.selectedTab,
         onTabClick = { tab -> viewModel.dispatch(MainIntent.SelectTab(tab)) },
         navigateToGoalEditor = navigateToGoalEditor,
+        navigateToGoalManage = navigateToGoalManage,
     )
 }
 
@@ -45,6 +48,7 @@ private fun MainScreen(
     selectedTab: MainTab,
     onTabClick: (MainTab) -> Unit,
     navigateToGoalEditor: () -> Unit,
+    navigateToGoalManage: (LocalDate) -> Unit,
 ) {
     val calendarState by homeViewModel.calendarState.collectAsStateWithLifecycle()
     var showCalendarBottomSheet by remember { mutableStateOf(false) }
@@ -79,6 +83,7 @@ private fun MainScreen(
                             viewModel = homeViewModel,
                             onShowCalendarBottomSheet = { showCalendarBottomSheet = true },
                             navigateToGoalEditor = navigateToGoalEditor,
+                            navigateToGoalManage = navigateToGoalManage,
                         )
                     MainTab.STATS -> Box(modifier = Modifier.fillMaxSize())
                     MainTab.COUPLE -> Box(modifier = Modifier.fillMaxSize())
