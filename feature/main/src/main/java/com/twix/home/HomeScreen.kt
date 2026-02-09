@@ -41,7 +41,7 @@ fun HomeRoute(
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     LaunchedEffect(Unit) {
-        viewModel
+        viewModel.dispatch(HomeIntent.RefreshGoals)
     }
 
     HomeScreen(

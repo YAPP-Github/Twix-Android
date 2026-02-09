@@ -40,10 +40,6 @@ class HomeViewModel(
                     ),
             )
 
-    init {
-        fetchGoalList()
-    }
-
     override suspend fun handleIntent(intent: HomeIntent) {
         when (intent) {
             is HomeIntent.SelectDate -> updateDate(intent.date)
