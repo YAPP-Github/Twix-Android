@@ -102,9 +102,20 @@ class GoalManageViewModel(
     }
 
     private fun setSelectedDate(date: LocalDate) {
-        if (currentState.selectedDate == date) return
-        reduce { copy(selectedDate = date) }
-        // TODO: 새로운 리스트 조회
+        if (currentState.selectedDate == date && currentState.isInitialized) return
+        reduce { copy(selectedDate = date, isInitialized = true) }
+
+        fetchGoalSummaryList(date)
+    }
+
+    private fun fetchGoalSummaryList(date: LocalDate) {
+        launchResult(
+            block = { goalRepository.fetchGoalSummaryList(date.toString()) },
+            onSuccess = {
+                reduce { copy(goalSummaries = it) }
+            },
+            onError = { emitSideEffect(GoalManageSideEffect.ShowToast(R.string.toast_goal_fetch_failed, ToastType.ERROR)) }
+        )
     }
 
     private fun restoreGoal(removed: RemovedGoal) {
