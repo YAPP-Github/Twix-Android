@@ -1,15 +1,16 @@
 package com.twix.goal_manage
 
+import com.twix.designsystem.R
+import com.twix.designsystem.components.toast.model.ToastType
 import com.twix.domain.model.enums.WeekNavigation
 import com.twix.domain.repository.GoalRepository
 import com.twix.goal_manage.model.GoalManageUiState
 import com.twix.ui.base.BaseViewModel
-import com.twix.ui.base.NoSideEffect
 import java.time.LocalDate
 
 class GoalManageViewModel(
     private val goalRepository: GoalRepository,
-) : BaseViewModel<GoalManageUiState, GoalManageIntent, NoSideEffect>(GoalManageUiState()) {
+) : BaseViewModel<GoalManageUiState, GoalManageIntent, GoalManageSideEffect>(GoalManageUiState()) {
     override suspend fun handleIntent(intent: GoalManageIntent) {
         when (intent) {
             is GoalManageIntent.EndGoal -> endGoal(intent.id)
@@ -25,9 +26,18 @@ class GoalManageViewModel(
     }
 
     private fun deleteGoal(id: Long) {
+        val previousSummaries = currentState.goalSummaries
         val newSummaries = currentState.goalSummaries.filter { it.goalId != id }
         reduce { copy(goalSummaries = newSummaries) }
-        // TODO: 서버 통신 로직 추가
+
+        launchResult(
+            block = { goalRepository.deleteGoal(id) },
+            onSuccess = {},
+            onError = {
+                reduce { copy(goalSummaries = previousSummaries) }
+                emitSideEffect(GoalManageSideEffect.ShowToast(R.string.toast_delete_goal_failed, ToastType.ERROR))
+            },
+        )
     }
 
     private fun setSelectedDate(date: LocalDate) {
