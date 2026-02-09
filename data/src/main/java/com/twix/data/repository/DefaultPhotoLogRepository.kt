@@ -1,9 +1,11 @@
 package com.twix.data.repository
 
 import com.twix.domain.model.photo.PhotoLogUploadInfo
+import com.twix.domain.model.photolog.PhotoLogs
 import com.twix.domain.repository.PhotoLogRepository
 import com.twix.network.execute.safeApiCall
 import com.twix.network.model.response.photo.mapper.toDomain
+import com.twix.network.model.response.photolog.mapper.toDomain
 import com.twix.network.service.PhotoLogService
 import com.twix.network.upload.PresignedUploader
 import com.twix.result.AppResult
@@ -39,4 +41,9 @@ class DefaultPhotoLogRepository(
         // fileName을 key로 사용함. 인증샷 등록 API에서 사용
         return AppResult.Success(info.fileName)
     }
+
+    override suspend fun fetchPhotoLogs(goalId: Long): AppResult<PhotoLogs> =
+        safeApiCall {
+            service.fetchPhotoLogs(goalId).toDomain()
+        }
 }
