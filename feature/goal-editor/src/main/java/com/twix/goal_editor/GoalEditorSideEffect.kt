@@ -9,4 +9,6 @@ interface GoalEditorSideEffect : SideEffect {
         @param:StringRes val resId: Int,
         val type: ToastType,
     ) : GoalEditorSideEffect
+
+    object NavigateToHome : GoalEditorSideEffect
 }

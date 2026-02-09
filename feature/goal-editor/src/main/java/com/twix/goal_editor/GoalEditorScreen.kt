@@ -85,6 +85,7 @@ fun GoalEditorRoute(
         viewModel.sideEffect.collect { effect ->
             when (effect) {
                 is GoalEditorSideEffect.ShowToast -> toastManager.tryShow(ToastData(currentContext.getString(effect.resId), effect.type))
+                is GoalEditorSideEffect.NavigateToHome -> navigateToBack()
             }
         }
     }
