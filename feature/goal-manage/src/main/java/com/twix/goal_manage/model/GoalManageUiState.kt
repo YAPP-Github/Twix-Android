@@ -23,7 +23,7 @@ data class GoalManageUiState(
             ),
             GoalSummary(
                 goalId = 2,
-                name = "운동",
+                name = "물 마시기",
                 icon = GoalIconType.EXERCISE,
                 repeatCycle = RepeatCycle.DAILY,
                 startDate = LocalDate.now(),
@@ -31,7 +31,7 @@ data class GoalManageUiState(
             ),
             GoalSummary(
                 goalId = 3,
-                name = "운동",
+                name = "잠자기",
                 icon = GoalIconType.EXERCISE,
                 repeatCycle = RepeatCycle.DAILY,
                 startDate = LocalDate.now(),
@@ -46,4 +46,8 @@ data class GoalManageUiState(
                 endDate = LocalDate.now(),
             ),
         ),
+    val pendingGoalIds: Set<Long> = emptySet(), // 중복 요청 방지
+    val openedMenuGoalId: Long? = null, // 팝업 현재 열린 goalId
+    val endDialog: GoalDialogState? = null,
+    val deleteDialog: GoalDialogState? = null,
 ) : State

@@ -4,7 +4,9 @@ import com.twix.designsystem.R
 import com.twix.designsystem.components.toast.model.ToastType
 import com.twix.domain.model.enums.WeekNavigation
 import com.twix.domain.repository.GoalRepository
+import com.twix.goal_manage.model.GoalDialogState
 import com.twix.goal_manage.model.GoalManageUiState
+import com.twix.goal_manage.model.RemovedGoal
 import com.twix.ui.base.BaseViewModel
 import java.time.LocalDate
 
@@ -18,30 +20,112 @@ class GoalManageViewModel(
             is GoalManageIntent.SetSelectedDate -> setSelectedDate(intent.date)
             GoalManageIntent.NextWeek -> shiftWeek(WeekNavigation.NEXT)
             GoalManageIntent.PreviousWeek -> shiftWeek(WeekNavigation.PREVIOUS)
+            is GoalManageIntent.OpenMenu -> reduce { copy(openedMenuGoalId = intent.goalId) }
+            GoalManageIntent.CloseMenu -> reduce { copy(openedMenuGoalId = null) }
+            is GoalManageIntent.ShowEndDialog -> {
+                if (intent.goalId in currentState.pendingGoalIds) return
+                val goal = currentState.goalSummaries.firstOrNull { it.goalId == intent.goalId } ?: return
+                reduce {
+                    copy(
+                        endDialog = GoalDialogState(goal.goalId, goal.name, goal.icon),
+                        openedMenuGoalId = null,
+                    )
+                }
+            }
+            GoalManageIntent.DismissEndDialog -> reduce { copy(endDialog = null) }
+            is GoalManageIntent.ShowDeleteDialog -> {
+                if (intent.goalId in currentState.pendingGoalIds) return
+                val goal = currentState.goalSummaries.firstOrNull { it.goalId == intent.goalId } ?: return
+                reduce {
+                    copy(
+                        deleteDialog = GoalDialogState(goal.goalId, goal.name, goal.icon),
+                        openedMenuGoalId = null,
+                    )
+                }
+            }
+            GoalManageIntent.DismissDeleteDialog -> reduce { copy(deleteDialog = null) }
         }
     }
 
     private fun endGoal(id: Long) {
-        // TODO: 서버 통신 로직 추가
+        if (id in currentState.pendingGoalIds) return
+
+        val removed = removeGoalOptimistically(id) ?: return
+
+        markPending(id, true)
+
+        launchResult(
+            block = { goalRepository.completeGoal(id) },
+            onSuccess = {
+                markPending(id, false)
+            },
+            onError = {
+                markPending(id, false)
+                restoreGoal(removed)
+                emitSideEffect(GoalManageSideEffect.ShowToast(R.string.toast_complete_goal_failed, ToastType.ERROR))
+            },
+        )
     }
 
     private fun deleteGoal(id: Long) {
-        val previousSummaries = currentState.goalSummaries
-        val newSummaries = currentState.goalSummaries.filter { it.goalId != id }
-        reduce { copy(goalSummaries = newSummaries) }
+        if (id in currentState.pendingGoalIds) return
+
+        val removed = removeGoalOptimistically(id) ?: return
+
+        markPending(id, true)
 
         launchResult(
             block = { goalRepository.deleteGoal(id) },
-            onSuccess = {},
+            onSuccess = {
+                markPending(id, false)
+            },
             onError = {
-                reduce { copy(goalSummaries = previousSummaries) }
+                markPending(id, false)
+                restoreGoal(removed)
                 emitSideEffect(GoalManageSideEffect.ShowToast(R.string.toast_delete_goal_failed, ToastType.ERROR))
             },
         )
     }
 
+    private fun removeGoalOptimistically(id: Long): RemovedGoal? {
+        val index = currentState.goalSummaries.indexOfFirst { it.goalId == id }
+        if (index == -1) return null
+        val item = currentState.goalSummaries[index]
+
+        reduce {
+            copy(
+                goalSummaries = goalSummaries.filterNot { it.goalId == id },
+                openedMenuGoalId = if (openedMenuGoalId == id) null else openedMenuGoalId,
+            )
+        }
+        return RemovedGoal(index, item)
+    }
+
     private fun setSelectedDate(date: LocalDate) {
+        if (currentState.selectedDate == date) return
         reduce { copy(selectedDate = date) }
+        // TODO: 새로운 리스트 조회
+    }
+
+    private fun restoreGoal(removed: RemovedGoal) {
+        reduce {
+            if (goalSummaries.any { it.goalId == removed.item.goalId }) return@reduce this
+            val list = goalSummaries.toMutableList()
+            val safeIndex = removed.index.coerceIn(0, list.size)
+            list.add(safeIndex, removed.item)
+            copy(goalSummaries = list)
+        }
+    }
+
+    private fun markPending(
+        id: Long,
+        pending: Boolean,
+    ) {
+        reduce {
+            copy(
+                pendingGoalIds = if (pending) pendingGoalIds + id else pendingGoalIds - id,
+            )
+        }
     }
 
     private fun shiftWeek(action: WeekNavigation) {
