@@ -29,17 +29,17 @@ import com.twix.ui.extension.getAppVersion
 import com.twix.ui.extension.noRippleClickable
 
 @Composable
-fun SettingsAboutRoute(
-    popBackStack: () -> Unit,
-) {
+fun SettingsAboutRoute(popBackStack: () -> Unit) {
     val context = LocalContext.current
 
     SettingsAboutScreen(
         onBack = popBackStack,
         onPrivacyPolicyClick = {
             val url = BuildConfig.PRIVACY_POLICY_URL
-            val intent = CustomTabsIntent.Builder()
-                .build()
+            val intent =
+                CustomTabsIntent
+                    .Builder()
+                    .build()
             intent.launchUrl(context, url.toUri())
         },
     )
@@ -95,7 +95,7 @@ private fun SettingsAboutScreen(
                             style = AppTextStyle.B2,
                             color = GrayColor.C500,
                         )
-                    }
+                    },
                 )
             },
         )

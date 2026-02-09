@@ -8,6 +8,8 @@ interface AuthRepository {
         idToken: String,
         type: LoginType,
     )
+
     suspend fun logout(): AppResult<Unit>
+
     suspend fun withdrawAccount(): AppResult<Unit>
 }

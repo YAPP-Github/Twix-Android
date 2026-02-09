@@ -41,7 +41,7 @@ class SettingsViewModel(
                 tryEmitSideEffect(SettingsSideEffect.ShowToast(R.string.toast_logout_completed, ToastType.SUCCESS))
                 tryEmitSideEffect(SettingsSideEffect.NavigateToLogin)
             },
-            onError = { tryEmitSideEffect(SettingsSideEffect.ShowToast(R.string.toast_logout_failed, ToastType.ERROR)) }
+            onError = { tryEmitSideEffect(SettingsSideEffect.ShowToast(R.string.toast_logout_failed, ToastType.ERROR)) },
         )
     }
 
@@ -52,7 +52,7 @@ class SettingsViewModel(
                 tryEmitSideEffect(SettingsSideEffect.ShowToast(R.string.toast_account_deleted, ToastType.SUCCESS))
                 tryEmitSideEffect(SettingsSideEffect.NavigateToLogin)
             },
-            onError = { tryEmitSideEffect(SettingsSideEffect.ShowToast(R.string.toast_account_delete_failed, ToastType.ERROR)) }
+            onError = { tryEmitSideEffect(SettingsSideEffect.ShowToast(R.string.toast_account_delete_failed, ToastType.ERROR)) },
         )
     }
 }

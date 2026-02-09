@@ -8,6 +8,7 @@ sealed interface SettingsSideEffect : SideEffect {
     data class ShowToast(
         @param:StringRes val resId: Int,
         val type: ToastType,
-    ): SettingsSideEffect
+    ) : SettingsSideEffect
+
     data object NavigateToLogin : SettingsSideEffect
 }
