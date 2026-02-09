@@ -1,7 +1,7 @@
 package com.twix.data.repository
 
 import com.twix.domain.model.goal.CreateGoalParam
-import com.twix.domain.model.goal.CreatedGoal
+import com.twix.domain.model.goal.GoalDetail
 import com.twix.domain.model.goal.GoalList
 import com.twix.domain.repository.GoalRepository
 import com.twix.network.execute.safeApiCall
@@ -15,7 +15,7 @@ class DefaultGoalRepository(
 ) : GoalRepository {
     override suspend fun fetchGoalList(date: String): AppResult<GoalList> = safeApiCall { service.fetchGoals(date).toDomain() }
 
-    override suspend fun createGoal(param: CreateGoalParam): AppResult<CreatedGoal> =
+    override suspend fun createGoal(param: CreateGoalParam): AppResult<GoalDetail> =
         safeApiCall {
             service.createGoal(param.toRequest()).toDomain()
         }
