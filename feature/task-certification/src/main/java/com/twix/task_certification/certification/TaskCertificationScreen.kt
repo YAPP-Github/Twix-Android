@@ -222,7 +222,7 @@ private fun TaskCertificationScreen(
                 CommentErrorText()
             } else {
                 AppText(
-                    text = stringResource(R.string.task_certification_title),
+                    text = stringResource(R.string.task_certification_image_upload),
                     style = AppTextStyle.H2,
                     color = GrayColor.C100,
                 )
