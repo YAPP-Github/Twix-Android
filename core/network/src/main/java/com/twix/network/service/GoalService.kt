@@ -38,4 +38,9 @@ interface GoalService {
     suspend fun deleteGoal(
         @Path("goalId") goalId: Long,
     )
+
+    @PUT("api/v1/goals/{goalId}/complete")
+    suspend fun completeGoal(
+        @Path("goalId") goalId: Long,
+    )
 }

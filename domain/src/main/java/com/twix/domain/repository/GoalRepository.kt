@@ -16,4 +16,6 @@ interface GoalRepository {
     suspend fun fetchGoalDetail(goalId: Long): AppResult<GoalDetail>
 
     suspend fun deleteGoal(goalId: Long): AppResult<Unit>
+
+    suspend fun completeGoal(goalId: Long): AppResult<Unit>
 }
