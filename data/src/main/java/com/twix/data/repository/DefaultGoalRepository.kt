@@ -30,4 +30,6 @@ class DefaultGoalRepository(
         safeApiCall {
             service.fetchGoalDetail(goalId).toDomain()
         }
+
+    override suspend fun deleteGoal(goalId: Long): AppResult<Unit> = safeApiCall { service.deleteGoal(goalId) }
 }

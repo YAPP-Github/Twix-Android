@@ -5,6 +5,7 @@ import com.twix.network.model.request.goal.model.UpdateGoalRequest
 import com.twix.network.model.response.goal.model.GoalDetailResponse
 import com.twix.network.model.response.goal.model.GoalListResponse
 import de.jensklingenberg.ktorfit.http.Body
+import de.jensklingenberg.ktorfit.http.DELETE
 import de.jensklingenberg.ktorfit.http.GET
 import de.jensklingenberg.ktorfit.http.POST
 import de.jensklingenberg.ktorfit.http.PUT
@@ -32,4 +33,9 @@ interface GoalService {
     suspend fun fetchGoalDetail(
         @Path("goalId") goalId: Long,
     ): GoalDetailResponse
+
+    @DELETE("api/v1/goals/{goalId}")
+    suspend fun deleteGoal(
+        @Path("goalId") goalId: Long,
+    )
 }
