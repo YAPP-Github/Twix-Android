@@ -123,6 +123,7 @@ compose-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-tooling
 compose-material3 = { group = "androidx.compose.material3", name = "material3" }
 compose-viewmodel = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-compose", version.ref = "androidx-lifecycle-runtime-ktx" }
 compose-coil = { module = "io.coil-kt.coil3:coil-compose", version.ref = "compose-coil" }
+compose-coil-network = { module = "io.coil-kt.coil3:coil-network-okhttp", version.ref = "compose-coil" }
 compose-navigation = { module = "androidx.navigation:navigation-compose", version.ref = "compose-navigation" }
 
 # Koin
