@@ -17,4 +17,6 @@ sealed interface HomeIntent : Intent {
     data class UpdateVisibleDate(
         val date: LocalDate,
     ) : HomeIntent
+
+    data object RefreshGoals : HomeIntent
 }

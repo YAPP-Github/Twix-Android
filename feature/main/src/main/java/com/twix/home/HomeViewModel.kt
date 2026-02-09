@@ -51,6 +51,7 @@ class HomeViewModel(
             HomeIntent.PreviousWeek -> shiftWeek(WeekNavigation.PREVIOUS)
             HomeIntent.MoveToToday -> shiftWeek(WeekNavigation.TODAY)
             is HomeIntent.UpdateVisibleDate -> updateVisibleDate(intent.date)
+            HomeIntent.RefreshGoals -> fetchGoalList()
         }
     }
 
