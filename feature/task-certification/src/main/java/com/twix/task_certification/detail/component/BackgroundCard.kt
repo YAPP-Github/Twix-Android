@@ -31,7 +31,6 @@ import com.twix.designsystem.R as DesR
 @Composable
 fun BackgroundCard(
     uiModel: PhotologDetailUiModel,
-    currentShow: BetweenUs = BetweenUs.PARTNER,
     buttonTitle: String,
     onClick: () -> Unit,
     rotation: Float,
@@ -93,7 +92,6 @@ fun PreviewBackgroundCard() {
                 PhotologDetailUiModel(
                     uploadedAt = "2023.10.31 23:59",
                 ),
-            currentShow = BetweenUs.PARTNER,
             onClick = {},
             rotation = -8f,
         )
