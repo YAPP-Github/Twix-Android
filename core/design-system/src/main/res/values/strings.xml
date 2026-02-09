@@ -61,6 +61,7 @@
     <string name="toast_goal_fetch_failed">목표 조회에 실패했습니다.</string>
     <string name="toast_create_goal_failed">목표 생성에 실패했습니다.</string>
     <string name="toast_update_goal_failed">목표 수정에 실패했습니다.</string>
+    <string name="toast_delete_goal_failed">목표 삭제에 실패했습니다.</string>
 
     <!-- 다이얼로그 -->
     <string name="dialog_end_goal_title">%s\n목표를 이루셨나요?</string>
