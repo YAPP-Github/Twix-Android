@@ -1,7 +1,5 @@
 package com.twix.task_certification.certification
 
-import android.Manifest
-import android.content.pm.PackageManager
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
@@ -32,7 +30,6 @@ import androidx.compose.ui.graphics.BlendMode
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.CompositingStrategy
 import androidx.compose.ui.graphics.graphicsLayer
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
@@ -40,7 +37,6 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
-import androidx.core.content.ContextCompat
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.twix.designsystem.components.comment.CIRCLE_PADDING_START
@@ -84,44 +80,19 @@ fun TaskCertificationRoute(
 
     val lifecycleOwner = LocalLifecycleOwner.current
     val coroutineScope = rememberCoroutineScope()
-    val context = LocalContext.current
 
     LaunchedEffect(goalId) {
         viewModel.dispatch(TaskCertificationIntent.InitGoal(goalId))
     }
-
-    var hasPermission by remember {
-        mutableStateOf(
-            ContextCompat.checkSelfPermission(
-                context,
-                Manifest.permission.CAMERA,
-            ) == PackageManager.PERMISSION_GRANTED,
-        )
-    }
-
-    val permissionLauncher =
-        rememberLauncherForActivityResult(
-            ActivityResultContracts.RequestPermission(),
-        ) { granted ->
-            hasPermission = granted
-        }
 
     val pickMedia =
         rememberLauncherForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
             viewModel.dispatch(TaskCertificationIntent.PickPicture(uri))
         }
 
-    LaunchedEffect(Unit) {
-        if (!hasPermission) {
-            permissionLauncher.launch(Manifest.permission.CAMERA)
-        }
-    }
-
-    DisposableEffect(lifecycleOwner, uiState.lens, hasPermission) {
-        if (hasPermission) {
-            coroutineScope.launch {
-                camera.bind(lifecycleOwner, uiState.lens)
-            }
+    DisposableEffect(lifecycleOwner, uiState.lens) {
+        coroutineScope.launch {
+            camera.bind(lifecycleOwner, uiState.lens)
         }
 
         onDispose {
@@ -129,10 +100,8 @@ fun TaskCertificationRoute(
         }
     }
 
-    LaunchedEffect(uiState.torch, hasPermission) {
-        if (hasPermission) {
-            camera.toggleTorch(uiState.torch)
-        }
+    LaunchedEffect(uiState.torch) {
+        camera.toggleTorch(uiState.torch)
     }
 
     val imageCaptureFailMessage = stringResource(R.string.task_certification_image_capture_fail)
@@ -154,8 +123,6 @@ fun TaskCertificationRoute(
         cameraPreview = cameraPreview,
         onClickClose = navigateToBack,
         onCaptureClick = {
-            if (!hasPermission) return@TaskCertificationScreen
-
             coroutineScope.launch {
                 camera
                     .takePicture()

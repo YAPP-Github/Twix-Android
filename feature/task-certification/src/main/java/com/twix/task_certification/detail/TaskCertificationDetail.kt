@@ -1,5 +1,14 @@
 package com.twix.task_certification.detail
 
+import android.Manifest
+import android.app.Activity
+import android.content.Context
+import android.content.Intent
+import android.content.pm.PackageManager
+import android.net.Uri
+import android.provider.Settings
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -22,9 +31,13 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.twix.designsystem.components.toast.ToastManager
+import com.twix.designsystem.components.toast.model.ToastAction
 import com.twix.designsystem.components.toast.model.ToastData
+import com.twix.designsystem.components.toast.model.ToastType
 import com.twix.designsystem.theme.CommonColor
 import com.twix.designsystem.theme.TwixTheme
 import com.twix.domain.model.enums.BetweenUs
@@ -42,6 +55,7 @@ import com.twix.task_certification.detail.reaction.ReactionEffect
 import com.twix.task_certification.detail.reaction.ReactionUiModel
 import com.twix.task_certification.detail.swipe.SwipeableCard
 import com.twix.ui.base.ObserveAsEvents
+import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 import org.koin.compose.koinInject
 
@@ -73,12 +87,64 @@ fun TaskCertificationDetailRoute(
         }
     }
 
+    val permissionLauncher =
+        rememberLauncherForActivityResult(
+            ActivityResultContracts.RequestPermission(),
+        ) { granted ->
+
+            if (granted) {
+                navigateToUpload(goalId)
+                return@rememberLauncherForActivityResult
+            }
+
+            val activity = currentContext as? Activity
+
+            val shouldShowRationale =
+                activity?.let {
+                    ActivityCompat.shouldShowRequestPermissionRationale(
+                        it,
+                        Manifest.permission.CAMERA,
+                    )
+                } ?: false
+
+            if (!shouldShowRationale) {
+                toastManager.tryShow(
+                    ToastData(
+                        currentContext.getString(
+                            R.string.task_certification_camera_permission_denied_permanently,
+                        ),
+                        ToastType.ERROR,
+                        action =
+                            ToastAction(
+                                label = currentContext.getString(R.string.move_to_setting),
+                                onClick = { openAppSettings(currentContext) },
+                            ),
+                    ),
+                )
+            } else {
+                toastManager.tryShow(
+                    ToastData(
+                        currentContext.getString(
+                            R.string.task_certification_camera_permission_denied_permanently,
+                        ),
+                        ToastType.ERROR,
+                    ),
+                )
+            }
+        }
+
     TaskCertificationDetailScreen(
         uiState = uiState,
         onBack = navigateToBack,
         onClickModify = { },
         onClickReaction = { viewModel.dispatch(TaskCertificationDetailIntent.Reaction(it)) },
-        onClickUpload = { navigateToUpload(goalId) },
+        onClickUpload = {
+            if (hasCameraPermission(currentContext)) {
+                navigateToUpload(goalId)
+            } else {
+                permissionLauncher.launch(Manifest.permission.CAMERA)
+            }
+        },
         onClickSting = { viewModel.dispatch(TaskCertificationDetailIntent.Sting) },
         onSwipe = { viewModel.dispatch(TaskCertificationDetailIntent.SwipeCard) },
     )
@@ -193,6 +259,21 @@ private fun ReactionSection(
             )
         }
     }
+}
+
+private fun hasCameraPermission(context: Context): Boolean =
+    ContextCompat.checkSelfPermission(
+        context,
+        Manifest.permission.CAMERA,
+    ) == PackageManager.PERMISSION_GRANTED
+
+private fun openAppSettings(context: Context) {
+    val intent =
+        Intent(
+            Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
+            Uri.fromParts("package", context.packageName, null),
+        )
+    context.startActivity(intent)
 }
 
 @Preview(showBackground = true)
