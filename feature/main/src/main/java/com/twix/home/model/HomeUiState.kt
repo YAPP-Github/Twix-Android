@@ -1,12 +1,7 @@
 package com.twix.home.model
 
 import androidx.compose.runtime.Immutable
-import com.twix.domain.model.enums.GoalIconType
-import com.twix.domain.model.enums.GoalReactionType
-import com.twix.domain.model.enums.RepeatCycle
-import com.twix.domain.model.goal.Goal
 import com.twix.domain.model.goal.GoalList
-import com.twix.domain.model.goal.GoalVerification
 import com.twix.ui.base.State
 import java.time.LocalDate
 import java.time.YearMonth
