@@ -8,4 +8,5 @@ data class UserResponse(
     @SerialName("id") val id: Long,
     @SerialName("name") val name: String,
     @SerialName("email") val email: String,
+    @SerialName("inviteCode") val inviteCode: String,
 )

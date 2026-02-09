@@ -8,4 +8,5 @@ fun UserResponse.toDomain(): User =
         id = id,
         name = name,
         email = email,
+        inviteCode = inviteCode,
     )
