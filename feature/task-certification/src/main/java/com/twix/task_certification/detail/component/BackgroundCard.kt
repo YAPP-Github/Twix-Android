@@ -22,7 +22,6 @@ import com.twix.designsystem.theme.CommonColor
 import com.twix.designsystem.theme.GrayColor
 import com.twix.designsystem.theme.TwixTheme
 import com.twix.domain.model.enums.AppTextStyle
-import com.twix.domain.model.enums.BetweenUs
 import com.twix.task_certification.R
 import com.twix.task_certification.detail.model.PhotologDetailUiModel
 import com.twix.ui.extension.noRippleClickable
