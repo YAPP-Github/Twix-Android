@@ -23,6 +23,7 @@ class TaskCertificationDetailViewModel(
             is TaskCertificationDetailIntent.Reaction -> reduceReaction(intent.type)
             TaskCertificationDetailIntent.Sting -> TODO("찌르기 API 연동")
             TaskCertificationDetailIntent.Upload -> navigateToUpload()
+            TaskCertificationDetailIntent.SwipeCard -> reduceShownCard()
         }
     }
 
@@ -50,5 +51,9 @@ class TaskCertificationDetailViewModel(
             val goalId = currentState.photoLogs.goalId
             emitSideEffect(TaskCertificationDetailSideEffect.NavigateToUpload(goalId))
         }
+    }
+
+    private fun reduceShownCard() {
+        reduce { toggleBetweenUs() }
     }
 }
