@@ -3,11 +3,11 @@ package com.twix.network.model.response.goal.mapper
 import com.twix.domain.model.enums.GoalIconType
 import com.twix.domain.model.enums.GoalReactionType
 import com.twix.domain.model.enums.RepeatCycle
-import com.twix.domain.model.goal.GoalDetail
 import com.twix.domain.model.goal.Goal
+import com.twix.domain.model.goal.GoalDetail
 import com.twix.domain.model.goal.GoalList
 import com.twix.domain.model.goal.GoalVerification
-import com.twix.network.model.response.goal.model.CreateGoalResponse
+import com.twix.network.model.response.goal.model.GoalDetailResponse
 import com.twix.network.model.response.goal.model.GoalListResponse
 import com.twix.network.model.response.goal.model.GoalResponse
 import com.twix.network.model.response.goal.model.VerificationResponse
@@ -41,7 +41,7 @@ fun VerificationResponse.toDomainOrNull(): GoalVerification? =
         uploadedAt = uploadedAt,
     )
 
-fun CreateGoalResponse.toDomain(): GoalDetail =
+fun GoalDetailResponse.toDomain(): GoalDetail =
     GoalDetail(
         goalId = goalId,
         name = name,
