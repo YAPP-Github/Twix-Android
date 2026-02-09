@@ -9,6 +9,7 @@ import com.twix.navigation.base.NavGraphContributor
 import com.twix.navigation.owner.rememberNavGraphOwner
 import com.twix.settings.SettingsRoute
 import com.twix.settings.SettingsViewModel
+import com.twix.settings.account.SettingsAccountRoute
 import org.koin.androidx.compose.koinViewModel
 
 object SettingsNavGraph : NavGraphContributor {
@@ -34,6 +35,34 @@ object SettingsNavGraph : NavGraphContributor {
                 SettingsRoute(
                     viewModel = viewModel,
                     popBackStack = { navController.popBackStack() },
+                    navigateToSettingsAccount = {
+                        navController.navigate(NavRoutes.SettingsAccountRoute.route) {
+                            launchSingleTop = true
+                        }
+                    },
+                )
+            }
+
+            composable(NavRoutes.SettingsAccountRoute.route) { entry ->
+                val graphEntry =
+                    rememberNavGraphOwner(
+                        navController = navController,
+                        graphRoute = NavRoutes.SettingsGraph.route,
+                        currentEntry = entry,
+                    )
+                val viewModel: SettingsViewModel = koinViewModel(viewModelStoreOwner = graphEntry)
+
+                SettingsAccountRoute(
+                    viewModel = viewModel,
+                    popBackStack = { navController.popBackStack() },
+                    navigateToLogin = {
+                        navController.navigate(NavRoutes.LoginRoute.route) {
+                            launchSingleTop = true
+                            popUpTo(NavRoutes.SettingsRoute.route) {
+                                inclusive = true
+                            }
+                        }
+                    },
                 )
             }
         }

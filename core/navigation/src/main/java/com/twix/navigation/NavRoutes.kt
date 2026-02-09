@@ -61,4 +61,6 @@ sealed class NavRoutes(
     object SettingsGraph : NavRoutes("settings_graph")
 
     object SettingsRoute : NavRoutes("settings")
+
+    object SettingsAccountRoute : NavRoutes("settings/account")
 }
