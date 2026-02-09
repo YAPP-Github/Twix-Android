@@ -40,6 +40,7 @@ import com.twix.task_certification.detail.preview.TaskCertificationDetailPreview
 import com.twix.task_certification.detail.reaction.ReactionBar
 import com.twix.task_certification.detail.reaction.ReactionEffect
 import com.twix.task_certification.detail.reaction.ReactionUiModel
+import com.twix.task_certification.detail.swipe.SwipeableCard
 import com.twix.ui.base.ObserveAsEvents
 import org.koin.androidx.compose.koinViewModel
 import org.koin.compose.koinInject
@@ -83,6 +84,7 @@ fun TaskCertificationDetailRoute(
         onClickReaction = { viewModel.dispatch(TaskCertificationDetailIntent.Reaction(it)) },
         onClickUpload = { viewModel.dispatch(TaskCertificationDetailIntent.Upload) },
         onClickSting = { viewModel.dispatch(TaskCertificationDetailIntent.Sting) },
+        onSwipe = { viewModel.dispatch(TaskCertificationDetailIntent.SwipeCard) },
     )
 }
 
@@ -94,6 +96,7 @@ fun TaskCertificationDetailScreen(
     onClickReaction: (GoalReactionType) -> Unit,
     onClickUpload: () -> Unit,
     onClickSting: () -> Unit,
+    onSwipe: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Column(
@@ -124,8 +127,8 @@ fun TaskCertificationDetailScreen(
                     },
                 rotation =
                     when (uiState.currentShow) {
-                        BetweenUs.ME -> 0f
-                        BetweenUs.PARTNER -> -8f
+                        BetweenUs.ME -> -8f
+                        BetweenUs.PARTNER -> 0f
                     },
                 onClick =
                     when (uiState.currentShow) {
@@ -134,19 +137,24 @@ fun TaskCertificationDetailScreen(
                     },
             )
 
-            ForegroundCard(
-                uiModel =
-                    when (uiState.currentShow) {
-                        BetweenUs.ME -> uiState.photoLogs.myPhotologs
-                        BetweenUs.PARTNER -> uiState.photoLogs.partnerPhotologs
-                    },
-                currentShow = uiState.currentShow,
-                rotation =
-                    when (uiState.currentShow) {
-                        BetweenUs.ME -> -8f
-                        BetweenUs.PARTNER -> 0f
-                    },
-            )
+            SwipeableCard(
+                onSwipe = onSwipe,
+                modifier = Modifier.fillMaxWidth(),
+            ) {
+                ForegroundCard(
+                    uiModel =
+                        when (uiState.currentShow) {
+                            BetweenUs.ME -> uiState.photoLogs.myPhotologs
+                            BetweenUs.PARTNER -> uiState.photoLogs.partnerPhotologs
+                        },
+                    currentShow = uiState.currentShow,
+                    rotation =
+                        when (uiState.currentShow) {
+                            BetweenUs.ME -> 0f
+                            BetweenUs.PARTNER -> -8f
+                        },
+                )
+            }
         }
 
         ReactionSection(
@@ -205,6 +213,7 @@ private fun TaskCertificationDetailScreenPreview(
             onClickReaction = {},
             onClickUpload = {},
             onClickSting = {},
+            onSwipe = {},
         )
     }
 }

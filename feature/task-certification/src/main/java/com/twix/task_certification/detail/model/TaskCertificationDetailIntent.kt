@@ -15,4 +15,6 @@ sealed interface TaskCertificationDetailIntent : Intent {
     data object Sting : TaskCertificationDetailIntent
 
     data object Upload : TaskCertificationDetailIntent
+
+    data object SwipeCard : TaskCertificationDetailIntent
 }
