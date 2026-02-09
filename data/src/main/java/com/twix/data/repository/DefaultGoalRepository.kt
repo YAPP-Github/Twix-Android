@@ -3,6 +3,7 @@ package com.twix.data.repository
 import com.twix.domain.model.goal.CreateGoalParam
 import com.twix.domain.model.goal.GoalDetail
 import com.twix.domain.model.goal.GoalList
+import com.twix.domain.model.goal.GoalSummary
 import com.twix.domain.model.goal.UpdateGoalParam
 import com.twix.domain.repository.GoalRepository
 import com.twix.network.execute.safeApiCall
@@ -34,4 +35,9 @@ class DefaultGoalRepository(
     override suspend fun deleteGoal(goalId: Long): AppResult<Unit> = safeApiCall { service.deleteGoal(goalId) }
 
     override suspend fun completeGoal(goalId: Long): AppResult<Unit> = safeApiCall { service.completeGoal(goalId) }
+
+    override suspend fun fetchGoalSummaryList(date: String): AppResult<List<GoalSummary>> =
+        safeApiCall {
+            service.fetchGoalSummaryList(date).toDomain()
+        }
 }

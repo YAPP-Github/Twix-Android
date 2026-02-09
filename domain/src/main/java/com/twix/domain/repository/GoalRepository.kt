@@ -3,6 +3,7 @@ package com.twix.domain.repository
 import com.twix.domain.model.goal.CreateGoalParam
 import com.twix.domain.model.goal.GoalDetail
 import com.twix.domain.model.goal.GoalList
+import com.twix.domain.model.goal.GoalSummary
 import com.twix.domain.model.goal.UpdateGoalParam
 import com.twix.result.AppResult
 
@@ -18,4 +19,6 @@ interface GoalRepository {
     suspend fun deleteGoal(goalId: Long): AppResult<Unit>
 
     suspend fun completeGoal(goalId: Long): AppResult<Unit>
+
+    suspend fun fetchGoalSummaryList(date: String): AppResult<List<GoalSummary>>
 }

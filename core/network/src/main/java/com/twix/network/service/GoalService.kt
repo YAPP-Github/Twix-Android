@@ -4,6 +4,7 @@ import com.twix.network.model.request.goal.model.CreateGoalRequest
 import com.twix.network.model.request.goal.model.UpdateGoalRequest
 import com.twix.network.model.response.goal.model.GoalDetailResponse
 import com.twix.network.model.response.goal.model.GoalListResponse
+import com.twix.network.model.response.goal.model.GoalSummaryListResponse
 import de.jensklingenberg.ktorfit.http.Body
 import de.jensklingenberg.ktorfit.http.DELETE
 import de.jensklingenberg.ktorfit.http.GET
@@ -43,4 +44,9 @@ interface GoalService {
     suspend fun completeGoal(
         @Path("goalId") goalId: Long,
     )
+
+    @GET("api/v1/goals/detail")
+    suspend fun fetchGoalSummaryList(
+        @Query("date") date: String,
+    ): GoalSummaryListResponse
 }
