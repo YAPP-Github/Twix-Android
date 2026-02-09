@@ -12,7 +12,7 @@ import io.ktor.http.isSuccess
 class PresignedUploader(
     private val client: HttpClient,
 ) {
-    suspend fun uploadPut(
+    suspend fun upload(
         uploadUrl: String,
         bytes: ByteArray,
         contentType: String = "image/jpeg",

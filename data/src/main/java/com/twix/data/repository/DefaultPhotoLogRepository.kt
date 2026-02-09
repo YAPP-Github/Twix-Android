@@ -29,7 +29,7 @@ class DefaultPhotoLogRepository(
 
         // S3로 직접 업로드
         val uploadResult =
-            uploader.uploadPut(
+            uploader.upload(
                 uploadUrl = info.uploadUrl,
                 bytes = bytes,
                 contentType = contentType,
