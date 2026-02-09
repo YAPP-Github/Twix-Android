@@ -9,6 +9,7 @@ import com.twix.domain.model.enums.RepeatCycle
 import com.twix.domain.model.goal.CreateGoalParam
 import com.twix.domain.model.goal.Goal
 import com.twix.domain.model.goal.GoalVerification
+import com.twix.domain.model.goal.UpdateGoalParam
 import com.twix.domain.repository.GoalRepository
 import com.twix.goal_editor.model.GoalEditorUiState
 import com.twix.ui.base.BaseViewModel
@@ -24,7 +25,7 @@ class GoalEditorViewModel(
     ) {
     override suspend fun handleIntent(intent: GoalEditorIntent) {
         when (intent) {
-            GoalEditorIntent.Save -> save()
+            is GoalEditorIntent.Save -> save(intent.id)
             is GoalEditorIntent.SetIcon -> setIcon(intent.icon)
             is GoalEditorIntent.SetEndDate -> setEndDate(intent.endDate)
             is GoalEditorIntent.SetRepeatCount -> setRepeatCount(intent.repeatCount)
@@ -68,7 +69,7 @@ class GoalEditorViewModel(
         reduce { copy(endDateEnabled = enabled) }
     }
 
-    private fun save() {
+    private fun save(id: Long) {
         if (!currentState.isEnabled) return
 
         if (currentState.endDateEnabled && currentState.endDate.isBefore(currentState.startDate)) {
@@ -78,14 +79,25 @@ class GoalEditorViewModel(
             return
         }
 
-        launchResult(
-            block = { goalRepository.createGoal(currentState.toCreateParam()) },
-            onSuccess = {
-                goalRefreshBus.notifyChanged()
-                tryEmitSideEffect(GoalEditorSideEffect.NavigateToHome)
-            },
-            onError = { emitSideEffect(GoalEditorSideEffect.ShowToast(R.string.toast_create_goal_failed, ToastType.ERROR)) },
-        )
+        if (id == -1L) {
+            launchResult(
+                block = { goalRepository.createGoal(currentState.toCreateParam()) },
+                onSuccess = {
+                    goalRefreshBus.notifyChanged()
+                    tryEmitSideEffect(GoalEditorSideEffect.NavigateToHome)
+                },
+                onError = { emitSideEffect(GoalEditorSideEffect.ShowToast(R.string.toast_create_goal_failed, ToastType.ERROR)) },
+            )
+        } else {
+            launchResult(
+                block = { goalRepository.updateGoal(currentState.toUpdateParam(id)) },
+                onSuccess = {
+                    goalRefreshBus.notifyChanged()
+                    tryEmitSideEffect(GoalEditorSideEffect.NavigateToHome)
+                },
+                onError = { emitSideEffect(GoalEditorSideEffect.ShowToast(R.string.toast_update_goal_failed, ToastType.ERROR)) },
+            )
+        }
     }
 
     private fun initGoal(id: Long) {
@@ -123,7 +135,7 @@ class GoalEditorViewModel(
                 repeatCount = 4,
                 startDate = LocalDate.now(),
                 endDate = LocalDate.now().plusWeeks(1),
-                endDateEnabled = true,
+                endDateEnabled = false,
             )
         }
     }
@@ -135,6 +147,16 @@ class GoalEditorViewModel(
             repeatCycle = selectedRepeatCycle,
             repeatCount = repeatCount,
             startDate = startDate,
+            endDate = if (endDateEnabled) endDate else null,
+        )
+
+    private fun GoalEditorUiState.toUpdateParam(id: Long): UpdateGoalParam =
+        UpdateGoalParam(
+            goalId = id,
+            name = goalTitle.trim(),
+            icon = selectedIcon,
+            repeatCycle = selectedRepeatCycle,
+            repeatCount = repeatCount,
             endDate = if (endDateEnabled) endDate else null,
         )
 }
