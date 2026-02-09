@@ -8,10 +8,12 @@ import com.twix.goal_manage.model.GoalDialogState
 import com.twix.goal_manage.model.GoalManageUiState
 import com.twix.goal_manage.model.RemovedGoal
 import com.twix.ui.base.BaseViewModel
+import com.twix.util.bus.GoalRefreshBus
 import java.time.LocalDate
 
 class GoalManageViewModel(
     private val goalRepository: GoalRepository,
+    private val goalRefreshBus: GoalRefreshBus,
 ) : BaseViewModel<GoalManageUiState, GoalManageIntent, GoalManageSideEffect>(GoalManageUiState()) {
     override suspend fun handleIntent(intent: GoalManageIntent) {
         when (intent) {
@@ -57,6 +59,7 @@ class GoalManageViewModel(
         launchResult(
             block = { goalRepository.completeGoal(id) },
             onSuccess = {
+                goalRefreshBus.notifyChanged()
                 markPending(id, false)
             },
             onError = {
@@ -77,6 +80,7 @@ class GoalManageViewModel(
         launchResult(
             block = { goalRepository.deleteGoal(id) },
             onSuccess = {
+                goalRefreshBus.notifyChanged()
                 markPending(id, false)
             },
             onError = {
