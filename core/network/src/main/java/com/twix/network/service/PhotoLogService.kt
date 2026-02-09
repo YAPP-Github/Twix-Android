@@ -12,7 +12,7 @@ interface PhotoLogService {
         @Query("goalId") goalId: Long,
     ): PhotoLogUploadUrlResponse
 
-    @GET("/api/v1/photologs/goals/{goalId}")
+    @GET("api/v1/photologs/goals/{goalId}")
     suspend fun fetchPhotoLogs(
         @Path("goalId") goalId: Long,
     ): PhotoLogResponse
