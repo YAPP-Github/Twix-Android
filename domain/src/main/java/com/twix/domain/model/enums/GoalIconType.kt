@@ -11,6 +11,18 @@ enum class GoalIconType {
     LAPTOP,
     ;
 
+    fun toApi(): String =
+        when (this) {
+            DEFAULT -> "ICON_DEFAULT"
+            CLEAN -> "ICON_CLEAN"
+            EXERCISE -> "ICON_EXERCISE"
+            BOOK -> "ICON_BOOK"
+            PENCIL -> "ICON_PENCIL"
+            HEALTH -> "ICON_HEALTH"
+            HEART -> "ICON_HEART"
+            LAPTOP -> "ICON_LAPTOP"
+        }
+
     companion object {
         fun fromApi(icon: String): GoalIconType =
             when (icon) {

@@ -8,18 +8,31 @@ import com.twix.domain.repository.GoalRepository
 import com.twix.home.model.CalendarState
 import com.twix.home.model.HomeUiState
 import com.twix.ui.base.BaseViewModel
+import com.twix.util.bus.GoalRefreshBus
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.launch
 import java.time.LocalDate
 
 class HomeViewModel(
     private val goalRepository: GoalRepository,
+    private val goalRefreshBus: GoalRefreshBus,
 ) : BaseViewModel<HomeUiState, HomeIntent, HomeSideEffect>(
         HomeUiState(),
     ) {
+    init {
+        fetchGoalList()
+
+        viewModelScope.launch {
+            goalRefreshBus.events.collect {
+                fetchGoalList()
+            }
+        }
+    }
+
     val calendarState: StateFlow<CalendarState> =
         uiState
             .map { state ->
@@ -39,10 +52,6 @@ class HomeViewModel(
                         monthYearText = currentState.monthYear,
                     ),
             )
-
-    init {
-        fetchGoalList()
-    }
 
     override suspend fun handleIntent(intent: HomeIntent) {
         when (intent) {

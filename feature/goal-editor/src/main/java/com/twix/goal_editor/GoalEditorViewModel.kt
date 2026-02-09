@@ -4,14 +4,22 @@ import androidx.lifecycle.viewModelScope
 import com.twix.designsystem.R
 import com.twix.designsystem.components.toast.model.ToastType
 import com.twix.domain.model.enums.GoalIconType
+import com.twix.domain.model.enums.GoalReactionType
 import com.twix.domain.model.enums.RepeatCycle
+import com.twix.domain.model.goal.CreateGoalParam
+import com.twix.domain.model.goal.Goal
+import com.twix.domain.model.goal.GoalVerification
+import com.twix.domain.repository.GoalRepository
 import com.twix.goal_editor.model.GoalEditorUiState
 import com.twix.ui.base.BaseViewModel
+import com.twix.util.bus.GoalRefreshBus
 import kotlinx.coroutines.launch
 import java.time.LocalDate
 
-class GoalEditorViewModel :
-    BaseViewModel<GoalEditorUiState, GoalEditorIntent, GoalEditorSideEffect>(
+class GoalEditorViewModel(
+    private val goalRepository: GoalRepository,
+    private val goalRefreshBus: GoalRefreshBus,
+) : BaseViewModel<GoalEditorUiState, GoalEditorIntent, GoalEditorSideEffect>(
         GoalEditorUiState(),
     ) {
     override suspend fun handleIntent(intent: GoalEditorIntent) {
@@ -24,6 +32,7 @@ class GoalEditorViewModel :
             is GoalEditorIntent.SetStartDate -> setStartDate(intent.startDate)
             is GoalEditorIntent.SetTitle -> setTitle(intent.title)
             is GoalEditorIntent.SetEndDateEnabled -> setEndDateEnabled(intent.enabled)
+            is GoalEditorIntent.InitGoal -> initGoal(intent.id)
         }
     }
 
@@ -38,7 +47,7 @@ class GoalEditorViewModel :
     }
 
     private fun setRepeatType(repeatCycle: RepeatCycle) {
-        reduce { copy(selectedRepeatCycle = repeatCycle) }
+        reduce { copy(selectedRepeatCycle = repeatCycle, repeatCount = 1) }
     }
 
     private fun setRepeatCount(repeatCount: Int) {
@@ -68,5 +77,64 @@ class GoalEditorViewModel :
             }
             return
         }
+
+        launchResult(
+            block = { goalRepository.createGoal(currentState.toCreateParam()) },
+            onSuccess = {
+                goalRefreshBus.notifyChanged()
+                tryEmitSideEffect(GoalEditorSideEffect.NavigateToHome)
+            },
+            onError = { emitSideEffect(GoalEditorSideEffect.ShowToast(R.string.toast_create_goal_failed, ToastType.ERROR)) },
+        )
     }
+
+    private fun initGoal(id: Long) {
+        val goal =
+            Goal(
+                goalId = 4,
+                name = "밥무라",
+                icon = GoalIconType.DEFAULT,
+                repeatCycle = RepeatCycle.WEEKLY,
+                myCompleted = true,
+                partnerCompleted = true,
+                myVerification =
+                    GoalVerification(
+                        photologId = 1,
+                        imageUrl = "https://picsum.photos/400/300",
+                        comment = null,
+                        reaction = GoalReactionType.LOVE,
+                        uploadedAt = "2023-05-05",
+                    ),
+                partnerVerification =
+                    GoalVerification(
+                        photologId = 1,
+                        imageUrl = "https://picsum.photos/400/300",
+                        comment = null,
+                        reaction = GoalReactionType.LOVE,
+                        uploadedAt = "2023-05-05",
+                    ),
+            )
+
+        reduce {
+            copy(
+                goalTitle = goal.name,
+                selectedIcon = goal.icon,
+                selectedRepeatCycle = goal.repeatCycle,
+                repeatCount = 4,
+                startDate = LocalDate.now(),
+                endDate = LocalDate.now().plusWeeks(1),
+                endDateEnabled = true,
+            )
+        }
+    }
+
+    private fun GoalEditorUiState.toCreateParam(): CreateGoalParam =
+        CreateGoalParam(
+            name = goalTitle.trim(),
+            icon = selectedIcon,
+            repeatCycle = selectedRepeatCycle,
+            repeatCount = repeatCount,
+            startDate = startDate,
+            endDate = if (endDateEnabled) endDate else null,
+        )
 }
