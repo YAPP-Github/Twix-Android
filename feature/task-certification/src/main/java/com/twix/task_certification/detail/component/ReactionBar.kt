@@ -1,4 +1,4 @@
-package com.twix.task_certification.detail.reaction
+package com.twix.task_certification.detail.component
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -22,6 +22,7 @@ import androidx.compose.ui.unit.dp
 import com.twix.designsystem.theme.GrayColor
 import com.twix.designsystem.theme.TwixTheme
 import com.twix.domain.model.enums.GoalReactionType
+import com.twix.task_certification.detail.model.ReactionUiModel
 import com.twix.ui.extension.noRippleClickable
 
 @Composable

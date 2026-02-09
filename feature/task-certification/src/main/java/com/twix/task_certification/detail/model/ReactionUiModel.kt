@@ -1,4 +1,4 @@
-package com.twix.task_certification.detail.reaction
+package com.twix.task_certification.detail.model
 
 import com.twix.designsystem.R
 import com.twix.domain.model.enums.GoalReactionType
@@ -12,13 +12,4 @@ enum class ReactionUiModel(
     LOVE(GoalReactionType.LOVE, R.drawable.ic_keepi_love),
     DOUBT(GoalReactionType.DOUBT, R.drawable.ic_keepi_doubt),
     FUCK(GoalReactionType.FUCK, R.drawable.ic_keepi_fuck),
-    ;
-
-    companion object {
-        fun find(type: GoalReactionType) =
-            entries.find { it.type == type }
-                ?: throw IllegalArgumentException(UNKNOWN_REACTION_TYPE_MESSAGE.format(type))
-
-        private const val UNKNOWN_REACTION_TYPE_MESSAGE = "Unknown GoalReactionType: %s"
-    }
 }
