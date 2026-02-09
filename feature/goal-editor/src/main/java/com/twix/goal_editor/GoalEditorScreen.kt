@@ -85,6 +85,7 @@ fun GoalEditorRoute(
         viewModel.sideEffect.collect { effect ->
             when (effect) {
                 is GoalEditorSideEffect.ShowToast -> toastManager.tryShow(ToastData(currentContext.getString(effect.resId), effect.type))
+                is GoalEditorSideEffect.NavigateToHome -> navigateToBack()
             }
         }
     }
@@ -332,7 +333,7 @@ private fun RepeatCountBottomSheetContent(
                         .padding(horizontal = 12.dp, vertical = 5.5.dp)
                         .noRippleClickable(onClick = {
                             internalSelectedRepeatType = RepeatCycle.WEEKLY
-                            internalRepeatCount = 0
+                            internalRepeatCount = 1
                         }),
             )
 
@@ -348,7 +349,7 @@ private fun RepeatCountBottomSheetContent(
                         .padding(horizontal = 12.dp, vertical = 5.5.dp)
                         .noRippleClickable(onClick = {
                             internalSelectedRepeatType = RepeatCycle.MONTHLY
-                            internalRepeatCount = 0
+                            internalRepeatCount = 1
                         }),
             )
         }
