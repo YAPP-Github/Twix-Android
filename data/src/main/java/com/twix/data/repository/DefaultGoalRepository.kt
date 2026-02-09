@@ -3,6 +3,7 @@ package com.twix.data.repository
 import com.twix.domain.model.goal.CreateGoalParam
 import com.twix.domain.model.goal.GoalDetail
 import com.twix.domain.model.goal.GoalList
+import com.twix.domain.model.goal.UpdateGoalParam
 import com.twix.domain.repository.GoalRepository
 import com.twix.network.execute.safeApiCall
 import com.twix.network.model.request.goal.mapper.toRequest
@@ -18,5 +19,10 @@ class DefaultGoalRepository(
     override suspend fun createGoal(param: CreateGoalParam): AppResult<GoalDetail> =
         safeApiCall {
             service.createGoal(param.toRequest()).toDomain()
+        }
+
+    override suspend fun updateGoal(param: UpdateGoalParam): AppResult<GoalDetail> =
+        safeApiCall {
+            service.updateGoal(body = param.toRequest(), goalId = param.goalId).toDomain()
         }
 }
