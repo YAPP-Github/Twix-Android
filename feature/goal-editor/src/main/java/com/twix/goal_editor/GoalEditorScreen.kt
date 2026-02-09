@@ -105,7 +105,7 @@ fun GoalEditorRoute(
         onCommitStartDate = { viewModel.dispatch(GoalEditorIntent.SetStartDate(it)) },
         onCommitRepeatCount = { viewModel.dispatch(GoalEditorIntent.SetRepeatCount(it)) },
         onToggleEndDateEnabled = { viewModel.dispatch(GoalEditorIntent.SetEndDateEnabled(it)) },
-        onComplete = { viewModel.dispatch(GoalEditorIntent.Save) },
+        onComplete = { viewModel.dispatch(GoalEditorIntent.Save(goalId)) },
     )
 }
 
