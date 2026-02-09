@@ -4,7 +4,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class CreateGoalResponse(
+data class GoalDetailResponse(
     @SerialName("goalId") val goalId: Long,
     @SerialName("name") val name: String,
     @SerialName("icon") val icon: String,
