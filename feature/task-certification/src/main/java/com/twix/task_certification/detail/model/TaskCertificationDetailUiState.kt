@@ -19,14 +19,5 @@ data class TaskCertificationDetailUiState(
             currentShow == BetweenUs.PARTNER &&
                 photoLogs.partnerPhotologs.isCertificated
 
-    fun toggleBetweenUs() =
-        copy(
-            currentShow =
-                when (currentShow) {
-                    BetweenUs.ME -> BetweenUs.PARTNER
-                    BetweenUs.PARTNER -> BetweenUs.ME
-                },
-        )
-
     fun updatePartnerReaction(type: GoalReactionType) = copy(photoLogs = photoLogs.updatePartnerReaction(type))
 }
