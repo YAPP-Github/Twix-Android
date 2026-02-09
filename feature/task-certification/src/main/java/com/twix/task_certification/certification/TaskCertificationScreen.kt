@@ -73,6 +73,7 @@ import com.twix.designsystem.R as DesR
 
 @Composable
 fun TaskCertificationRoute(
+    goalId: Long,
     toastManager: ToastManager = koinInject(),
     camera: Camera = koinInject(),
     viewModel: TaskCertificationViewModel = koinViewModel(),
@@ -84,6 +85,10 @@ fun TaskCertificationRoute(
     val lifecycleOwner = LocalLifecycleOwner.current
     val coroutineScope = rememberCoroutineScope()
     val context = LocalContext.current
+
+    LaunchedEffect(goalId) {
+        viewModel.dispatch(TaskCertificationIntent.InitGoal(goalId))
+    }
 
     var hasPermission by remember {
         mutableStateOf(

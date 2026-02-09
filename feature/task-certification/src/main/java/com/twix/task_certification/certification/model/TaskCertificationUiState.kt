@@ -9,6 +9,7 @@ import com.twix.ui.base.State
 
 @Immutable
 data class TaskCertificationUiState(
+    val goalId: Long = -1L,
     val capture: CaptureStatus = CaptureStatus.NotCaptured,
     val torch: TorchStatus = TorchStatus.Off,
     val lens: CameraSelector = CameraSelector.DEFAULT_BACK_CAMERA,
