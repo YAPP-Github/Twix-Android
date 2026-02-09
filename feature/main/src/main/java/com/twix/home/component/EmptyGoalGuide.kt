@@ -30,30 +30,37 @@ fun EmptyGoalGuide(modifier: Modifier = Modifier) {
         verticalArrangement = Arrangement.Center,
     ) {
         Image(
-            painter = painterResource(R.drawable.ic_empty_face),
+            painter = painterResource(R.drawable.ic_empty_goal_home),
             contentDescription = "empty face",
             modifier =
                 Modifier
-                    .padding(horizontal = 9.dp, vertical = 6.dp)
-                    .size(width = 34.dp, height = 40.dp),
+                    .size(width = 181.dp, height = 111.dp),
         )
 
-        Spacer(Modifier.height(10.dp))
+        Spacer(Modifier.height(21.5.dp))
 
         AppText(
             text = stringResource(R.string.home_empty_goal_guide),
             style = AppTextStyle.T2,
-            color = GrayColor.C200,
+            color = GrayColor.C400,
         )
 
-        Spacer(Modifier.height(12.dp))
+        Spacer(Modifier.height(5.dp))
+
+        AppText(
+            text = stringResource(R.string.home_empty_goal_content),
+            style = AppTextStyle.C1,
+            color = GrayColor.C300,
+        )
+
+        Spacer(Modifier.height(50.dp))
 
         Image(
             painter = painterResource(R.drawable.ic_empty_goal_arrow),
             contentDescription = "empty goal arrow",
             modifier =
                 Modifier
-                    .offset(x = 32.dp),
+                    .offset(x = 60.dp),
         )
     }
 }
