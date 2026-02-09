@@ -26,7 +26,7 @@ import com.twix.task_certification.detail.model.ReactionUiModel
 import com.twix.ui.extension.noRippleClickable
 
 @Composable
-fun ReactionBox(
+fun ReactionBar(
     onSelectReaction: (GoalReactionType) -> Unit,
     modifier: Modifier = Modifier,
     selectedReaction: GoalReactionType? = null,
@@ -92,9 +92,9 @@ fun ReactionBox(
 
 @Preview
 @Composable
-fun ReactionBoxPreview() {
+fun ReactionBarPreview() {
     TwixTheme {
-        ReactionBox(
+        ReactionBar(
             selectedReaction = GoalReactionType.FUCK,
             onSelectReaction = { },
         )

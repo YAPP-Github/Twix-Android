@@ -28,7 +28,7 @@ import com.twix.domain.model.enums.GoalReactionType
 import com.twix.task_certification.R
 import com.twix.task_certification.detail.component.BackgroundCard
 import com.twix.task_certification.detail.component.ForegroundCard
-import com.twix.task_certification.detail.component.ReactionBox
+import com.twix.task_certification.detail.component.ReactionBar
 import com.twix.task_certification.detail.component.TaskCertificationDetailTopBar
 import com.twix.task_certification.detail.model.TaskCertificationDetailIntent
 import com.twix.task_certification.detail.model.TaskCertificationDetailSideEffect
@@ -160,7 +160,7 @@ private fun ReactionSection(
     if (visible) {
         Spacer(Modifier.height(85.dp))
 
-        ReactionBox(
+        ReactionBar(
             selectedReaction = reaction,
             onSelectReaction = onClickReaction,
             modifier = Modifier.padding(horizontal = 20.dp),
@@ -182,7 +182,6 @@ private fun TaskCertificationDetailScreenPreview(
             onClickReaction = {},
             onClickUpload = {},
             onClickSting = {},
-            onSwipe = {},
         )
     }
 }
