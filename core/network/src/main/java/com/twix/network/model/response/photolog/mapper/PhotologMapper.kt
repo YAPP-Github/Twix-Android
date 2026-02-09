@@ -4,7 +4,9 @@ import com.twix.domain.model.photolog.PhotoLogs
 import com.twix.domain.model.photolog.PhotologDetail
 import com.twix.network.model.response.photolog.PhotoLogResponse
 import com.twix.network.model.response.photolog.PhotologDetailResponse
+import kotlin.time.ExperimentalTime
 
+@OptIn(ExperimentalTime::class)
 fun PhotologDetailResponse.toDomain(): PhotologDetail =
     PhotologDetail(
         comment = comment,
@@ -12,7 +14,7 @@ fun PhotologDetailResponse.toDomain(): PhotologDetail =
         imageUrl = imageUrl,
         isMine = isMine,
         photologId = photologId,
-        uploadedAt = uploadedAt,
+        uploadedAt = uploadedAt.toString(),
         uploaderName = uploaderName,
         verificationDate = verificationDate,
     )
