@@ -70,10 +70,6 @@ fun TaskCertificationDetailRoute(
                     ToastData(currentContext.getString(sideEffect.message), sideEffect.type),
                 )
             }
-
-            is TaskCertificationDetailSideEffect.NavigateToUpload -> {
-                navigateToUpload(sideEffect.goalId)
-            }
         }
     }
 
@@ -82,7 +78,7 @@ fun TaskCertificationDetailRoute(
         onBack = navigateToBack,
         onClickModify = { },
         onClickReaction = { viewModel.dispatch(TaskCertificationDetailIntent.Reaction(it)) },
-        onClickUpload = { viewModel.dispatch(TaskCertificationDetailIntent.Upload) },
+        onClickUpload = { navigateToUpload(goalId) },
         onClickSting = { viewModel.dispatch(TaskCertificationDetailIntent.Sting) },
         onSwipe = { viewModel.dispatch(TaskCertificationDetailIntent.SwipeCard) },
     )

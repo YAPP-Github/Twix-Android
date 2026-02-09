@@ -8,9 +8,7 @@ import com.twix.task_certification.R
 import com.twix.task_certification.detail.model.TaskCertificationDetailIntent
 import com.twix.task_certification.detail.model.TaskCertificationDetailSideEffect
 import com.twix.task_certification.detail.model.TaskCertificationDetailUiState
-import com.twix.task_certification.detail.model.toUiModel
 import com.twix.ui.base.BaseViewModel
-import kotlinx.coroutines.launch
 
 class TaskCertificationDetailViewModel(
     private val photologRepository: PhotoLogRepository,
@@ -22,7 +20,6 @@ class TaskCertificationDetailViewModel(
             is TaskCertificationDetailIntent.InitGoal -> fetchPhotolog(intent.goalId)
             is TaskCertificationDetailIntent.Reaction -> reduceReaction(intent.type)
             TaskCertificationDetailIntent.Sting -> TODO("찌르기 API 연동")
-            TaskCertificationDetailIntent.Upload -> navigateToUpload()
             TaskCertificationDetailIntent.SwipeCard -> reduceShownCard()
         }
     }
@@ -30,7 +27,9 @@ class TaskCertificationDetailViewModel(
     private fun fetchPhotolog(goalId: Long) {
         launchResult(
             block = { photologRepository.fetchPhotoLogs(goalId) },
-            onSuccess = { reduce { copy(photoLogs = it.toUiModel(), goalTitle = goalTitle) } },
+            onSuccess = {
+                //reduce { copy(photoLogs = it.toUiModel(), goalTitle = goalTitle) }
+                        },
             onError = {
                 emitSideEffect(
                     TaskCertificationDetailSideEffect.ShowToast(
@@ -44,13 +43,6 @@ class TaskCertificationDetailViewModel(
 
     private fun reduceReaction(reaction: GoalReactionType) {
         reduce { updatePartnerReaction(reaction) }
-    }
-
-    private fun navigateToUpload() {
-        viewModelScope.launch {
-            val goalId = currentState.photoLogs.goalId
-            emitSideEffect(TaskCertificationDetailSideEffect.NavigateToUpload(goalId))
-        }
     }
 
     private fun reduceShownCard() {
