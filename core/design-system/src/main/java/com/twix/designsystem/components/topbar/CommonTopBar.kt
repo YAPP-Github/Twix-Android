@@ -1,6 +1,5 @@
-package com.twix.goal_editor.component
+package com.twix.designsystem.components.topbar
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -13,28 +12,18 @@ import androidx.compose.material3.VerticalDivider
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import com.twix.designsystem.R
 import com.twix.designsystem.components.text.AppText
 import com.twix.designsystem.theme.GrayColor
 import com.twix.domain.model.enums.AppTextStyle
-import com.twix.ui.extension.noRippleClickable
 
 @Composable
-fun GoalEditorTopBar(
-    isEdit: Boolean = false,
-    onBack: () -> Unit,
+fun CommonTopBar(
+    title: String,
+    left: @Composable () -> Unit,
+    right: (@Composable () -> Unit)? = null,
 ) {
-    val title =
-        if (isEdit) {
-            stringResource(R.string.goal_editor_title_edit)
-        } else {
-            stringResource(R.string.goal_editor_title)
-        }
-
     Column(
         modifier =
             Modifier
@@ -50,15 +39,7 @@ fun GoalEditorTopBar(
                     .height(60.dp),
             verticalAlignment = Alignment.CenterVertically,
         ) {
-            Image(
-                painter = painterResource(R.drawable.ic_arrow3_left),
-                contentDescription = "back",
-                modifier =
-                    Modifier
-                        .padding(18.dp)
-                        .size(24.dp)
-                        .noRippleClickable(onClick = onBack),
-            )
+            left()
 
             VerticalDivider(thickness = 1.dp, color = GrayColor.C500)
 
@@ -79,7 +60,9 @@ fun GoalEditorTopBar(
                     Modifier
                         .padding(18.dp)
                         .size(24.dp),
-            )
+            ) {
+                right?.invoke()
+            }
         }
 
         HorizontalDivider(thickness = 1.dp, color = GrayColor.C500)
