@@ -104,7 +104,7 @@ fun TaskCertificationDetailScreen(
 
         Spacer(Modifier.height(103.dp))
 
-        Box(modifier.fillMaxWidth()) {
+        Box(Modifier.fillMaxWidth()) {
             BackgroundCard(
                 uiModel =
                     when (uiState.currentShow) {
