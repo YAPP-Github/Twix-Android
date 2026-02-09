@@ -9,11 +9,13 @@ import com.twix.domain.model.goal.CreateGoalParam
 import com.twix.domain.repository.GoalRepository
 import com.twix.goal_editor.model.GoalEditorUiState
 import com.twix.ui.base.BaseViewModel
+import com.twix.util.bus.GoalRefreshBus
 import kotlinx.coroutines.launch
 import java.time.LocalDate
 
 class GoalEditorViewModel(
     private val goalRepository: GoalRepository,
+    private val goalRefreshBus: GoalRefreshBus,
 ) : BaseViewModel<GoalEditorUiState, GoalEditorIntent, GoalEditorSideEffect>(
         GoalEditorUiState(),
     ) {
@@ -41,7 +43,7 @@ class GoalEditorViewModel(
     }
 
     private fun setRepeatType(repeatCycle: RepeatCycle) {
-        reduce { copy(selectedRepeatCycle = repeatCycle) }
+        reduce { copy(selectedRepeatCycle = repeatCycle, repeatCount = 1) }
     }
 
     private fun setRepeatCount(repeatCount: Int) {
@@ -74,7 +76,10 @@ class GoalEditorViewModel(
 
         launchResult(
             block = { goalRepository.createGoal(currentState.toCreateParam()) },
-            onSuccess = { tryEmitSideEffect(GoalEditorSideEffect.NavigateToHome) },
+            onSuccess = {
+                goalRefreshBus.notifyChanged()
+                tryEmitSideEffect(GoalEditorSideEffect.NavigateToHome)
+            },
             onError = { emitSideEffect(GoalEditorSideEffect.ShowToast(R.string.toast_create_goal_failed, ToastType.ERROR)) },
         )
     }
