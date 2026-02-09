@@ -63,6 +63,6 @@ fun GoalSummaryListResponse.toDomain(): List<GoalSummary> =
             icon = GoalIconType.fromApi(it.icon),
             repeatCycle = RepeatCycle.fromApi(it.repeatCycle),
             startDate = LocalDate.parse(it.startDate),
-            it.endDate?.let(LocalDate::parse)
+            it.endDate?.let(LocalDate::parse),
         )
     }

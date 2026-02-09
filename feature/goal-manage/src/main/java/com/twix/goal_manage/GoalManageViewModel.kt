@@ -114,7 +114,7 @@ class GoalManageViewModel(
             onSuccess = {
                 reduce { copy(goalSummaries = it) }
             },
-            onError = { emitSideEffect(GoalManageSideEffect.ShowToast(R.string.toast_goal_fetch_failed, ToastType.ERROR)) }
+            onError = { emitSideEffect(GoalManageSideEffect.ShowToast(R.string.toast_goal_fetch_failed, ToastType.ERROR)) },
         )
     }
 

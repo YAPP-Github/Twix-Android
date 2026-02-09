@@ -5,5 +5,5 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class GoalSummaryListResponse(
-    @SerialName("goals") val goals: List<GoalSummaryResponse>
+    @SerialName("goals") val goals: List<GoalSummaryResponse>,
 )
