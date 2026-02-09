@@ -14,6 +14,7 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.IntOffset
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 import kotlin.math.abs
 import kotlin.math.roundToInt
@@ -128,9 +129,14 @@ fun SwipeableCard(
                                             0f
                                         }
 
-                                    launch { offsetX.animateTo(targetX, tween(spec.dismissDuration)) }
-                                    launch { offsetY.animateTo(targetY, tween(spec.dismissDuration)) }
-                                    launch { opacity.animateTo(0f, tween(spec.dismissDuration)) }
+                                    /**
+                                     * dismiss 애니메이션 완료 대기
+                                     */
+                                    coroutineScope {
+                                        launch { offsetX.animateTo(targetX, tween(spec.dismissDuration)) }
+                                        launch { offsetY.animateTo(targetY, tween(spec.dismissDuration)) }
+                                        launch { opacity.animateTo(0f, tween(spec.dismissDuration)) }
+                                    }
 
                                     /**
                                      * 데이터 교체
