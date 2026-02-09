@@ -7,9 +7,9 @@ import com.twix.domain.model.enums.GoalIconType
 import com.twix.domain.model.enums.GoalReactionType
 import com.twix.domain.model.enums.RepeatCycle
 import com.twix.domain.model.goal.CreateGoalParam
-import com.twix.domain.repository.GoalRepository
 import com.twix.domain.model.goal.Goal
 import com.twix.domain.model.goal.GoalVerification
+import com.twix.domain.repository.GoalRepository
 import com.twix.goal_editor.model.GoalEditorUiState
 import com.twix.ui.base.BaseViewModel
 import com.twix.util.bus.GoalRefreshBus
