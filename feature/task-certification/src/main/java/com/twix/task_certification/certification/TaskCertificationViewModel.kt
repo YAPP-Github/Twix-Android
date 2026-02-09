@@ -16,38 +16,14 @@ class TaskCertificationViewModel :
     override suspend fun handleIntent(intent: TaskCertificationIntent) {
         when (intent) {
             is TaskCertificationIntent.InitGoal -> reduceGoalId(intent.goalId)
-
-            is TaskCertificationIntent.TakePicture -> {
-                takePicture(intent.uri)
-            }
-
-            is TaskCertificationIntent.PickPicture -> {
-                pickPicture(intent.uri)
-            }
-
-            is TaskCertificationIntent.ToggleLens -> {
-                reduceLens()
-            }
-
-            is TaskCertificationIntent.ToggleTorch -> {
-                reduceTorch()
-            }
-
-            is TaskCertificationIntent.RetakePicture -> {
-                setupRetake()
-            }
-
-            is TaskCertificationIntent.UpdateComment -> {
-                updateComment(intent)
-            }
-
-            is TaskCertificationIntent.CommentFocusChanged -> {
-                updateCommentFocus(intent.isFocused)
-            }
-
-            is TaskCertificationIntent.Upload -> {
-                upload()
-            }
+            is TaskCertificationIntent.TakePicture -> takePicture(intent.uri)
+            is TaskCertificationIntent.PickPicture -> pickPicture(intent.uri)
+            is TaskCertificationIntent.ToggleLens -> reduceLens()
+            is TaskCertificationIntent.ToggleTorch -> reduceTorch()
+            is TaskCertificationIntent.RetakePicture -> setupRetake()
+            is TaskCertificationIntent.UpdateComment -> updateComment(intent)
+            is TaskCertificationIntent.CommentFocusChanged -> updateCommentFocus(intent.isFocused)
+            is TaskCertificationIntent.Upload -> upload()
         }
     }
 
