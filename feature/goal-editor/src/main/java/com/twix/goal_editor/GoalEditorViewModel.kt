@@ -4,11 +4,9 @@ import androidx.lifecycle.viewModelScope
 import com.twix.designsystem.R
 import com.twix.designsystem.components.toast.model.ToastType
 import com.twix.domain.model.enums.GoalIconType
-import com.twix.domain.model.enums.GoalReactionType
 import com.twix.domain.model.enums.RepeatCycle
 import com.twix.domain.model.goal.CreateGoalParam
-import com.twix.domain.model.goal.Goal
-import com.twix.domain.model.goal.GoalVerification
+import com.twix.domain.model.goal.GoalDetail
 import com.twix.domain.model.goal.UpdateGoalParam
 import com.twix.domain.repository.GoalRepository
 import com.twix.goal_editor.model.GoalEditorUiState
@@ -69,6 +67,19 @@ class GoalEditorViewModel(
         reduce { copy(endDateEnabled = enabled) }
     }
 
+    private fun setGoal(goal: GoalDetail) {
+        reduce {
+            copy(
+                goalTitle = goal.name,
+                selectedIcon = goal.icon,
+                selectedRepeatCycle = goal.repeatCycle,
+                repeatCount = goal.repeatCount,
+                endDate = goal.endDate ?: LocalDate.now(),
+                endDateEnabled = goal.endDate != null,
+            )
+        }
+    }
+
     private fun save(id: Long) {
         if (!currentState.isEnabled) return
 
@@ -101,43 +112,11 @@ class GoalEditorViewModel(
     }
 
     private fun initGoal(id: Long) {
-        val goal =
-            Goal(
-                goalId = 4,
-                name = "밥무라",
-                icon = GoalIconType.DEFAULT,
-                repeatCycle = RepeatCycle.WEEKLY,
-                myCompleted = true,
-                partnerCompleted = true,
-                myVerification =
-                    GoalVerification(
-                        photologId = 1,
-                        imageUrl = "https://picsum.photos/400/300",
-                        comment = null,
-                        reaction = GoalReactionType.LOVE,
-                        uploadedAt = "2023-05-05",
-                    ),
-                partnerVerification =
-                    GoalVerification(
-                        photologId = 1,
-                        imageUrl = "https://picsum.photos/400/300",
-                        comment = null,
-                        reaction = GoalReactionType.LOVE,
-                        uploadedAt = "2023-05-05",
-                    ),
-            )
-
-        reduce {
-            copy(
-                goalTitle = goal.name,
-                selectedIcon = goal.icon,
-                selectedRepeatCycle = goal.repeatCycle,
-                repeatCount = 4,
-                startDate = LocalDate.now(),
-                endDate = LocalDate.now().plusWeeks(1),
-                endDateEnabled = false,
-            )
-        }
+        launchResult(
+            block = { goalRepository.fetchGoalDetail(id) },
+            onSuccess = { setGoal(it) },
+            onError = { emitSideEffect(GoalEditorSideEffect.ShowToast(R.string.toast_goal_fetch_failed, ToastType.ERROR)) },
+        )
     }
 
     private fun GoalEditorUiState.toCreateParam(): CreateGoalParam =
