@@ -22,7 +22,12 @@ object MainNavGraph : NavGraphContributor {
             composable(NavRoutes.MainRoute.route) {
                 MainRoute(
                     navigateToGoalEditor = {
-                        navController.navigate(NavRoutes.GoalEditorRoute.route) {
+                        navController.navigate(NavRoutes.GoalEditorRoute.createRoute(-1L)) {
+                            launchSingleTop = true
+                        }
+                    },
+                    navigateToGoalManage = {
+                        navController.navigate(NavRoutes.GoalManageRoute.createRoute(it)) {
                             launchSingleTop = true
                         }
                     },

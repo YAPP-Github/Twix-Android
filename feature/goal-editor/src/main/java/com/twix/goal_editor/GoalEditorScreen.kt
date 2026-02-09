@@ -46,6 +46,8 @@ import com.twix.designsystem.components.dialog.CommonDialog
 import com.twix.designsystem.components.text.AppText
 import com.twix.designsystem.components.toast.ToastManager
 import com.twix.designsystem.components.toast.model.ToastData
+import com.twix.designsystem.components.topbar.CommonTopBar
+import com.twix.designsystem.extension.label
 import com.twix.designsystem.extension.toRes
 import com.twix.designsystem.theme.CommonColor
 import com.twix.designsystem.theme.GrayColor
@@ -54,10 +56,8 @@ import com.twix.domain.model.enums.AppTextStyle
 import com.twix.domain.model.enums.GoalIconType
 import com.twix.domain.model.enums.RepeatCycle
 import com.twix.goal_editor.component.EmojiPicker
-import com.twix.goal_editor.component.GoalEditorTopBar
 import com.twix.goal_editor.component.GoalInfoCard
 import com.twix.goal_editor.component.GoalTextField
-import com.twix.goal_editor.component.label
 import com.twix.goal_editor.model.GoalEditorUiState
 import com.twix.ui.extension.dismissKeyboardOnTap
 import com.twix.ui.extension.noRippleClickable
@@ -69,7 +69,7 @@ import java.time.LocalDate
 fun GoalEditorRoute(
     viewModel: GoalEditorViewModel = koinViewModel(),
     toastManager: ToastManager = koinInject(),
-    isEdit: Boolean = false,
+    goalId: Long,
     navigateToBack: () -> Unit,
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -90,9 +90,13 @@ fun GoalEditorRoute(
         }
     }
 
+    LaunchedEffect(goalId) {
+        if (goalId != -1L) viewModel.dispatch(GoalEditorIntent.InitGoal(goalId))
+    }
+
     GoalEditorScreen(
         uiState = uiState,
-        isEdit = isEdit,
+        isEdit = goalId != -1L,
         onBack = navigateToBack,
         onCommitTitle = { viewModel.dispatch(GoalEditorIntent.SetTitle(it)) },
         onSelectRepeatType = { viewModel.dispatch(GoalEditorIntent.SetRepeatType(it)) },
@@ -134,9 +138,19 @@ fun GoalEditorScreen(
                     .dismissKeyboardOnTap(),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            GoalEditorTopBar(
-                isEdit = isEdit,
-                onBack = onBack,
+            CommonTopBar(
+                title = if (isEdit) stringResource(R.string.goal_editor_title_edit) else stringResource(R.string.goal_editor_title),
+                left = {
+                    Image(
+                        painter = painterResource(R.drawable.ic_arrow3_left),
+                        contentDescription = "back",
+                        modifier =
+                            Modifier
+                                .padding(18.dp)
+                                .size(24.dp)
+                                .noRippleClickable(onClick = onBack),
+                    )
+                },
             )
 
             Spacer(Modifier.height(52.dp))
@@ -161,6 +175,7 @@ fun GoalEditorScreen(
                 startDate = uiState.startDate,
                 endDateEnabled = uiState.endDateEnabled,
                 endDate = uiState.endDate,
+                isEdit = isEdit,
                 onSelectedRepeatType = onSelectRepeatType,
                 onShowRepeatCountBottomSheet = { showRepeatCountBottomSheet = true },
                 onShowCalendarBottomSheet = {
