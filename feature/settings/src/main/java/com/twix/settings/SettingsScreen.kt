@@ -37,6 +37,7 @@ fun SettingsRoute(
     viewModel: SettingsViewModel = koinViewModel(),
     popBackStack: () -> Unit,
     navigateToSettingsAccount: () -> Unit,
+    navigateToSettingsAbout: () -> Unit,
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
@@ -44,6 +45,7 @@ fun SettingsRoute(
         uiState = uiState,
         onBack = popBackStack,
         onAccountClick = navigateToSettingsAccount,
+        onAboutClick = navigateToSettingsAbout,
     )
 }
 
@@ -52,6 +54,7 @@ private fun SettingsScreen(
     uiState: SettingsUiState,
     onBack: () -> Unit,
     onAccountClick: () -> Unit,
+    onAboutClick: () -> Unit,
 ) {
     Column(
         modifier =
@@ -98,7 +101,7 @@ private fun SettingsScreen(
                 SettingsMenuItem(
                     resId = R.drawable.ic_info,
                     title = stringResource(R.string.word_information),
-                    onClick = { },
+                    onClick = onAboutClick,
                 )
             }
         }

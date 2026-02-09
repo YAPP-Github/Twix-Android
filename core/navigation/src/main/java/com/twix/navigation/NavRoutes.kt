@@ -63,4 +63,6 @@ sealed class NavRoutes(
     object SettingsRoute : NavRoutes("settings")
 
     object SettingsAccountRoute : NavRoutes("settings/account")
+
+    object SettingsAboutRoute : NavRoutes("settings/about")
 }

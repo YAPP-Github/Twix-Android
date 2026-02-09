@@ -9,6 +9,8 @@ import com.twix.navigation.base.NavGraphContributor
 import com.twix.navigation.owner.rememberNavGraphOwner
 import com.twix.settings.SettingsRoute
 import com.twix.settings.SettingsViewModel
+import com.twix.settings.about.SettingsAboutRoute
+import com.twix.settings.about.policy.PrivacyPolicyRoute
 import com.twix.settings.account.SettingsAccountRoute
 import org.koin.androidx.compose.koinViewModel
 
@@ -40,6 +42,11 @@ object SettingsNavGraph : NavGraphContributor {
                             launchSingleTop = true
                         }
                     },
+                    navigateToSettingsAbout = {
+                        navController.navigate(NavRoutes.SettingsAboutRoute.route) {
+                            launchSingleTop = true
+                        }
+                    }
                 )
             }
 
@@ -63,6 +70,12 @@ object SettingsNavGraph : NavGraphContributor {
                             }
                         }
                     },
+                )
+            }
+
+            composable(NavRoutes.SettingsAboutRoute.route) {
+                SettingsAboutRoute(
+                    popBackStack = { navController.popBackStack() },
                 )
             }
         }
