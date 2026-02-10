@@ -99,8 +99,6 @@ private fun LoginScreen(onClickLogin: (LoginType) -> Unit) {
             Image(
                 imageVector = ImageVector.vectorResource(com.twix.designsystem.R.drawable.ic_keepi_singing),
                 contentDescription = null,
-                modifier =
-                Modifier,
             )
 
             // LoginType.entries.forEach { type ->
