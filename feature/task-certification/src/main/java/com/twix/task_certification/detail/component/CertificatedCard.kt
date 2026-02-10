@@ -33,15 +33,16 @@ internal fun CertificatedCard(uiModel: PhotologDetailUiModel) {
             contentScale = ContentScale.Crop,
             modifier = Modifier.fillMaxSize(),
         )
-
-        CommentTextField(
-            uiModel = CommentUiModel(TextFieldValue(uiModel.comment ?: "")),
-            enabled = false,
-            modifier =
-                Modifier
-                    .align(Alignment.BottomCenter)
-                    .padding(bottom = 28.dp),
-        )
+        if (uiModel.comment?.isNotEmpty() == true) {
+            CommentTextField(
+                uiModel = CommentUiModel(TextFieldValue(uiModel.comment)),
+                enabled = false,
+                modifier =
+                    Modifier
+                        .align(Alignment.BottomCenter)
+                        .padding(bottom = 28.dp),
+            )
+        }
     }
 }
 
