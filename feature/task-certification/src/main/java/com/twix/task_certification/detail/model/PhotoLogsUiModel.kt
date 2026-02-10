@@ -17,6 +17,8 @@ data class PhotoLogsUiModel(
 }
 
 fun PhotoLogs.toUiModel(): PhotoLogsUiModel {
+    if (photologDetails.size != 2) return PhotoLogsUiModel()
+
     val my = photologDetails.first { it.isMine }
     val partner = photologDetails.first { !it.isMine }
 

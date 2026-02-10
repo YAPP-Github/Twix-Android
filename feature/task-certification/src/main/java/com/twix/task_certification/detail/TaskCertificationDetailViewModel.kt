@@ -10,6 +10,7 @@ import com.twix.task_certification.R
 import com.twix.task_certification.detail.model.TaskCertificationDetailIntent
 import com.twix.task_certification.detail.model.TaskCertificationDetailSideEffect
 import com.twix.task_certification.detail.model.TaskCertificationDetailUiState
+import com.twix.task_certification.detail.model.toUiModel
 import com.twix.ui.base.BaseViewModel
 import com.twix.util.bus.GoalRefreshBus
 import com.twix.util.bus.TaskCertificationRefreshBus
@@ -54,7 +55,7 @@ class TaskCertificationDetailViewModel(
         launchResult(
             block = { photologRepository.fetchPhotoLogs(goalId) },
             onSuccess = {
-                // reduce { copy(photoLogs = it.toUiModel(), goalTitle = goalTitle) }
+                reduce { copy(photoLogs = it.toUiModel(), goalTitle = goalTitle) }
             },
             onError = {
                 emitSideEffect(
