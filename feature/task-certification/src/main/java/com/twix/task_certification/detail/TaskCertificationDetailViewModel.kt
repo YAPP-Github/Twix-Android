@@ -18,7 +18,8 @@ class TaskCertificationDetailViewModel(
         TaskCertificationDetailUiState(),
     ) {
     private val goalId: Long =
-        savedStateHandle[NavRoutes.TaskCertificationDetailRoute.ARG_GOAL_ID] ?: -1L
+        savedStateHandle[NavRoutes.TaskCertificationDetailRoute.ARG_GOAL_ID]
+            ?: throw IllegalArgumentException(GOAL_ID_NOT_FOUND)
 
     init {
         fetchPhotolog()
@@ -55,5 +56,9 @@ class TaskCertificationDetailViewModel(
 
     private fun reduceShownCard() {
         reduce { toggleBetweenUs() }
+    }
+
+    companion object {
+        private const val GOAL_ID_NOT_FOUND = "Goal Id Not Found"
     }
 }
