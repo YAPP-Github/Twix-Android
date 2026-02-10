@@ -145,7 +145,7 @@ private fun ImageCapturedBar(
             AppRoundButton(
                 borderColor = CommonColor.White,
                 backgroundColor = GrayColor.C500,
-                text = stringResource(R.string.task_certification_image_upload),
+                text = stringResource(R.string.task_certification_upload),
                 textStyle = AppTextStyle.T2,
                 textColor = CommonColor.White,
                 modifier =

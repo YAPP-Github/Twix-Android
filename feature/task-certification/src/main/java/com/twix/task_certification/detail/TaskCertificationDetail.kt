@@ -175,7 +175,7 @@ fun TaskCertificationDetailScreen(
                     },
                 buttonTitle =
                     when (uiState.currentShow) {
-                        BetweenUs.ME -> stringResource(R.string.task_certification_image_upload)
+                        BetweenUs.ME -> stringResource(R.string.task_certification_take_picture)
                         BetweenUs.PARTNER -> stringResource(R.string.task_certification_detail_partner_sting)
                     },
                 rotation =
