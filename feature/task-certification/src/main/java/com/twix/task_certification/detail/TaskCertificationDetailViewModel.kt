@@ -11,16 +11,18 @@ import com.twix.task_certification.detail.model.TaskCertificationDetailIntent
 import com.twix.task_certification.detail.model.TaskCertificationDetailSideEffect
 import com.twix.task_certification.detail.model.TaskCertificationDetailUiState
 import com.twix.ui.base.BaseViewModel
+import com.twix.util.bus.GoalRefreshBus
 import com.twix.util.bus.TaskCertificationRefreshBus
 import kotlinx.coroutines.launch
 
 class TaskCertificationDetailViewModel(
     private val photologRepository: PhotoLogRepository,
-    private val eventBus: TaskCertificationRefreshBus,
+    private val taskCertificationRefreshBus: TaskCertificationRefreshBus,
+    private val goalRefreshBus: GoalRefreshBus,
     savedStateHandle: SavedStateHandle,
 ) : BaseViewModel<TaskCertificationDetailUiState, TaskCertificationDetailIntent, TaskCertificationDetailSideEffect>(
-        TaskCertificationDetailUiState(),
-    ) {
+    TaskCertificationDetailUiState(),
+) {
     private val goalId: Long =
         savedStateHandle[NavRoutes.TaskCertificationDetailRoute.ARG_GOAL_ID]
             ?: throw IllegalArgumentException(GOAL_ID_NOT_FOUND)
@@ -33,8 +35,9 @@ class TaskCertificationDetailViewModel(
 
     private fun collectEventBus() {
         viewModelScope.launch {
-            eventBus.events.collect {
+            taskCertificationRefreshBus.events.collect {
                 fetchPhotolog()
+                goalRefreshBus.notifyChanged()
             }
         }
     }
@@ -51,8 +54,8 @@ class TaskCertificationDetailViewModel(
         launchResult(
             block = { photologRepository.fetchPhotoLogs(goalId) },
             onSuccess = {
-                //reduce { copy(photoLogs = it.toUiModel(), goalTitle = goalTitle) }
-                        },
+                // reduce { copy(photoLogs = it.toUiModel(), goalTitle = goalTitle) }
+            },
             onError = {
                 emitSideEffect(
                     TaskCertificationDetailSideEffect.ShowToast(
