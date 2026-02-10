@@ -1,4 +1,4 @@
-package com.twix.home.component
+package com.twix.designsystem.components.goal
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
@@ -20,7 +20,11 @@ import com.twix.designsystem.theme.GrayColor
 import com.twix.domain.model.enums.AppTextStyle
 
 @Composable
-fun EmptyGoalGuide(modifier: Modifier = Modifier) {
+fun EmptyGoalGuide(
+    modifier: Modifier = Modifier,
+    text: String,
+    isDetail: Boolean = false,
+) {
     Column(
         modifier =
             modifier
@@ -36,30 +40,32 @@ fun EmptyGoalGuide(modifier: Modifier = Modifier) {
                     .size(width = 181.dp, height = 111.dp),
         )
 
-        Spacer(Modifier.height(21.5.dp))
+        Spacer(Modifier.height(22.dp))
 
         AppText(
-            text = stringResource(R.string.home_empty_goal_guide),
+            text = text,
             style = AppTextStyle.T2,
             color = GrayColor.C400,
         )
 
-        Spacer(Modifier.height(5.dp))
+        if (!isDetail) {
+            Spacer(Modifier.height(5.dp))
 
-        AppText(
-            text = stringResource(R.string.home_empty_goal_content),
-            style = AppTextStyle.C1,
-            color = GrayColor.C300,
-        )
+            AppText(
+                text = stringResource(R.string.home_empty_goal_content),
+                style = AppTextStyle.C1,
+                color = GrayColor.C300,
+            )
 
-        Spacer(Modifier.height(50.dp))
+            Spacer(Modifier.height(50.dp))
 
-        Image(
-            painter = painterResource(R.drawable.ic_empty_goal_arrow),
-            contentDescription = "empty goal arrow",
-            modifier =
-                Modifier
-                    .offset(x = 60.dp),
-        )
+            Image(
+                painter = painterResource(R.drawable.ic_empty_goal_arrow),
+                contentDescription = "empty goal arrow",
+                modifier =
+                    Modifier
+                        .offset(x = 60.dp),
+            )
+        }
     }
 }
