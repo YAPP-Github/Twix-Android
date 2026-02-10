@@ -88,7 +88,7 @@ fun TaskCertificationDetailTopBar(
                 contentAlignment = Alignment.Center,
             ) {
                 if (showModify) {
-                    TODO("수정 기능 구현")
+//                   TODO("수정 기능 구현")
 //                    AppText(
 //                        text = stringResource(DesR.string.word_modify),
 //                        style = AppTextStyle.T2,
