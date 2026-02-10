@@ -8,9 +8,6 @@ data class CommentUiModel(
     val comment: TextFieldValue = TextFieldValue(""),
     val isFocused: Boolean = false,
 ) {
-    val isEmpty: Boolean
-        get() = comment.text.isEmpty()
-
     val hasMaxCommentLength: Boolean
         get() = comment.text.length == COMMENT_COUNT
 
