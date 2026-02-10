@@ -1,5 +1,4 @@
 import java.util.Properties
-import kotlin.apply
 
 plugins {
     alias(libs.plugins.twix.feature)
@@ -22,13 +21,11 @@ android {
 
     val privacyPolicyUrl =
         localProperties.getProperty("privacy_policy_url")
-            ?: error("privacy_policy_url is missing in local.properties")
+            ?: providers.gradleProperty("privacy_policy_url").orNull
+            ?: "https://incongruous-sweatshirt-b32.notion.site/Keepliuv-3024eb2e10638051824ef9ac7f9a522f"
 
     buildTypes {
-        debug {
-            buildConfigField("String", "PRIVACY_POLICY_URL", "\"$privacyPolicyUrl\"")
-        }
-        release {
+        all {
             buildConfigField("String", "PRIVACY_POLICY_URL", "\"$privacyPolicyUrl\"")
         }
     }
