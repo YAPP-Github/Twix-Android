@@ -39,6 +39,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.twix.designsystem.R
 import com.twix.designsystem.components.calendar.WeeklyCalendar
 import com.twix.designsystem.components.dialog.CommonDialog
+import com.twix.designsystem.components.goal.EmptyGoalGuide
 import com.twix.designsystem.components.goal.GoalCardFrame
 import com.twix.designsystem.components.popup.CommonPopup
 import com.twix.designsystem.components.popup.CommonPopupDivider
@@ -173,20 +174,30 @@ private fun GoalManageScreen(
                 onNextWeek = onNextWeek,
             )
 
-            GoalSummaryList(
-                modifier =
-                    Modifier
-                        .padding(horizontal = 20.dp)
-                        .weight(1f),
-                summaryList = uiState.goalSummaries,
-                openedMenuGoalId = openedMenuGoalId,
-                pendingIds = pendingIds,
-                onOpenMenu = onOpenMenu,
-                onCloseMenu = onCloseMenu,
-                onEdit = onEdit,
-                onRequestDelete = onRequestDelete,
-                onRequestEnd = onRequestEnd,
-            )
+            if (uiState.goalSummaries.isEmpty()) {
+                EmptyGoalGuide(
+                    modifier =
+                        Modifier
+                            .weight(1f),
+                    text = stringResource(R.string.goal_detail_empty_goal_guide),
+                    isDetail = true,
+                )
+            } else {
+                GoalSummaryList(
+                    modifier =
+                        Modifier
+                            .padding(horizontal = 20.dp)
+                            .weight(1f),
+                    summaryList = uiState.goalSummaries,
+                    openedMenuGoalId = openedMenuGoalId,
+                    pendingIds = pendingIds,
+                    onOpenMenu = onOpenMenu,
+                    onCloseMenu = onCloseMenu,
+                    onEdit = onEdit,
+                    onRequestDelete = onRequestDelete,
+                    onRequestEnd = onRequestEnd,
+                )
+            }
         }
 
         CommonDialog(
