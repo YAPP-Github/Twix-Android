@@ -210,11 +210,11 @@ fun TaskCertificationDetailScreen(
             }
         }
 
-        ReactionSection(
-            visible = uiState.canReaction,
-            reaction = uiState.photoLogs.partnerPhotologs.reaction,
-            onClickReaction = onClickReaction,
-        )
+//        ReactionSection(
+//            visible = uiState.canReaction,
+//            reaction = uiState.photoLogs.partnerPhotologs.reaction,
+//            onClickReaction = onClickReaction,
+//        )
     }
 }
 
