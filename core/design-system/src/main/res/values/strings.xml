@@ -56,6 +56,7 @@
     <string name="goal_list_title_today">오늘 우리 목표</string>
     <string name="goal_list_title_next">다음 우리 목표</string>
     <string name="date_year_month_day">%s년 %02d월 %02d일</string>
+    <string name="goal_detail_empty_goal_guide">아직 목표가 없어요!</string>
     
     <!-- 토스트 메시지 -->
     <string name="toast_end_date_before_start_date">종료 날짜가 시작 날짜보다 이전입니다.</string>
