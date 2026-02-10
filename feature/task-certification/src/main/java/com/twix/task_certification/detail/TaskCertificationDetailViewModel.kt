@@ -1,9 +1,10 @@
 package com.twix.task_certification.detail
 
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.SavedStateHandle
 import com.twix.designsystem.components.toast.model.ToastType
 import com.twix.domain.model.enums.GoalReactionType
 import com.twix.domain.repository.PhotoLogRepository
+import com.twix.navigation.NavRoutes
 import com.twix.task_certification.R
 import com.twix.task_certification.detail.model.TaskCertificationDetailIntent
 import com.twix.task_certification.detail.model.TaskCertificationDetailSideEffect
@@ -12,19 +13,26 @@ import com.twix.ui.base.BaseViewModel
 
 class TaskCertificationDetailViewModel(
     private val photologRepository: PhotoLogRepository,
+    savedStateHandle: SavedStateHandle,
 ) : BaseViewModel<TaskCertificationDetailUiState, TaskCertificationDetailIntent, TaskCertificationDetailSideEffect>(
         TaskCertificationDetailUiState(),
     ) {
+    private val goalId: Long =
+        savedStateHandle[NavRoutes.TaskCertificationDetailRoute.ARG_GOAL_ID] ?: -1L
+
+    init {
+        fetchPhotolog()
+    }
+
     override suspend fun handleIntent(intent: TaskCertificationDetailIntent) {
         when (intent) {
-            is TaskCertificationDetailIntent.InitGoal -> fetchPhotolog(intent.goalId)
             is TaskCertificationDetailIntent.Reaction -> reduceReaction(intent.type)
             TaskCertificationDetailIntent.Sting -> TODO("찌르기 API 연동")
             TaskCertificationDetailIntent.SwipeCard -> reduceShownCard()
         }
     }
 
-    private fun fetchPhotolog(goalId: Long) {
+    private fun fetchPhotolog() {
         launchResult(
             block = { photologRepository.fetchPhotoLogs(goalId) },
             onSuccess = {
