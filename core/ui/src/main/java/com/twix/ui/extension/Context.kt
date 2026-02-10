@@ -7,28 +7,34 @@ import android.net.Uri
 import java.io.ByteArrayOutputStream
 
 /**
- * 주어진 [Uri]로부터 이미지를 읽어 [ByteArray]로 변환한다.
+ * 주어진 [Uri]로부터 이미지를 읽어 JPEG 형식의 [ByteArray]로 변환한다.
  *
  * 내부 동작 과정:
- * 1. [ContentResolver.openInputStream]을 통해 Uri를 InputStream으로 연다.
- * 2. 스트림을 [BitmapFactory.decodeStream]으로 Bitmap으로 디코딩한다.
- * 3. Bitmap을 JPEG 형식(품질 90)으로 압축하여 [ByteArrayOutputStream]에 기록한다.
- * 4. 최종적으로 압축된 바이트 배열을 반환한다.
+ * 1. [ContentResolver.openInputStream]으로 InputStream을 연다.
+ * 2. [BitmapFactory.decodeStream]으로 Bitmap 디코딩
+ * 3. JPEG(품질 90) 압축 후 ByteArray 반환
  *
- * @param imageUri 변환할 이미지의 Uri (content:// 또는 file://)
- * @return JPEG 압축된 이미지 바이트 배열, 실패 시 null
+ * 실패 케이스:
+ * - InputStream 열기 실패
+ * - 디코딩 실패 (손상 이미지 등)
+ * - 압축 실패
+ *
+ * @param imageUri 변환할 이미지 Uri (content:// 또는 file://)
+ * @return 변환 성공 시 JPEG 바이트 배열, 실패 시 null
  */
-fun Context.uriToByteArray(imageUri: Uri): ByteArray =
-    try {
-        val inputStream = contentResolver.openInputStream(imageUri)
-        val bitmap = BitmapFactory.decodeStream(inputStream)
-        inputStream?.close()
+fun Context.uriToByteArray(imageUri: Uri): ByteArray? {
+    return try {
+        contentResolver.openInputStream(imageUri)?.use { inputStream ->
+            val bitmap = BitmapFactory.decodeStream(inputStream) ?: return null
 
-        val outputStream = ByteArrayOutputStream()
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 90, outputStream)
-
-        outputStream.toByteArray() ?: byteArrayOf()
+            ByteArrayOutputStream().use { outputStream ->
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 90, outputStream)
+                bitmap.recycle()
+                outputStream.toByteArray()
+            }
+        }
     } catch (e: Exception) {
         e.printStackTrace()
-        byteArrayOf()
+        null
     }
+}
