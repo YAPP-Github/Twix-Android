@@ -178,7 +178,7 @@ private fun GoalManageScreen(
                 EmptyGoalGuide(
                     modifier =
                         Modifier
-                            .weight(1f),
+                            .padding(top = 128.dp),
                     text = stringResource(R.string.goal_detail_empty_goal_guide),
                     isDetail = true,
                 )
