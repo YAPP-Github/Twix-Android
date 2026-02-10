@@ -65,7 +65,9 @@ import com.twix.task_certification.certification.model.TaskCertificationUiState
 import com.twix.ui.base.ObserveAsEvents
 import com.twix.ui.extension.noRippleClickable
 import com.twix.ui.extension.uriToByteArray
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import org.koin.androidx.compose.koinViewModel
 import org.koin.compose.koinInject
 import com.twix.designsystem.R as DesR
@@ -123,10 +125,25 @@ fun TaskCertificationRoute(
                     ),
                 )
             }
+
             is TaskCertificationSideEffect.GetImageFromUri -> {
-                val image = currentContext.uriToByteArray(event.uri)
-                viewModel.dispatch(TaskCertificationIntent.Upload(image))
+                val bytes =
+                    withContext(Dispatchers.IO) {
+                        currentContext.uriToByteArray(event.uri)
+                    }
+
+                if (bytes != null) {
+                    viewModel.dispatch(TaskCertificationIntent.Upload(bytes))
+                } else {
+                    toastManager.tryShow(
+                        ToastData(
+                            message = currentContext.getString(R.string.task_certification_image_translate_fail),
+                            type = ToastType.ERROR,
+                        ),
+                    )
+                }
             }
+
             TaskCertificationSideEffect.NavigateToDetail -> navigateToBack()
         }
     }
