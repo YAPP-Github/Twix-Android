@@ -46,6 +46,10 @@ class GoalManageViewModel(
                 }
             }
             GoalManageIntent.DismissDeleteDialog -> reduce { copy(deleteDialog = null) }
+            is GoalManageIntent.EditGoal -> {
+                reduce { copy(openedMenuGoalId = null) }
+                emitSideEffect(GoalManageSideEffect.NavigateToGoalEditor(intent.goalId))
+            }
         }
     }
 

@@ -38,4 +38,8 @@ sealed interface GoalManageIntent : Intent {
     ) : GoalManageIntent
 
     data object DismissDeleteDialog : GoalManageIntent
+
+    data class EditGoal(
+        val goalId: Long,
+    ) : GoalManageIntent
 }

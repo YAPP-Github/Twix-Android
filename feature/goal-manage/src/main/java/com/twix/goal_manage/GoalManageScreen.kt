@@ -80,6 +80,7 @@ fun GoalManageRoute(
     ObserveAsEvents(viewModel.sideEffect) { effect ->
         when (effect) {
             is GoalManageSideEffect.ShowToast -> toastManager.tryShow(ToastData(currentContext.getString(effect.resId), effect.type))
+            is GoalManageSideEffect.NavigateToGoalEditor -> navigateToGoalEditor(effect.goalId)
         }
     }
 
@@ -104,7 +105,7 @@ fun GoalManageRoute(
         onDismissEndDialog = { viewModel.dispatch(GoalManageIntent.DismissEndDialog) },
         onDismissDeleteDialog = { viewModel.dispatch(GoalManageIntent.DismissDeleteDialog) },
         // 수정
-        onEdit = navigateToGoalEditor,
+        onEdit = { viewModel.dispatch(GoalManageIntent.EditGoal(it)) },
     )
 }
 

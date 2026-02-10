@@ -9,4 +9,8 @@ sealed interface GoalManageSideEffect : SideEffect {
         @param:StringRes val resId: Int,
         val type: ToastType,
     ) : GoalManageSideEffect
+
+    data class NavigateToGoalEditor(
+        val goalId: Long,
+    ) : GoalManageSideEffect
 }
