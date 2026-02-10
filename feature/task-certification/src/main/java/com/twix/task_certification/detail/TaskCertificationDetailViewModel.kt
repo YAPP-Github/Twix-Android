@@ -1,6 +1,7 @@
 package com.twix.task_certification.detail
 
 import androidx.lifecycle.SavedStateHandle
+import androidx.lifecycle.viewModelScope
 import com.twix.designsystem.components.toast.model.ToastType
 import com.twix.domain.model.enums.GoalReactionType
 import com.twix.domain.repository.PhotoLogRepository
@@ -10,9 +11,12 @@ import com.twix.task_certification.detail.model.TaskCertificationDetailIntent
 import com.twix.task_certification.detail.model.TaskCertificationDetailSideEffect
 import com.twix.task_certification.detail.model.TaskCertificationDetailUiState
 import com.twix.ui.base.BaseViewModel
+import com.twix.util.bus.TaskCertificationRefreshBus
+import kotlinx.coroutines.launch
 
 class TaskCertificationDetailViewModel(
     private val photologRepository: PhotoLogRepository,
+    private val eventBus: TaskCertificationRefreshBus,
     savedStateHandle: SavedStateHandle,
 ) : BaseViewModel<TaskCertificationDetailUiState, TaskCertificationDetailIntent, TaskCertificationDetailSideEffect>(
         TaskCertificationDetailUiState(),
@@ -23,6 +27,16 @@ class TaskCertificationDetailViewModel(
 
     init {
         fetchPhotolog()
+
+        collectEventBus()
+    }
+
+    private fun collectEventBus() {
+        viewModelScope.launch {
+            eventBus.events.collect {
+                fetchPhotolog()
+            }
+        }
     }
 
     override suspend fun handleIntent(intent: TaskCertificationDetailIntent) {
@@ -59,6 +73,6 @@ class TaskCertificationDetailViewModel(
     }
 
     companion object {
-        private const val GOAL_ID_NOT_FOUND = "Goal Id Not Found"
+        private const val GOAL_ID_NOT_FOUND = "Goal Id Argument Not Found"
     }
 }

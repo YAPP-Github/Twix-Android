@@ -20,6 +20,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -30,6 +31,7 @@ import androidx.compose.ui.graphics.BlendMode
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.CompositingStrategy
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
@@ -62,6 +64,7 @@ import com.twix.task_certification.certification.model.TaskCertificationSideEffe
 import com.twix.task_certification.certification.model.TaskCertificationUiState
 import com.twix.ui.base.ObserveAsEvents
 import com.twix.ui.extension.noRippleClickable
+import com.twix.ui.extension.uriToByteArray
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 import org.koin.compose.koinInject
@@ -69,7 +72,6 @@ import com.twix.designsystem.R as DesR
 
 @Composable
 fun TaskCertificationRoute(
-    goalId: Long,
     toastManager: ToastManager = koinInject(),
     camera: Camera = koinInject(),
     viewModel: TaskCertificationViewModel = koinViewModel(),
@@ -77,13 +79,10 @@ fun TaskCertificationRoute(
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val cameraPreview by camera.surfaceRequests.collectAsStateWithLifecycle()
-
+    val context = LocalContext.current
+    val currentContext by rememberUpdatedState(context)
     val lifecycleOwner = LocalLifecycleOwner.current
     val coroutineScope = rememberCoroutineScope()
-
-    LaunchedEffect(goalId) {
-        viewModel.dispatch(TaskCertificationIntent.InitGoal(goalId))
-    }
 
     val pickMedia =
         rememberLauncherForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
@@ -115,6 +114,20 @@ fun TaskCertificationRoute(
                     ),
                 )
             }
+
+            is TaskCertificationSideEffect.ShowToast -> {
+                toastManager.tryShow(
+                    ToastData(
+                        message = currentContext.getString(event.message),
+                        type = event.type,
+                    ),
+                )
+            }
+            is TaskCertificationSideEffect.GetImageFromUri -> {
+                val image = currentContext.uriToByteArray(event.uri)
+                viewModel.dispatch(TaskCertificationIntent.Upload(image))
+            }
+            TaskCertificationSideEffect.NavigateToDetail -> navigateToBack()
         }
     }
 
@@ -152,7 +165,7 @@ fun TaskCertificationRoute(
             viewModel.dispatch(TaskCertificationIntent.CommentFocusChanged(it))
         },
         onClickUpload = {
-            viewModel.dispatch(TaskCertificationIntent.Upload)
+            viewModel.dispatch(TaskCertificationIntent.TryUpload)
         },
     )
 }
@@ -194,7 +207,7 @@ private fun TaskCertificationScreen(
                 CommentErrorText()
             } else {
                 AppText(
-                    text = stringResource(R.string.task_certification_image_upload),
+                    text = stringResource(R.string.task_certification_take_picture),
                     style = AppTextStyle.H2,
                     color = GrayColor.C100,
                 )
