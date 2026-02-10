@@ -1,6 +1,5 @@
 package com.twix.goal_editor
 
-import androidx.lifecycle.viewModelScope
 import com.twix.designsystem.R
 import com.twix.designsystem.components.toast.model.ToastType
 import com.twix.domain.model.enums.GoalIconType
@@ -12,7 +11,6 @@ import com.twix.domain.repository.GoalRepository
 import com.twix.goal_editor.model.GoalEditorUiState
 import com.twix.ui.base.BaseViewModel
 import com.twix.util.bus.GoalRefreshBus
-import kotlinx.coroutines.launch
 import java.time.LocalDate
 
 class GoalEditorViewModel(
@@ -80,13 +78,14 @@ class GoalEditorViewModel(
         }
     }
 
-    private fun save(id: Long) {
-        if (!currentState.isEnabled) return
+    private suspend fun save(id: Long) {
+        if (!currentState.isEnabled) {
+            emitSideEffect(GoalEditorSideEffect.ShowToast(R.string.toast_input_goal_title, ToastType.ERROR))
+            return
+        }
 
         if (currentState.endDateEnabled && currentState.endDate.isBefore(currentState.startDate)) {
-            viewModelScope.launch {
-                emitSideEffect(GoalEditorSideEffect.ShowToast(R.string.toast_end_date_before_start_date, ToastType.ERROR))
-            }
+            emitSideEffect(GoalEditorSideEffect.ShowToast(R.string.toast_end_date_before_start_date, ToastType.ERROR))
             return
         }
 
