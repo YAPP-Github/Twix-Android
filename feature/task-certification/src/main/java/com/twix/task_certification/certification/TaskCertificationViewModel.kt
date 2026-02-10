@@ -111,9 +111,11 @@ class TaskCertificationViewModel(
             },
             onSuccess = { fileName -> uploadPhotoLog(fileName) },
             onError = {
-                TaskCertificationSideEffect.ShowToast(
-                    R.string.task_certification_upload_fail,
-                    ToastType.ERROR,
+                emitSideEffect(
+                    TaskCertificationSideEffect.ShowToast(
+                        R.string.task_certification_upload_fail,
+                        ToastType.ERROR,
+                    ),
                 )
             },
         )
@@ -136,9 +138,11 @@ class TaskCertificationViewModel(
                 tryEmitSideEffect(TaskCertificationSideEffect.NavigateToDetail)
             },
             onError = {
-                TaskCertificationSideEffect.ShowToast(
-                    R.string.task_certification_upload_fail,
-                    ToastType.ERROR,
+                emitSideEffect(
+                    TaskCertificationSideEffect.ShowToast(
+                        R.string.task_certification_upload_fail,
+                        ToastType.ERROR,
+                    ),
                 )
             },
         )
