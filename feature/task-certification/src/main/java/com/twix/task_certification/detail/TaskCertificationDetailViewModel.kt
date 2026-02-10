@@ -21,8 +21,8 @@ class TaskCertificationDetailViewModel(
     private val goalRefreshBus: GoalRefreshBus,
     savedStateHandle: SavedStateHandle,
 ) : BaseViewModel<TaskCertificationDetailUiState, TaskCertificationDetailIntent, TaskCertificationDetailSideEffect>(
-    TaskCertificationDetailUiState(),
-) {
+        TaskCertificationDetailUiState(),
+    ) {
     private val goalId: Long =
         savedStateHandle[NavRoutes.TaskCertificationDetailRoute.ARG_GOAL_ID]
             ?: throw IllegalArgumentException(GOAL_ID_NOT_FOUND)
