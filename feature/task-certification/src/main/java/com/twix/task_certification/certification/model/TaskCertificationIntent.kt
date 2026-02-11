@@ -5,6 +5,10 @@ import androidx.compose.ui.text.input.TextFieldValue
 import com.twix.ui.base.Intent
 
 sealed interface TaskCertificationIntent : Intent {
+    data class InitGoal(
+        val goalId: Long,
+    ) : TaskCertificationIntent
+
     data class TakePicture(
         val uri: Uri?,
     ) : TaskCertificationIntent

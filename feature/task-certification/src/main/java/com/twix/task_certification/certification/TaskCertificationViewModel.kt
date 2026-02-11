@@ -15,6 +15,8 @@ class TaskCertificationViewModel :
     ) {
     override suspend fun handleIntent(intent: TaskCertificationIntent) {
         when (intent) {
+            is TaskCertificationIntent.InitGoal -> reduceGoalId(intent.goalId)
+
             is TaskCertificationIntent.TakePicture -> {
                 takePicture(intent.uri)
             }
@@ -47,6 +49,10 @@ class TaskCertificationViewModel :
                 upload()
             }
         }
+    }
+
+    private fun reduceGoalId(goalId: Long) {
+        reduce { copy(goalId = goalId) }
     }
 
     private fun takePicture(uri: Uri?) {

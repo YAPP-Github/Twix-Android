@@ -44,8 +44,21 @@ object TaskCertificationGraph : NavGraphContributor {
                 )
             }
 
-            composable(NavRoutes.TaskCertificationRoute.route) {
+            composable(
+                route = NavRoutes.TaskCertificationRoute.route,
+                arguments =
+                    listOf(
+                        navArgument(NavRoutes.TaskCertificationRoute.ARG_GOAL_ID) {
+                            defaultValue = -1L
+                        },
+                    ),
+            ) { backStackEntry ->
+                val id =
+                    backStackEntry.arguments?.getLong(NavRoutes.TaskCertificationDetailRoute.ARG_GOAL_ID)
+                        ?: -1
+
                 TaskCertificationRoute(
+                    goalId = id,
                     navigateToBack = navController::popBackStack,
                 )
             }
