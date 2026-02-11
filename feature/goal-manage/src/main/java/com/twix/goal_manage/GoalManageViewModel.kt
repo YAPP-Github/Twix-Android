@@ -1,5 +1,6 @@
 package com.twix.goal_manage
 
+import androidx.lifecycle.viewModelScope
 import com.twix.designsystem.R
 import com.twix.designsystem.components.toast.model.ToastType
 import com.twix.domain.model.enums.WeekNavigation
@@ -9,12 +10,21 @@ import com.twix.goal_manage.model.GoalManageUiState
 import com.twix.goal_manage.model.RemovedGoal
 import com.twix.ui.base.BaseViewModel
 import com.twix.util.bus.GoalRefreshBus
+import kotlinx.coroutines.launch
 import java.time.LocalDate
 
 class GoalManageViewModel(
     private val goalRepository: GoalRepository,
     private val goalRefreshBus: GoalRefreshBus,
 ) : BaseViewModel<GoalManageUiState, GoalManageIntent, GoalManageSideEffect>(GoalManageUiState()) {
+    init {
+        viewModelScope.launch {
+            goalRefreshBus.goalSummariesEvents.collect {
+                fetchGoalSummaryList(currentState.selectedDate)
+            }
+        }
+    }
+    
     override suspend fun handleIntent(intent: GoalManageIntent) {
         when (intent) {
             is GoalManageIntent.EndGoal -> endGoal(intent.id)
@@ -63,7 +73,7 @@ class GoalManageViewModel(
         launchResult(
             block = { goalRepository.completeGoal(id) },
             onSuccess = {
-                goalRefreshBus.notifyChanged()
+                goalRefreshBus.notifyGoalListChanged()
                 markPending(id, false)
             },
             onError = {
@@ -84,7 +94,7 @@ class GoalManageViewModel(
         launchResult(
             block = { goalRepository.deleteGoal(id) },
             onSuccess = {
-                goalRefreshBus.notifyChanged()
+                goalRefreshBus.notifyGoalListChanged()
                 markPending(id, false)
             },
             onError = {

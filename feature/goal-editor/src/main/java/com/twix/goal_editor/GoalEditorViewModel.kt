@@ -93,7 +93,7 @@ class GoalEditorViewModel(
             launchResult(
                 block = { goalRepository.createGoal(currentState.toCreateParam()) },
                 onSuccess = {
-                    goalRefreshBus.notifyChanged()
+                    goalRefreshBus.notifyGoalListChanged()
                     tryEmitSideEffect(GoalEditorSideEffect.NavigateToHome)
                 },
                 onError = { emitSideEffect(GoalEditorSideEffect.ShowToast(R.string.toast_create_goal_failed, ToastType.ERROR)) },
@@ -102,7 +102,8 @@ class GoalEditorViewModel(
             launchResult(
                 block = { goalRepository.updateGoal(currentState.toUpdateParam(id)) },
                 onSuccess = {
-                    goalRefreshBus.notifyChanged()
+                    goalRefreshBus.notifyGoalListChanged()
+                    goalRefreshBus.notifyGoalSummariesChanged()
                     tryEmitSideEffect(GoalEditorSideEffect.NavigateToHome)
                 },
                 onError = { emitSideEffect(GoalEditorSideEffect.ShowToast(R.string.toast_update_goal_failed, ToastType.ERROR)) },
