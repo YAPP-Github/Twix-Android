@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -23,7 +24,6 @@ import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.layout.boundsInRoot
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalFocusManager
-import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.ImeAction
@@ -55,28 +55,12 @@ fun CommentTextField(
 ) {
     val focusManager = LocalFocusManager.current
     val focusRequester = remember { FocusRequester() }
-    val keyboardController = LocalSoftwareKeyboardController.current
-    val placeholder = stringResource(R.string.comment_text_field_placeholder)
+    val keyboardState by keyboardAsState()
 
-    val keyboardVisibility by keyboardAsState()
-
-    LaunchedEffect(keyboardVisibility) {
-        when (keyboardVisibility) {
+    LaunchedEffect(keyboardState) {
+        when (keyboardState) {
             Keyboard.Opened -> Unit
-            Keyboard.Closed -> {
-                focusManager.clearFocus()
-                onFocusChanged(false)
-            }
-        }
-    }
-
-    LaunchedEffect(uiModel.isFocused) {
-        if (uiModel.isFocused) {
-            focusRequester.requestFocus()
-            awaitFrame()
-            keyboardController?.show()
-        } else {
-            keyboardController?.hide()
+            Keyboard.Closed -> focusManager.clearFocus()
         }
     }
 
@@ -85,7 +69,8 @@ fun CommentTextField(
             modifier
                 .onGloballyPositioned { coordinates ->
                     onPositioned(coordinates.boundsInRoot())
-                }.noRippleClickable {
+                }
+                .noRippleClickable {
                     focusRequester.requestFocus()
                 },
     ) {
@@ -101,6 +86,7 @@ fun CommentTextField(
                         onFocusChanged(focusState.isFocused)
                     },
             keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
+            keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() }),
             singleLine = true,
         )
 
@@ -132,7 +118,7 @@ fun CommentTextField(
                             .getOrNull(index)
                             ?.toString()
                     } else {
-                        placeholder.getOrNull(index)?.toString()
+                        stringResource(R.string.comment_text_field_placeholder)[index].toString()
                     }.orEmpty()
 
                 CommentCircle(
