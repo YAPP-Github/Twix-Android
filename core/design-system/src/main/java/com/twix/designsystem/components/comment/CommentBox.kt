@@ -8,7 +8,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import com.twix.designsystem.R
 import com.twix.designsystem.components.comment.model.CommentUiModel
@@ -19,7 +18,7 @@ import com.twix.domain.model.enums.AppTextStyle
 @Composable
 fun CommentBox(
     uiModel: CommentUiModel,
-    onCommentChanged: (TextFieldValue) -> Unit,
+    onCommentChanged: (String) -> Unit,
     onFocusChanged: (Boolean) -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -36,7 +35,7 @@ fun CommentBox(
         Spacer(modifier = Modifier.height(8.dp))
         CommentTextField(
             uiModel = uiModel,
-            onCommentChanged = onCommentChanged,
+            onCommitComment = onCommentChanged,
             onFocusChanged = onFocusChanged,
             modifier =
                 Modifier
