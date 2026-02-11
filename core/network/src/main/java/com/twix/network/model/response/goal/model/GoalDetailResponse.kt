@@ -6,7 +6,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class GoalDetailResponse(
     @SerialName("goalId") val goalId: Long,
-    @SerialName("name") val name: String,
+    @SerialName("goalName") val name: String,
     @SerialName("icon") val icon: String,
     @SerialName("repeatCycle") val repeatCycle: String,
     @SerialName("repeatCount") val repeatCount: Int,
