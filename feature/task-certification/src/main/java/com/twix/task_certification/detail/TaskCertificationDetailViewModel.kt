@@ -38,7 +38,7 @@ class TaskCertificationDetailViewModel(
         viewModelScope.launch {
             taskCertificationRefreshBus.events.collect {
                 fetchPhotolog()
-                goalRefreshBus.notifyChanged()
+                goalRefreshBus.notifyGoalListChanged()
             }
         }
     }
