@@ -127,11 +127,10 @@ fun CommentTextField(
                 CommentCircle(
                     text = char,
                     showPlaceholder = !uiModel.hidePlaceholder,
-                    showCursor = uiModel.showCursor(index),
+                    showCursor = uiModel.isFocused && index == internalValue.length,
                     modifier =
                         Modifier.noRippleClickable {
                             focusRequester.requestFocus()
-                            //onCommentChanged(uiModel.comment.copy(selection = TextRange(uiModel.comment.text.length)))
                         },
                 )
             }
