@@ -1,4 +1,4 @@
-package com.twix.designsystem.keyboard
+package com.twix.ui.keyboard
 
 enum class Keyboard {
     Opened,
