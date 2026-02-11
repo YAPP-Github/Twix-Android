@@ -4,7 +4,7 @@ import com.twix.domain.model.enums.GoalIconType
 import com.twix.domain.model.enums.RepeatCycle
 import java.time.LocalDate
 
-data class CreatedGoal(
+data class GoalDetail(
     val goalId: Long,
     val name: String,
     val icon: GoalIconType,

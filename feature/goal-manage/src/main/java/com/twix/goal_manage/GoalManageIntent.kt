@@ -19,4 +19,27 @@ sealed interface GoalManageIntent : Intent {
     data object PreviousWeek : GoalManageIntent
 
     data object NextWeek : GoalManageIntent
+
+    // UI 제어
+    data class OpenMenu(
+        val goalId: Long,
+    ) : GoalManageIntent
+
+    data object CloseMenu : GoalManageIntent
+
+    data class ShowEndDialog(
+        val goalId: Long,
+    ) : GoalManageIntent
+
+    data object DismissEndDialog : GoalManageIntent
+
+    data class ShowDeleteDialog(
+        val goalId: Long,
+    ) : GoalManageIntent
+
+    data object DismissDeleteDialog : GoalManageIntent
+
+    data class EditGoal(
+        val goalId: Long,
+    ) : GoalManageIntent
 }

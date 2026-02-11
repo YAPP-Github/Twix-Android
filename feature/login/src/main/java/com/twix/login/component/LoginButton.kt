@@ -34,11 +34,12 @@ import com.twix.designsystem.R as DesR
 fun LoginButton(
     type: LoginType,
     onClickLogin: (LoginType) -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     val uiModel = type.uiModel()
     Row(
         modifier =
-            Modifier
+            modifier
                 .fillMaxWidth()
                 .height(54.dp)
                 .clip(RoundedCornerShape(12.dp))

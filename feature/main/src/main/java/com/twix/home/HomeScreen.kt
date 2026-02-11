@@ -29,6 +29,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.twix.designsystem.R
 import com.twix.designsystem.components.calendar.WeeklyCalendar
+import com.twix.designsystem.components.goal.EmptyGoalGuide
 import com.twix.designsystem.components.goal.GoalCardFrame
 import com.twix.designsystem.components.goal.GoalCheckIndicator
 import com.twix.designsystem.components.text.AppText
@@ -37,7 +38,6 @@ import com.twix.designsystem.theme.GrayColor
 import com.twix.domain.model.enums.AppTextStyle
 import com.twix.domain.model.goal.Goal
 import com.twix.domain.model.goal.checkState
-import com.twix.home.component.EmptyGoalGuide
 import com.twix.home.component.GoalVerifications
 import com.twix.home.component.HomeTopBar
 import com.twix.home.model.HomeUiState
@@ -115,7 +115,10 @@ fun HomeScreen(
             Spacer(Modifier.height(12.dp))
 
             if (uiState.goalList.goals.isEmpty()) {
-                EmptyGoalGuide(modifier = Modifier.weight(1f))
+                EmptyGoalGuide(
+                    modifier = Modifier.weight(1f),
+                    text = stringResource(R.string.home_empty_goal_guide),
+                )
             } else {
                 GoalList(
                     modifier =
