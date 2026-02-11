@@ -3,9 +3,10 @@ package com.twix.designsystem.components.comment
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -38,7 +39,6 @@ import com.twix.designsystem.theme.TwixTheme
 import com.twix.ui.extension.noRippleClickable
 import com.twix.ui.keyboard.Keyboard
 import com.twix.ui.keyboard.keyboardAsState
-import kotlinx.coroutines.android.awaitFrame
 
 val CIRCLE_PADDING_START: Dp = 50.dp
 val CIRCLE_SIZE: Dp = 64.dp
@@ -69,17 +69,17 @@ fun CommentTextField(
             modifier
                 .onGloballyPositioned { coordinates ->
                     onPositioned(coordinates.boundsInRoot())
-                }
-                .noRippleClickable {
+                }.noRippleClickable {
                     focusRequester.requestFocus()
                 },
     ) {
-        BasicTextField(
+        TextField(
             value = uiModel.comment,
             onValueChange = { newValue -> onCommentChanged(newValue) },
             enabled = enabled,
             modifier =
                 Modifier
+                    .width(0.dp)
                     .alpha(0f)
                     .focusRequester(focusRequester)
                     .onFocusChanged { focusState ->
