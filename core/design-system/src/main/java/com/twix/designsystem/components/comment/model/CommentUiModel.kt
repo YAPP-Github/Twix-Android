@@ -26,17 +26,6 @@ data class CommentUiModel(
 
     fun updateFocus(isFocused: Boolean) = copy(isFocused = isFocused)
 
-    /**
-     * 플레이스홀더 표시 여부.
-     *
-     * 표시 조건
-     * - 포커스 중이 아니거나
-     * - 텍스트가 하나라도 존재하지 않으면
-     *
-     */
-    val hidePlaceholder: Boolean
-        get() = isFocused || comment.text.isNotEmpty()
-
     companion object {
         const val COMMENT_COUNT = 5
     }

@@ -58,13 +58,18 @@ fun CommentTextField(
     val keyboardState by keyboardAsState()
 
     var internalValue by rememberSaveable(uiModel.comment.text) { mutableStateOf(uiModel.comment.text) }
+    var isInitialized by remember { mutableStateOf(false) }
 
     LaunchedEffect(keyboardState) {
-        when (keyboardState) {
-            Keyboard.Opened -> Unit
-            Keyboard.Closed -> {
-                onCommitComment(internalValue.trim())
-                focusManager.clearFocus()
+        if (!isInitialized) {
+            isInitialized = true
+        } else {
+            when (keyboardState) {
+                Keyboard.Opened -> Unit
+                Keyboard.Closed -> {
+                    onCommitComment(internalValue.trim())
+                    focusManager.clearFocus()
+                }
             }
         }
     }
@@ -74,8 +79,7 @@ fun CommentTextField(
             modifier
                 .onGloballyPositioned { coordinates ->
                     onPositioned(coordinates.boundsInRoot())
-                }
-                .noRippleClickable {
+                }.noRippleClickable {
                     focusRequester.requestFocus()
                 },
     ) {
@@ -123,7 +127,7 @@ fun CommentTextField(
         ) {
             repeat(CommentUiModel.COMMENT_COUNT) { index ->
                 val char =
-                    if (uiModel.hidePlaceholder) {
+                    if (uiModel.isFocused || internalValue.isNotEmpty()) {
                         internalValue.getOrNull(index)?.toString()
                     } else {
                         stringResource(R.string.comment_text_field_placeholder)[index].toString()
@@ -131,7 +135,7 @@ fun CommentTextField(
 
                 CommentCircle(
                     text = char,
-                    showPlaceholder = !uiModel.hidePlaceholder,
+                    showPlaceholder = !uiModel.isFocused && internalValue.isEmpty(),
                     showCursor = uiModel.isFocused && index == internalValue.length,
                     modifier =
                         Modifier.noRippleClickable {
