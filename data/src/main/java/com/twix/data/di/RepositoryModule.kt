@@ -4,10 +4,12 @@ import com.twix.data.repository.DefaultAuthRepository
 import com.twix.data.repository.DefaultGoalRepository
 import com.twix.data.repository.DefaultOnboardingRepository
 import com.twix.data.repository.DefaultPhotoLogRepository
+import com.twix.data.repository.DefaultUserRepository
 import com.twix.domain.repository.AuthRepository
 import com.twix.domain.repository.GoalRepository
 import com.twix.domain.repository.OnBoardingRepository
 import com.twix.domain.repository.PhotoLogRepository
+import com.twix.domain.repository.UserRepository
 import org.koin.dsl.module
 
 internal val repositoryModule =
@@ -23,5 +25,8 @@ internal val repositoryModule =
         }
         single<PhotoLogRepository> {
             DefaultPhotoLogRepository(get(), get())
+        }
+        single<UserRepository> {
+            DefaultUserRepository(get())
         }
     }
