@@ -159,7 +159,7 @@ fun TaskCertificationDetailScreen(
     ) {
         TaskCertificationDetailTopBar(
             showModify = uiState.canModify,
-            goalTitle = uiState.goalTitle,
+            goalTitle = uiState.photoLogs.goalTitle,
             onBack = onBack,
             onClickModify = onClickModify,
         )

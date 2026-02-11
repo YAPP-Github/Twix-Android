@@ -7,6 +7,7 @@ import com.twix.domain.model.photolog.PhotoLogs
 @Immutable
 data class PhotoLogsUiModel(
     val goalId: Long = -1,
+    val goalTitle: String = "",
     val myPhotologs: PhotologDetailUiModel = PhotologDetailUiModel(),
     val partnerPhotologs: PhotologDetailUiModel = PhotologDetailUiModel(),
 ) {
@@ -17,13 +18,12 @@ data class PhotoLogsUiModel(
 }
 
 fun PhotoLogs.toUiModel(): PhotoLogsUiModel {
-    if (photologDetails.size != 2) return PhotoLogsUiModel()
-
-    val my = photologDetails.first { it.isMine }
-    val partner = photologDetails.first { !it.isMine }
+    val my = photologDetails.firstOrNull { it.isMine }
+    val partner = photologDetails.firstOrNull { !it.isMine }
 
     return PhotoLogsUiModel(
         goalId = goalId,
+        goalTitle = goalTitle,
         myPhotologs = my.toUiModel(myNickname),
         partnerPhotologs = partner.toUiModel(partnerNickname),
     )

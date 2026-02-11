@@ -7,7 +7,6 @@ import com.twix.ui.base.State
 
 @Immutable
 data class TaskCertificationDetailUiState(
-    val goalTitle: String = "",
     val currentShow: BetweenUs = BetweenUs.PARTNER,
     val photoLogs: PhotoLogsUiModel = PhotoLogsUiModel(),
 ) : State {

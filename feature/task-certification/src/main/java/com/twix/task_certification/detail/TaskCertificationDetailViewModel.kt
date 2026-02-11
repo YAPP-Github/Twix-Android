@@ -55,7 +55,7 @@ class TaskCertificationDetailViewModel(
         launchResult(
             block = { photologRepository.fetchPhotoLogs(goalId) },
             onSuccess = {
-                reduce { copy(photoLogs = it.toUiModel(), goalTitle = goalTitle) }
+                reduce { copy(photoLogs = it.toUiModel()) }
             },
             onError = {
                 emitSideEffect(
