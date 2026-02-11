@@ -10,6 +10,7 @@ class GoalRefreshBus {
             replay = 0,
             extraBufferCapacity = 1,
         )
+
     // 편집 화면 목표 리프레쉬 이벤트
     private val _goalSummariesEvents =
         MutableSharedFlow<Unit>(
@@ -20,5 +21,6 @@ class GoalRefreshBus {
     val goalSummariesEvents: SharedFlow<Unit> = _goalSummariesEvents
 
     fun notifyGoalListChanged() = _goalEvents.tryEmit(Unit)
+
     fun notifyGoalSummariesChanged() = _goalSummariesEvents.tryEmit(Unit)
 }

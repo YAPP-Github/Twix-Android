@@ -24,7 +24,7 @@ class GoalManageViewModel(
             }
         }
     }
-    
+
     override suspend fun handleIntent(intent: GoalManageIntent) {
         when (intent) {
             is GoalManageIntent.EndGoal -> endGoal(intent.id)
