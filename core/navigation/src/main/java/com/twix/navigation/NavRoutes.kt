@@ -54,4 +54,15 @@ sealed class NavRoutes(
 
         fun createRoute(date: LocalDate) = "goal_manage/$date"
     }
+
+    /**
+     * SettingsGraph
+     * */
+    object SettingsGraph : NavRoutes("settings_graph")
+
+    object SettingsRoute : NavRoutes("settings")
+
+    object SettingsAccountRoute : NavRoutes("settings/account")
+
+    object SettingsAboutRoute : NavRoutes("settings/about")
 }

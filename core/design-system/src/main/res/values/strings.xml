@@ -13,6 +13,10 @@
     <string name="word_not_set">미설정</string>
     <string name="word_cancel">취소</string>
     <string name="word_delete">삭제</string>
+    <string name="word_setting">설정</string>
+    <string name="word_account">계정</string>
+    <string name="word_information">정보</string>
+    <string name="word_logout">로그아웃</string>
 
     <string name="word_daily">매일</string>
     <string name="word_weekly">매주</string>
@@ -31,6 +35,7 @@
     <string name="action_delete">삭제하기</string>
     <string name="action_finish">끝내기</string>
     <string name="action_complete_goal">이뤘어요</string>
+    <string name="action_withdraw_account">탈퇴하기</string>
 
     <!-- 홈 화면 -->
     <string name="home_today_goal">오늘 우리 목표</string>
@@ -57,7 +62,11 @@
     <string name="goal_list_title_next">다음 우리 목표</string>
     <string name="date_year_month_day">%s년 %02d월 %02d일</string>
     <string name="goal_detail_empty_goal_guide">아직 목표가 없어요!</string>
-    
+
+    <!-- 설정 화면 -->
+    <string name="settings_privacy_policy">개인정보 처리방침</string>
+    <string name="settings_my_app_version">나의 버전</string>
+
     <!-- 토스트 메시지 -->
     <string name="toast_end_date_before_start_date">종료 날짜가 시작 날짜보다 이전입니다.</string>
     <string name="toast_goal_fetch_failed">목표 조회에 실패했습니다.</string>
@@ -66,11 +75,17 @@
     <string name="toast_delete_goal_failed">목표 삭제에 실패했습니다.</string>
     <string name="toast_complete_goal_failed">목표 완료에 실패했습니다.</string>
     <string name="toast_input_goal_title">목표를 입력해주세요.</string>
+    <string name="toast_logout_completed">로그아웃되었습니다.</string>
+    <string name="toast_logout_failed">로그아웃에 실패했습니다.</string>
+    <string name="toast_account_deleted">계정이 삭제되었습니다.</string>
+    <string name="toast_account_delete_failed">계정 삭제에 실패했습니다.</string>
 
     <!-- 다이얼로그 -->
     <string name="dialog_end_goal_title">%s\n목표를 이루셨나요?</string>
     <string name="dialog_end_goal_content">이룬 목표에서 확인하실 수 있어요.</string>
     <string name="dialog_delete_goal_title">%s\n목표를 삭제할까요?</string>
     <string name="dialog_delete_goal_content">저장된 인증샷은 모두 삭제됩니다.</string>
+    <string name="dialog_withdraw_account_title">정말 탈퇴하시겠어요?</string>
+    <string name="dialog_withdraw_account_content">커플 연결이 끊어집니다.\n데이터는 전부 삭제되며 복구가 불가능합니다.</string>
 
 </resources>
