@@ -12,6 +12,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -26,7 +27,6 @@ import androidx.compose.ui.layout.boundsInRoot
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
@@ -49,7 +49,7 @@ fun CommentTextField(
     uiModel: CommentUiModel,
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
-    onCommentChanged: (TextFieldValue) -> Unit = {},
+    onCommitComment: (String) -> Unit = {},
     onFocusChanged: (Boolean) -> Unit = {},
     onPositioned: (Rect) -> Unit = {},
 ) {
@@ -57,10 +57,15 @@ fun CommentTextField(
     val focusRequester = remember { FocusRequester() }
     val keyboardState by keyboardAsState()
 
+    var internalValue by rememberSaveable(uiModel.comment.text) { mutableStateOf(uiModel.comment.text) }
+
     LaunchedEffect(keyboardState) {
         when (keyboardState) {
             Keyboard.Opened -> Unit
-            Keyboard.Closed -> focusManager.clearFocus()
+            Keyboard.Closed -> {
+                onCommitComment(internalValue.trim())
+                focusManager.clearFocus()
+            }
         }
     }
 
@@ -74,16 +79,16 @@ fun CommentTextField(
                 },
     ) {
         TextField(
-            value = uiModel.comment,
-            onValueChange = { newValue -> onCommentChanged(newValue) },
+            value = internalValue,
+            onValueChange = { newValue -> internalValue = newValue },
             enabled = enabled,
             modifier =
                 Modifier
                     .width(0.dp)
                     .alpha(0f)
                     .focusRequester(focusRequester)
-                    .onFocusChanged { focusState ->
-                        onFocusChanged(focusState.isFocused)
+                    .onFocusChanged { state ->
+                        onFocusChanged(state.isFocused)
                     },
             keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
             keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() }),
@@ -114,9 +119,7 @@ fun CommentTextField(
             repeat(CommentUiModel.COMMENT_COUNT) { index ->
                 val char =
                     if (uiModel.hidePlaceholder) {
-                        uiModel.comment.text
-                            .getOrNull(index)
-                            ?.toString()
+                        internalValue.getOrNull(index)?.toString()
                     } else {
                         stringResource(R.string.comment_text_field_placeholder)[index].toString()
                     }.orEmpty()
@@ -128,7 +131,7 @@ fun CommentTextField(
                     modifier =
                         Modifier.noRippleClickable {
                             focusRequester.requestFocus()
-                            onCommentChanged(uiModel.comment.copy(selection = TextRange(uiModel.comment.text.length)))
+                            //onCommentChanged(uiModel.comment.copy(selection = TextRange(uiModel.comment.text.length)))
                         },
                 )
             }
@@ -144,7 +147,6 @@ private fun CommentTextFieldPreview() {
         var isFocused by remember { mutableStateOf(false) }
         CommentTextField(
             uiModel = CommentUiModel(text, isFocused),
-            onCommentChanged = { text = it },
             onFocusChanged = { isFocused = it },
             onPositioned = {},
         )

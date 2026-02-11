@@ -36,8 +36,8 @@ class TaskCertificationViewModel(
             is TaskCertificationIntent.ToggleLens -> reduceLens()
             is TaskCertificationIntent.ToggleTorch -> reduceTorch()
             is TaskCertificationIntent.RetakePicture -> setupRetake()
-            is TaskCertificationIntent.UpdateComment -> updateComment(intent)
-            is TaskCertificationIntent.CommentFocusChanged -> updateCommentFocus(intent.isFocused)
+            is TaskCertificationIntent.UpdateComment -> reduceComment(intent.value)
+            is TaskCertificationIntent.CommentFocusChanged -> reduceCommentFocus(intent.isFocused)
             is TaskCertificationIntent.TryUpload -> checkUpload()
             is TaskCertificationIntent.Upload -> upload(intent.image)
         }
@@ -58,7 +58,7 @@ class TaskCertificationViewModel(
     private fun reducePicture(uri: Uri) {
         reduce { updatePicture(uri) }
         if (uiState.value.hasMaxCommentLength.not()) {
-            updateCommentFocus(true)
+            reduceCommentFocus(true)
         }
     }
 
@@ -74,11 +74,11 @@ class TaskCertificationViewModel(
         reduce { removePicture() }
     }
 
-    private fun updateComment(intent: TaskCertificationIntent.UpdateComment) {
-        reduce { updateComment(intent.comment) }
+    private fun reduceComment(comment: String) {
+        reduce { updateComment(comment) }
     }
 
-    private fun updateCommentFocus(isFocused: Boolean) {
+    private fun reduceCommentFocus(isFocused: Boolean) {
         reduce { updateCommentFocus(isFocused) }
     }
 

@@ -1,7 +1,6 @@
 package com.twix.task_certification.certification.model
 
 import android.net.Uri
-import androidx.compose.ui.text.input.TextFieldValue
 import com.twix.ui.base.Intent
 
 sealed interface TaskCertificationIntent : Intent {
@@ -20,7 +19,7 @@ sealed interface TaskCertificationIntent : Intent {
     data object RetakePicture : TaskCertificationIntent
 
     data class UpdateComment(
-        val comment: TextFieldValue,
+        val value: String,
     ) : TaskCertificationIntent
 
     data class CommentFocusChanged(
