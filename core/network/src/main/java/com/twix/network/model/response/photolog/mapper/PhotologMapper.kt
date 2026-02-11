@@ -20,8 +20,8 @@ fun PhotologDetailResponse.toDomain(): PhotologDetail =
 fun PhotoLogResponse.toDomain(): PhotoLogs =
     PhotoLogs(
         goalId = goalId,
+        goalTitle = goalTitle,
         myNickname = myNickname,
         partnerNickname = partnerNickname,
-        goalTitle = goalTitle,
-        photologDetails = photologs.map { it.toDomain() },
+        photologDetails = photologs?.map { it.toDomain() } ?: emptyList(),
     )

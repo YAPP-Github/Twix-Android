@@ -29,13 +29,8 @@ object TaskCertificationGraph : NavGraphContributor {
                             defaultValue = -1L
                         },
                     ),
-            ) { backStackEntry ->
-                val id =
-                    backStackEntry.arguments?.getLong(NavRoutes.TaskCertificationDetailRoute.ARG_GOAL_ID)
-                        ?: -1
-
+            ) {
                 TaskCertificationDetailRoute(
-                    goalId = id,
                     navigateToBack = navController::popBackStack,
                     navigateToUpload = { goalId ->
                         val destination = NavRoutes.TaskCertificationRoute.createRoute(goalId)
@@ -52,14 +47,11 @@ object TaskCertificationGraph : NavGraphContributor {
                             defaultValue = -1L
                         },
                     ),
-            ) { backStackEntry ->
-                val id =
-                    backStackEntry.arguments?.getLong(NavRoutes.TaskCertificationDetailRoute.ARG_GOAL_ID)
-                        ?: -1
-
+            ) {
                 TaskCertificationRoute(
-                    goalId = id,
-                    navigateToBack = navController::popBackStack,
+                    navigateToBack = {
+                        navController.popBackStack()
+                    },
                 )
             }
         }

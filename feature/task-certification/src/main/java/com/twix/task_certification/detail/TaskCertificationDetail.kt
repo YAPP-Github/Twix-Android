@@ -19,7 +19,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -55,13 +54,11 @@ import com.twix.task_certification.detail.reaction.ReactionEffect
 import com.twix.task_certification.detail.reaction.ReactionUiModel
 import com.twix.task_certification.detail.swipe.SwipeableCard
 import com.twix.ui.base.ObserveAsEvents
-import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 import org.koin.compose.koinInject
 
 @Composable
 fun TaskCertificationDetailRoute(
-    goalId: Long,
     navigateToBack: () -> Unit,
     navigateToUpload: (Long) -> Unit,
     toastManager: ToastManager = koinInject(),
@@ -70,12 +67,6 @@ fun TaskCertificationDetailRoute(
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val context = LocalContext.current
     val currentContext by rememberUpdatedState(context)
-
-    LaunchedEffect(goalId) {
-        if (goalId != -1L) {
-            viewModel.dispatch(TaskCertificationDetailIntent.InitGoal(goalId))
-        }
-    }
 
     ObserveAsEvents(viewModel.sideEffect) { sideEffect ->
         when (sideEffect) {
@@ -93,7 +84,7 @@ fun TaskCertificationDetailRoute(
         ) { granted ->
 
             if (granted) {
-                navigateToUpload(goalId)
+                navigateToUpload(uiState.photoLogs.goalId)
                 return@rememberLauncherForActivityResult
             }
 
@@ -140,7 +131,7 @@ fun TaskCertificationDetailRoute(
         onClickReaction = { viewModel.dispatch(TaskCertificationDetailIntent.Reaction(it)) },
         onClickUpload = {
             if (hasCameraPermission(currentContext)) {
-                navigateToUpload(goalId)
+                navigateToUpload(uiState.photoLogs.goalId)
             } else {
                 permissionLauncher.launch(Manifest.permission.CAMERA)
             }
@@ -168,7 +159,7 @@ fun TaskCertificationDetailScreen(
     ) {
         TaskCertificationDetailTopBar(
             showModify = uiState.canModify,
-            goalTitle = uiState.goalTitle,
+            goalTitle = uiState.photoLogs.goalTitle,
             onBack = onBack,
             onClickModify = onClickModify,
         )
@@ -184,7 +175,7 @@ fun TaskCertificationDetailScreen(
                     },
                 buttonTitle =
                     when (uiState.currentShow) {
-                        BetweenUs.ME -> stringResource(R.string.task_certification_image_upload)
+                        BetweenUs.ME -> stringResource(R.string.task_certification_take_picture)
                         BetweenUs.PARTNER -> stringResource(R.string.task_certification_detail_partner_sting)
                     },
                 rotation =
@@ -219,11 +210,11 @@ fun TaskCertificationDetailScreen(
             }
         }
 
-        ReactionSection(
-            visible = uiState.canReaction,
-            reaction = uiState.photoLogs.partnerPhotologs.reaction,
-            onClickReaction = onClickReaction,
-        )
+//        ReactionSection(
+//            visible = uiState.canReaction,
+//            reaction = uiState.photoLogs.partnerPhotologs.reaction,
+//            onClickReaction = onClickReaction,
+//        )
     }
 }
 

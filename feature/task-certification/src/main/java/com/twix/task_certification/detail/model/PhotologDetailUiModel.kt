@@ -28,14 +28,18 @@ data class PhotologDetailUiModel(
                 uploadedAt.isNotEmpty()
 }
 
-fun PhotologDetail.toUiModel(nickName: String) =
-    PhotologDetailUiModel(
+fun PhotologDetail?.toUiModel(nickName: String): PhotologDetailUiModel =
+    this?.let {
+        PhotologDetailUiModel(
+            nickName = nickName,
+            photologId = photologId,
+            goalId = goalId,
+            imageUrl = imageUrl,
+            comment = comment,
+            verificationDate = verificationDate,
+            uploaderName = uploaderName,
+            uploadedAt = uploadedAt?.let { RelativeTimeFormatter.format(it) } ?: "",
+        )
+    } ?: PhotologDetailUiModel(
         nickName = nickName,
-        photologId = photologId,
-        goalId = goalId,
-        imageUrl = imageUrl,
-        comment = comment,
-        verificationDate = verificationDate,
-        uploaderName = uploaderName,
-        uploadedAt = uploadedAt?.let { RelativeTimeFormatter.format(it) } ?: "",
     )

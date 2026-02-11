@@ -1,9 +1,11 @@
 package com.twix.data.repository
 
 import com.twix.domain.model.photo.PhotoLogUploadInfo
+import com.twix.domain.model.photo.PhotologParam
 import com.twix.domain.model.photolog.PhotoLogs
 import com.twix.domain.repository.PhotoLogRepository
 import com.twix.network.execute.safeApiCall
+import com.twix.network.model.request.photolog.mapper.toRequest
 import com.twix.network.model.response.photo.mapper.toDomain
 import com.twix.network.model.response.photolog.mapper.toDomain
 import com.twix.network.service.PhotoLogService
@@ -15,6 +17,9 @@ class DefaultPhotoLogRepository(
     private val uploader: PresignedUploader,
 ) : PhotoLogRepository {
     override suspend fun getUploadUrl(goalId: Long): AppResult<PhotoLogUploadInfo> = safeApiCall { service.getUploadUrl(goalId).toDomain() }
+
+    override suspend fun uploadPhotoLog(photologParam: PhotologParam): AppResult<Unit> =
+        safeApiCall { service.uploadPhotoLog(photologParam.toRequest()) }
 
     override suspend fun uploadPhotoLogImage(
         goalId: Long,

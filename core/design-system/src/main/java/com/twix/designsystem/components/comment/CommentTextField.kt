@@ -33,11 +33,11 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.twix.designsystem.R
 import com.twix.designsystem.components.comment.model.CommentUiModel
-import com.twix.designsystem.keyboard.Keyboard
-import com.twix.designsystem.keyboard.keyboardAsState
 import com.twix.designsystem.theme.GrayColor
 import com.twix.designsystem.theme.TwixTheme
 import com.twix.ui.extension.noRippleClickable
+import com.twix.ui.keyboard.Keyboard
+import com.twix.ui.keyboard.keyboardAsState
 import kotlinx.coroutines.android.awaitFrame
 
 val CIRCLE_PADDING_START: Dp = 50.dp
