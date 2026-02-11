@@ -74,13 +74,18 @@ fun CommentTextField(
             modifier
                 .onGloballyPositioned { coordinates ->
                     onPositioned(coordinates.boundsInRoot())
-                }.noRippleClickable {
+                }
+                .noRippleClickable {
                     focusRequester.requestFocus()
                 },
     ) {
         TextField(
             value = internalValue,
-            onValueChange = { newValue -> internalValue = newValue },
+            onValueChange = { newValue ->
+                if (newValue.length <= CommentUiModel.COMMENT_COUNT) {
+                    internalValue = newValue
+                }
+            },
             enabled = enabled,
             modifier =
                 Modifier
