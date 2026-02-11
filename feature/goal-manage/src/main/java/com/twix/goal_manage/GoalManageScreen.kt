@@ -25,9 +25,11 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -37,11 +39,14 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.twix.designsystem.R
 import com.twix.designsystem.components.calendar.WeeklyCalendar
 import com.twix.designsystem.components.dialog.CommonDialog
+import com.twix.designsystem.components.goal.EmptyGoalGuide
 import com.twix.designsystem.components.goal.GoalCardFrame
 import com.twix.designsystem.components.popup.CommonPopup
 import com.twix.designsystem.components.popup.CommonPopupDivider
 import com.twix.designsystem.components.popup.CommonPopupItem
 import com.twix.designsystem.components.text.AppText
+import com.twix.designsystem.components.toast.ToastManager
+import com.twix.designsystem.components.toast.model.ToastData
 import com.twix.designsystem.components.topbar.CommonTopBar
 import com.twix.designsystem.extension.label
 import com.twix.designsystem.extension.toRes
@@ -51,49 +56,91 @@ import com.twix.domain.model.enums.AppTextStyle
 import com.twix.domain.model.enums.GoalIconType
 import com.twix.domain.model.goal.GoalSummary
 import com.twix.goal_manage.model.GoalManageUiState
+import com.twix.ui.base.ObserveAsEvents
 import com.twix.ui.extension.noRippleClickable
 import org.koin.androidx.compose.koinViewModel
+import org.koin.compose.koinInject
 import java.time.LocalDate
 
 @Composable
 fun GoalManageRoute(
     selectedDate: LocalDate,
+    toastManager: ToastManager = koinInject(),
     viewModel: GoalManageViewModel = koinViewModel(),
     popBackStack: () -> Unit,
     navigateToGoalEditor: (Long) -> Unit,
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val context = LocalContext.current
+    val currentContext by rememberUpdatedState(context)
 
     LaunchedEffect(selectedDate) {
         viewModel.dispatch(GoalManageIntent.SetSelectedDate(selectedDate))
     }
 
+    ObserveAsEvents(viewModel.sideEffect) { effect ->
+        when (effect) {
+            is GoalManageSideEffect.ShowToast -> toastManager.tryShow(ToastData(currentContext.getString(effect.resId), effect.type))
+            is GoalManageSideEffect.NavigateToGoalEditor -> navigateToGoalEditor(effect.goalId)
+        }
+    }
+
     GoalManageScreen(
         uiState = uiState,
+        openedMenuGoalId = uiState.openedMenuGoalId,
+        pendingIds = uiState.pendingGoalIds,
         onBack = popBackStack,
         onSelectDate = { viewModel.dispatch(GoalManageIntent.SetSelectedDate(it)) },
         onPreviousWeek = { viewModel.dispatch(GoalManageIntent.PreviousWeek) },
         onNextWeek = { viewModel.dispatch(GoalManageIntent.NextWeek) },
-        onEdit = navigateToGoalEditor,
-        onDelete = { viewModel.dispatch(GoalManageIntent.DeleteGoal(it)) },
-        onEnd = { viewModel.dispatch(GoalManageIntent.EndGoal(it)) },
+        // 팝업 메뉴
+        onOpenMenu = { viewModel.dispatch(GoalManageIntent.OpenMenu(it)) },
+        onCloseMenu = { viewModel.dispatch(GoalManageIntent.CloseMenu) },
+        // 팝업 아이템에서 요청
+        onRequestEnd = { viewModel.dispatch(GoalManageIntent.ShowEndDialog(it)) },
+        onRequestDelete = { viewModel.dispatch(GoalManageIntent.ShowDeleteDialog(it)) },
+        // 다이얼로그 confirm
+        onConfirmEnd = { viewModel.dispatch(GoalManageIntent.EndGoal(it)) },
+        onConfirmDelete = { viewModel.dispatch(GoalManageIntent.DeleteGoal(it)) },
+        // 다이얼로그 dismiss
+        onDismissEndDialog = { viewModel.dispatch(GoalManageIntent.DismissEndDialog) },
+        onDismissDeleteDialog = { viewModel.dispatch(GoalManageIntent.DismissDeleteDialog) },
+        // 수정
+        onEdit = { viewModel.dispatch(GoalManageIntent.EditGoal(it)) },
     )
 }
 
 @Composable
 private fun GoalManageScreen(
     uiState: GoalManageUiState,
+    openedMenuGoalId: Long?,
     onBack: () -> Unit,
     onSelectDate: (LocalDate) -> Unit,
     onPreviousWeek: () -> Unit,
     onNextWeek: () -> Unit,
-    onEdit: (Long) -> Unit = {},
-    onDelete: (Long) -> Unit = {},
-    onEnd: (Long) -> Unit = {},
+    onEdit: (Long) -> Unit,
+    onRequestDelete: (Long) -> Unit,
+    onRequestEnd: (Long) -> Unit,
+    onConfirmDelete: (Long) -> Unit,
+    onConfirmEnd: (Long) -> Unit,
+    onDismissDeleteDialog: () -> Unit,
+    onDismissEndDialog: () -> Unit,
+    onOpenMenu: (Long) -> Unit,
+    onCloseMenu: () -> Unit,
+    pendingIds: Set<Long>,
 ) {
-    var showEndGoalDialog by remember { mutableStateOf(false) }
-    var showDeleteGoalDialog by remember { mutableStateOf(false) }
-    var selectedGoal: GoalSummary? by remember { mutableStateOf(null) }
+    val endDialog = uiState.endDialog
+    val deleteDialog = uiState.deleteDialog
+
+    var endDialogSnapshot by remember { mutableStateOf(endDialog) }
+    var deleteDialogSnapshot by remember { mutableStateOf(deleteDialog) }
+
+    LaunchedEffect(endDialog) {
+        if (endDialog != null) endDialogSnapshot = endDialog
+    }
+    LaunchedEffect(deleteDialog) {
+        if (deleteDialog != null) deleteDialogSnapshot = deleteDialog
+    }
 
     Box(modifier = Modifier.fillMaxSize()) {
         Column(
@@ -127,63 +174,71 @@ private fun GoalManageScreen(
                 onNextWeek = onNextWeek,
             )
 
-            GoalSummaryList(
-                modifier =
-                    Modifier
-                        .padding(horizontal = 20.dp)
-                        .weight(1f),
-                summaryList = uiState.goalSummaries,
-                onEdit = onEdit,
-                onDelete = {
-                    showDeleteGoalDialog = true
-                    selectedGoal = it
-                },
-                onEnd = {
-                    showEndGoalDialog = true
-                    selectedGoal = it
-                },
-            )
+            if (uiState.goalSummaries.isEmpty()) {
+                EmptyGoalGuide(
+                    modifier =
+                        Modifier
+                            .padding(top = 128.dp),
+                    text = stringResource(R.string.goal_detail_empty_goal_guide),
+                    isDetail = true,
+                )
+            } else {
+                GoalSummaryList(
+                    modifier =
+                        Modifier
+                            .padding(horizontal = 20.dp)
+                            .weight(1f),
+                    summaryList = uiState.goalSummaries,
+                    openedMenuGoalId = openedMenuGoalId,
+                    pendingIds = pendingIds,
+                    onOpenMenu = onOpenMenu,
+                    onCloseMenu = onCloseMenu,
+                    onEdit = onEdit,
+                    onRequestDelete = onRequestDelete,
+                    onRequestEnd = onRequestEnd,
+                )
+            }
         }
 
         CommonDialog(
-            visible = showEndGoalDialog,
+            visible = endDialog != null,
             confirmText = stringResource(R.string.action_complete_goal),
             dismissText = stringResource(R.string.word_cancel),
-            onDismissRequest = { showEndGoalDialog = false },
+            onDismissRequest = onDismissEndDialog,
             onConfirm = {
-                showEndGoalDialog = false
-                selectedGoal?.let { onEnd(it.goalId) }
+                val id = endDialog?.goalId
+                onDismissEndDialog()
+                id?.let(onConfirmEnd)
             },
-            onDismiss = { showEndGoalDialog = false },
+            onDismiss = onDismissEndDialog,
             content = {
-                selectedGoal?.let {
-                    GoalSummaryDialogContent(
-                        title = stringResource(R.string.dialog_end_goal_title, it.name),
-                        content = stringResource(R.string.dialog_end_goal_content),
-                        icon = it.icon,
-                    )
-                }
+                val dialog = endDialogSnapshot ?: return@CommonDialog
+                GoalSummaryDialogContent(
+                    title = stringResource(R.string.dialog_end_goal_title, dialog.name),
+                    content = stringResource(R.string.dialog_end_goal_content),
+                    icon = dialog.icon,
+                )
             },
         )
 
         CommonDialog(
-            visible = showDeleteGoalDialog,
+            visible = deleteDialog != null,
             confirmText = stringResource(R.string.word_delete),
             dismissText = stringResource(R.string.word_cancel),
-            onDismissRequest = { showDeleteGoalDialog = false },
+            onDismissRequest = onDismissDeleteDialog,
             onConfirm = {
-                showDeleteGoalDialog = false
-                selectedGoal?.let { onDelete(it.goalId) }
+                val id = deleteDialog?.goalId
+                onDismissDeleteDialog()
+                id?.let(onConfirmDelete)
             },
-            onDismiss = { showDeleteGoalDialog = false },
+            onDismiss = onDismissDeleteDialog,
             content = {
-                selectedGoal?.let {
-                    GoalSummaryDialogContent(
-                        title = stringResource(R.string.dialog_delete_goal_title, it.name),
-                        content = stringResource(R.string.dialog_delete_goal_content),
-                        icon = it.icon,
-                    )
-                }
+                val dialog = deleteDialogSnapshot ?: return@CommonDialog
+                GoalSummaryDialogContent(
+                    title = stringResource(R.string.dialog_delete_goal_title, dialog.name),
+                    content = stringResource(R.string.dialog_delete_goal_content),
+                    icon = dialog.icon,
+                )
             },
         )
     }
@@ -193,9 +248,13 @@ private fun GoalManageScreen(
 private fun GoalSummaryList(
     modifier: Modifier = Modifier,
     summaryList: List<GoalSummary>,
+    openedMenuGoalId: Long?,
+    pendingIds: Set<Long>,
+    onOpenMenu: (Long) -> Unit,
+    onCloseMenu: () -> Unit,
     onEdit: (Long) -> Unit = {},
-    onDelete: (GoalSummary) -> Unit = {},
-    onEnd: (GoalSummary) -> Unit = {},
+    onRequestDelete: (Long) -> Unit = {},
+    onRequestEnd: (Long) -> Unit = {},
 ) {
     LazyColumn(
         modifier = modifier,
@@ -205,9 +264,13 @@ private fun GoalSummaryList(
         items(summaryList, key = { it.goalId }) { item ->
             GoalSummaryItem(
                 item = item,
+                openedMenuGoalId = openedMenuGoalId,
+                onOpenMenu = onOpenMenu,
+                onCloseMenu = onCloseMenu,
                 onEdit = onEdit,
-                onDelete = onDelete,
-                onEnd = onEnd,
+                onShowDeleteDialog = onRequestDelete,
+                onShowEndDialog = onRequestEnd,
+                isPending = item.goalId in pendingIds,
             )
         }
     }
@@ -216,12 +279,15 @@ private fun GoalSummaryList(
 @Composable
 private fun GoalSummaryItem(
     item: GoalSummary,
-    onEdit: (Long) -> Unit = {},
-    onDelete: (GoalSummary) -> Unit = {},
-    onEnd: (GoalSummary) -> Unit = {},
+    openedMenuGoalId: Long?,
+    onOpenMenu: (Long) -> Unit,
+    onCloseMenu: () -> Unit,
+    onEdit: (Long) -> Unit,
+    onShowEndDialog: (Long) -> Unit,
+    onShowDeleteDialog: (Long) -> Unit,
+    isPending: Boolean,
 ) {
-    var menuExpanded by remember { mutableStateOf(false) }
-    var anchorOffset by remember { mutableStateOf(IntOffset(x = -180, y = 68)) }
+    val menuVisible = openedMenuGoalId == item.goalId
 
     GoalCardFrame(
         goalName = item.name,
@@ -236,13 +302,13 @@ private fun GoalSummaryItem(
                     modifier =
                         Modifier
                             .size(24.dp)
-                            .noRippleClickable(onClick = { menuExpanded = true }),
+                            .noRippleClickable(enabled = !isPending, onClick = { onOpenMenu(item.goalId) }),
                 )
 
                 CommonPopup(
-                    visible = menuExpanded,
-                    anchorOffset = anchorOffset,
-                    onDismiss = { menuExpanded = false },
+                    visible = menuVisible,
+                    anchorOffset = IntOffset(x = -180, y = 68),
+                    onDismiss = onCloseMenu,
                 ) {
                     Column(
                         modifier =
@@ -255,23 +321,21 @@ private fun GoalSummaryItem(
                             text = stringResource(R.string.action_edit),
                             onClick = {
                                 onEdit(item.goalId)
-                                menuExpanded = false
+                                onCloseMenu()
                             },
                         )
                         CommonPopupDivider()
                         CommonPopupItem(
                             text = stringResource(R.string.action_finish),
                             onClick = {
-                                onEnd(item)
-                                menuExpanded = false
+                                onShowEndDialog(item.goalId)
                             },
                         )
                         CommonPopupDivider()
                         CommonPopupItem(
                             text = stringResource(R.string.action_delete),
                             onClick = {
-                                onDelete(item)
-                                menuExpanded = false
+                                onShowDeleteDialog(item.goalId)
                             },
                         )
                     }

@@ -34,7 +34,9 @@ sealed interface GoalEditorIntent : Intent {
         val enabled: Boolean,
     ) : GoalEditorIntent
 
-    data object Save : GoalEditorIntent
+    data class Save(
+        val id: Long,
+    ) : GoalEditorIntent
 
     data class InitGoal(
         val id: Long,

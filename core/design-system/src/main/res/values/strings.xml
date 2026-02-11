@@ -40,6 +40,7 @@
     <!-- 홈 화면 -->
     <string name="home_today_goal">오늘 우리 목표</string>
     <string name="home_empty_goal_guide">첫 목표를 세워볼까요?</string>
+    <string name="home_empty_goal_content">+ 버튼을 눌러 목표를 추가해보세요</string>
 
     <!-- 코멘트 입력 -->
     <string name="comment_text_field_placeholder">코멘트추가</string>
@@ -60,15 +61,20 @@
     <string name="goal_list_title_today">오늘 우리 목표</string>
     <string name="goal_list_title_next">다음 우리 목표</string>
     <string name="date_year_month_day">%s년 %02d월 %02d일</string>
+    <string name="goal_detail_empty_goal_guide">아직 목표가 없어요!</string>
 
     <!-- 설정 화면 -->
     <string name="settings_privacy_policy">개인정보 처리방침</string>
     <string name="settings_my_app_version">나의 버전</string>
-    
+
     <!-- 토스트 메시지 -->
     <string name="toast_end_date_before_start_date">종료 날짜가 시작 날짜보다 이전입니다.</string>
     <string name="toast_goal_fetch_failed">목표 조회에 실패했습니다.</string>
     <string name="toast_create_goal_failed">목표 생성에 실패했습니다.</string>
+    <string name="toast_update_goal_failed">목표 수정에 실패했습니다.</string>
+    <string name="toast_delete_goal_failed">목표 삭제에 실패했습니다.</string>
+    <string name="toast_complete_goal_failed">목표 완료에 실패했습니다.</string>
+    <string name="toast_input_goal_title">목표를 입력해주세요.</string>
     <string name="toast_logout_completed">로그아웃되었습니다.</string>
     <string name="toast_logout_failed">로그아웃에 실패했습니다.</string>
     <string name="toast_account_deleted">계정이 삭제되었습니다.</string>

@@ -27,7 +27,7 @@ class HomeViewModel(
         fetchGoalList()
 
         viewModelScope.launch {
-            goalRefreshBus.events.collect {
+            goalRefreshBus.goalEvents.collect {
                 fetchGoalList()
             }
         }

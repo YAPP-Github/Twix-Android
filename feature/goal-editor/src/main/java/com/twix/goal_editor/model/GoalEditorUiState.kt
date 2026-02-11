@@ -17,5 +17,5 @@ data class GoalEditorUiState(
     val endDate: LocalDate = LocalDate.now(),
 ) : State {
     val isEnabled: Boolean
-        get() = goalTitle.isNotBlank() && (selectedRepeatCycle == RepeatCycle.DAILY || repeatCount > 0)
+        get() = goalTitle.isNotBlank()
 }

@@ -65,9 +65,9 @@ fun GoalInfoCard(
             onShowRepeatCountBottomSheet = onShowRepeatCountBottomSheet,
         )
 
-        HorizontalDivider(thickness = 1.dp, color = GrayColor.C500)
-
         if (!isEdit) {
+            HorizontalDivider(thickness = 1.dp, color = GrayColor.C500)
+
             DateSettings(
                 date = startDate,
                 onShowCalendarBottomSheet = { onShowCalendarBottomSheet(false) },
