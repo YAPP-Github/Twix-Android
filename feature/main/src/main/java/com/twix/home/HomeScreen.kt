@@ -52,6 +52,7 @@ fun HomeRoute(
     navigateToGoalEditor: () -> Unit,
     navigateToGoalManage: (LocalDate) -> Unit,
     navigateToCertificationDetail: (Long) -> Unit,
+    navigateToSettings: () -> Unit,
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
@@ -66,6 +67,7 @@ fun HomeRoute(
         onAddNewGoal = navigateToGoalEditor,
         onEditClick = { navigateToGoalManage(uiState.selectedDate) },
         onVerificationClick = navigateToCertificationDetail,
+        onSettingClick = navigateToSettings,
     )
 }
 
@@ -81,6 +83,7 @@ fun HomeScreen(
     onAddNewGoal: () -> Unit,
     onEditClick: () -> Unit,
     onVerificationClick: (Long) -> Unit,
+    onSettingClick: () -> Unit,
 ) {
     Box(
         modifier =
@@ -95,7 +98,7 @@ fun HomeScreen(
             HomeTopBar(
                 monthYearText = uiState.monthYear,
                 onNotificationClick = {},
-                onSettingClick = {},
+                onSettingClick = onSettingClick,
                 onMoveToToday = onMoveToToday,
                 onShowCalendarBottomSheet = onShowCalendarBottomSheet,
             )

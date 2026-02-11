@@ -68,6 +68,9 @@ jetbrains-kotlin-jvm = "2.1.0"
 kermit = "2.0.8"
 junit = "4.13.2"
 
+# Browser
+browser = "1.9.0"
+
 [libraries]
 # AndroidX
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "androidx-core-ktx" }
@@ -152,6 +155,9 @@ junit = { group = "junit", name = "junit", version.ref = "junit" }
 
 # Guava
 guava = { module = "com.google.guava:guava", version.ref = "guava" }
+
+# Browser
+browser = { module = "androidx.browser:browser", version.ref = "browser" }
 
 [bundles]
 androidx = [
