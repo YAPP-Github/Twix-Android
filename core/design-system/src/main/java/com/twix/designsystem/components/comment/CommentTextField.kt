@@ -28,7 +28,6 @@ import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -57,7 +56,7 @@ fun CommentTextField(
     val focusRequester = remember { FocusRequester() }
     val keyboardState by keyboardAsState()
 
-    var internalValue by rememberSaveable(uiModel.comment.text) { mutableStateOf(uiModel.comment.text) }
+    var internalValue by rememberSaveable(uiModel.comment) { mutableStateOf(uiModel.comment) }
     var isInitialized by remember { mutableStateOf(false) }
 
     LaunchedEffect(keyboardState) {
@@ -151,7 +150,7 @@ fun CommentTextField(
 @Composable
 private fun CommentTextFieldPreview() {
     TwixTheme {
-        var text by remember { mutableStateOf(TextFieldValue("")) }
+        var text by remember { mutableStateOf("") }
         var isFocused by remember { mutableStateOf(false) }
         CommentTextField(
             uiModel = CommentUiModel(text, isFocused),

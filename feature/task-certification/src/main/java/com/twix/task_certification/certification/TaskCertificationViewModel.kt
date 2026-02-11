@@ -128,7 +128,7 @@ class TaskCertificationViewModel(
                     PhotologParam(
                         goalId = goalId,
                         fileName = fileName,
-                        comment = currentState.commentUiModel.comment.text,
+                        comment = currentState.commentUiModel.comment,
                         verificationDate = LocalDate.now(),
                     ),
                 )
