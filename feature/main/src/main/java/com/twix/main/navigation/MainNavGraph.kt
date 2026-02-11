@@ -31,6 +31,11 @@ object MainNavGraph : NavGraphContributor {
                             launchSingleTop = true
                         }
                     },
+                    navigateToSettings = {
+                        navController.navigate(NavRoutes.SettingsRoute.route) {
+                            launchSingleTop = true
+                        }
+                    },
                 )
             }
         }
