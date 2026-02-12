@@ -84,6 +84,6 @@ class TaskCertificationDetailViewModel(
 
     companion object {
         private const val GOAL_ID_NOT_FOUND = "Goal Id Argument Not Found"
-        private const val TARGET_DATE_NOT_FOUND = "Target Date Id Argument Not Found"
+        private const val TARGET_DATE_NOT_FOUND = "Target Date Argument Not Found"
     }
 }
