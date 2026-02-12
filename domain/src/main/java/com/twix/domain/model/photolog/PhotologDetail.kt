@@ -13,6 +13,4 @@ data class PhotologDetail(
     val reaction: GoalReactionType?,
 ) {
     fun updateReaction(reaction: GoalReactionType): PhotologDetail = copy(reaction = reaction)
-
-    fun updateComment(comment: String): PhotologDetail = copy(comment = comment)
 }
