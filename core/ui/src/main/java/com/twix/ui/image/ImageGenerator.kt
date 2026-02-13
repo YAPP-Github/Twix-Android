@@ -38,6 +38,7 @@ class ImageGenerator(
                     ExifInterface.ORIENTATION_ROTATE_270 -> rotator.rotate(bitmap, 270f)
                     else -> bitmap
                 }
+            if (rotatedBitmap !== bitmap) bitmap.recycle()
             byteArray(rotatedBitmap)
         } catch (e: Exception) {
             e.printStackTrace()
