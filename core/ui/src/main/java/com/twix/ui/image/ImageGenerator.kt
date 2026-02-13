@@ -56,7 +56,7 @@ class ImageGenerator(
     ): Bitmap =
         contentResolver.openInputStream(imageUri)?.use { inputStream ->
             BitmapFactory.decodeStream(inputStream)
-        } ?: throw IllegalArgumentException()
+        } ?: throw IllegalArgumentException(IMAGE_DECODE_ERROR_MESSAGE.format(imageUri))
 
     /**
      * [Bitmap] 을 JPEG 형식(품질 90)으로 압축하여 [ByteArray] 로 변환한다.
@@ -73,4 +73,8 @@ class ImageGenerator(
             bitmap.recycle()
             outputStream.toByteArray()
         }
+
+    companion object {
+        private const val IMAGE_DECODE_ERROR_MESSAGE = "Failed to open or decode image: %s"
+    }
 }
