@@ -27,7 +27,7 @@ interface PhotoLogService {
         @Query("targetDate") request: String,
     ): PhotoLogsResponse
 
-    @PUT(("api/v1/photologs/{photologId}/reaction"))
+    @PUT("api/v1/photologs/{photologId}/reaction")
     suspend fun reactToPhotolog(
         @Path("photologId") photologId: Long,
         @Body request: ReactionRequest,
