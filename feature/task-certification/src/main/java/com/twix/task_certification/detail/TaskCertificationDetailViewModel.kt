@@ -18,6 +18,7 @@ import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
 
 class TaskCertificationDetailViewModel(
@@ -53,6 +54,7 @@ class TaskCertificationDetailViewModel(
     private fun collectReactionFlow() {
         viewModelScope.launch {
             reactionFlow
+                .distinctUntilChanged()
                 .debounce(DEBOUNCE_INTERVAL)
                 .collect { reaction ->
                     sendReactionToServer(reaction)
