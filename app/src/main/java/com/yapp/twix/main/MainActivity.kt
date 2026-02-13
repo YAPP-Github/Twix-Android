@@ -7,6 +7,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.WindowInsetsSides
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.systemBars
 import androidx.compose.foundation.layout.windowInsetsPadding
@@ -34,6 +35,7 @@ class MainActivity : ComponentActivity() {
                 Box(
                     modifier =
                         Modifier
+                            .fillMaxSize()
                             .windowInsetsPadding(
                                 WindowInsets.systemBars.only(WindowInsetsSides.Vertical),
                             ),
