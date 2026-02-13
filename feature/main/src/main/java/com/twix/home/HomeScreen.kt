@@ -22,9 +22,11 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.rememberUpdatedState
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
@@ -76,15 +78,14 @@ fun HomeRoute(
     val context = LocalContext.current
     val currentContext by rememberUpdatedState(context)
     val coroutineScope = rememberCoroutineScope()
+    var pendingGoalId by remember { mutableStateOf<Long?>(null) }
 
     val permissionLauncher =
         rememberLauncherForActivityResult(
             ActivityResultContracts.RequestPermission(),
         ) { granted ->
             if (granted) {
-                uiState.selectedGoalId?.let {
-                    navigateToCertification(it)
-                }
+                pendingGoalId?.let { navigateToCertification(it) }
                 return@rememberLauncherForActivityResult
             }
 
@@ -136,7 +137,7 @@ fun HomeRoute(
                 GoalCheckState.ONLY_PARTNER,
                 GoalCheckState.NONE,
                 -> {
-                    viewModel.dispatch(HomeIntent.SelectGoal(goalId))
+                    pendingGoalId = goalId
                     permissionLauncher.launch(Manifest.permission.CAMERA)
                 }
             }

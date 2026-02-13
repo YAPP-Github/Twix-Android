@@ -60,7 +60,6 @@ class HomeViewModel(
             HomeIntent.PreviousWeek -> shiftWeek(WeekNavigation.PREVIOUS)
             HomeIntent.MoveToToday -> shiftWeek(WeekNavigation.TODAY)
             is HomeIntent.UpdateVisibleDate -> updateVisibleDate(intent.date)
-            is HomeIntent.SelectGoal -> reduceSelectedGoal(intent.goalId)
         }
     }
 
@@ -93,10 +92,6 @@ class HomeViewModel(
         if (currentState.visibleDate.month == date.month) return
 
         reduce { copy(visibleDate = date) }
-    }
-
-    private fun reduceSelectedGoal(goalId: Long) {
-        reduce { copy(selectedGoalId = goalId) }
     }
 
     /**
