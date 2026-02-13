@@ -42,7 +42,9 @@ object MainNavGraph : NavGraphContributor {
                                 goalId = it,
                                 from = NavRoutes.TaskCertificationRoute.From.HOME,
                             )
-                        navController.navigate(destination)
+                        navController.navigate(destination) {
+                            launchSingleTop = true
+                        }
                     },
                     navigateToCertificationDetail = { goalId, date, betweenUs ->
                         navController.navigate(
@@ -51,7 +53,9 @@ object MainNavGraph : NavGraphContributor {
                                 date,
                                 betweenUs.name,
                             ),
-                        )
+                        ) {
+                            launchSingleTop = true
+                        }
                     },
                 )
             }
