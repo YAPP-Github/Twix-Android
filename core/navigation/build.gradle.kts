@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.twix.android.library)
     alias(libs.plugins.twix.android.compose)
     alias(libs.plugins.twix.koin)
+    alias(libs.plugins.serialization)
 }
 
 android {
