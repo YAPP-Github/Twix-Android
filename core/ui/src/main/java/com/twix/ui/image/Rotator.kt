@@ -17,7 +17,6 @@ class Rotator(
      *
      * 내부적으로 새로운 InputStream을 열어 [ExifInterface] 로 분석한다.
      *
-     * @param contentResolver Uri 접근을 위한 ContentResolver
      * @param imageUri 대상 이미지 Uri
      * @return EXIF orientation 값 (기본값: ORIENTATION_NORMAL)
      */
