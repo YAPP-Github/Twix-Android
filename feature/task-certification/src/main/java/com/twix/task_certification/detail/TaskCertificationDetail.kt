@@ -60,7 +60,6 @@ import com.twix.designsystem.R as DesR
 fun TaskCertificationDetailRoute(
     navigateToBack: () -> Unit,
     navigateToUpload: (Long) -> Unit,
-    navigateToEditor: () -> Unit,
     toastManager: ToastManager = koinInject(),
     viewModel: TaskCertificationDetailViewModel = koinViewModel(),
 ) {
@@ -113,7 +112,7 @@ fun TaskCertificationDetailRoute(
     TaskCertificationDetailScreen(
         uiState = uiState,
         onBack = navigateToBack,
-        onClickModify = { navigateToEditor() },
+        onClickModify = { },
         onClickReaction = { viewModel.dispatch(TaskCertificationDetailIntent.Reaction(it)) },
         onClickUpload = {
             if (currentContext.hasCameraPermission()) {
@@ -140,10 +139,10 @@ fun TaskCertificationDetailScreen(
     Scaffold(
         topBar = {
             TaskCertificationDetailTopBar(
+                actionTitle = stringResource(DesR.string.word_modify),
                 goalTitle = uiState.currentGoal.goalName,
                 onBack = onBack,
-                actionTitle = if (uiState.canModify) stringResource(DesR.string.word_modify) else null,
-                onClickModify = if (uiState.canModify) onClickModify else null,
+                onClickModify = onClickModify,
                 modifier =
                     Modifier
                         .background(color = CommonColor.White),
