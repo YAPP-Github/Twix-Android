@@ -7,3 +7,7 @@ plugins {
 android {
     namespace = "com.twix.navigation"
 }
+
+dependencies {
+    implementation(libs.kotlinx.serialization.json)
+}
