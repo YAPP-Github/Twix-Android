@@ -8,8 +8,11 @@ import androidx.navigation.navArgument
 import androidx.navigation.navigation
 import com.twix.navigation.NavRoutes
 import com.twix.navigation.base.NavGraphContributor
+import com.twix.navigation.graphViewModel
 import com.twix.task_certification.certification.TaskCertificationRoute
 import com.twix.task_certification.detail.TaskCertificationDetailRoute
+import com.twix.task_certification.detail.TaskCertificationDetailViewModel
+import com.twix.task_certification.editor.TaskCertificationEditorRoute
 
 object TaskCertificationGraph : NavGraphContributor {
     override val graphRoute: NavRoutes
@@ -35,11 +38,11 @@ object TaskCertificationGraph : NavGraphContributor {
                         navArgument(NavRoutes.TaskCertificationDetailRoute.ARG_BETWEEN_US) {
                             type = NavType.StringType
                         },
-                        navArgument(NavRoutes.TaskCertificationDetailRoute.ARG_DATE) {
-                            type = NavType.StringType
-                        },
                     ),
-            ) {
+            ) { backStackEntry ->
+                val vm: TaskCertificationDetailViewModel =
+                    backStackEntry.graphViewModel(navController, graphRoute.route)
+
                 TaskCertificationDetailRoute(
                     navigateToBack = navController::popBackStack,
                     navigateToUpload = {
@@ -50,7 +53,30 @@ object TaskCertificationGraph : NavGraphContributor {
                             )
                         navController.navigate(destination)
                     },
-                    navigateToEditor = { },
+                    navigateToEditor = {
+                        navController.navigate(NavRoutes.TaskCertificationEditorRoute.route)
+                    },
+                    viewModel = vm,
+                )
+            }
+
+            composable(
+                route = NavRoutes.TaskCertificationEditorRoute.route,
+            ) { backStackEntry ->
+                val vm: TaskCertificationDetailViewModel =
+                    backStackEntry.graphViewModel(navController, graphRoute.route)
+
+                TaskCertificationEditorRoute(
+                    viewModel = vm,
+                    navigateToBack = navController::popBackStack,
+                    navigateToCertification = { goalId ->
+                        navController.navigate(
+                            NavRoutes.TaskCertificationRoute.createRoute(
+                                goalId = goalId,
+                                from = NavRoutes.TaskCertificationRoute.From.EDITOR,
+                            ),
+                        )
+                    },
                 )
             }
 
@@ -67,9 +93,7 @@ object TaskCertificationGraph : NavGraphContributor {
                     ),
             ) {
                 TaskCertificationRoute(
-                    navigateToBack = {
-                        navController.popBackStack()
-                    },
+                    navigateToBack = navController::popBackStack,
                 )
             }
         }

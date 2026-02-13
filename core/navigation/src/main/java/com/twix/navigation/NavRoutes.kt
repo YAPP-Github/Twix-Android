@@ -51,6 +51,7 @@ sealed class NavRoutes(
         enum class From {
             HOME,
             DETAIL,
+            EDITOR,
         }
 
         fun createRoute(
@@ -58,6 +59,8 @@ sealed class NavRoutes(
             from: From,
         ) = "task_certification/$goalId/${from.name}"
     }
+
+    object TaskCertificationEditorRoute : NavRoutes("task_certification_editor")
 
     /**
      * OnboardingGraph
