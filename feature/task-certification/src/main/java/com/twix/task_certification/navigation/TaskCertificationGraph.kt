@@ -27,9 +27,12 @@ object TaskCertificationGraph : NavGraphContributor {
                 arguments =
                     listOf(
                         navArgument(NavRoutes.TaskCertificationDetailRoute.ARG_GOAL_ID) {
-                            defaultValue = -1L
+                            type = NavType.LongType
                         },
                         navArgument(NavRoutes.TaskCertificationDetailRoute.ARG_DATE) {
+                            type = NavType.StringType
+                        },
+                        navArgument(NavRoutes.TaskCertificationDetailRoute.ARG_BETWEEN_US) {
                             type = NavType.StringType
                         },
                     ),

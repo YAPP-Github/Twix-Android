@@ -48,6 +48,7 @@ import com.twix.designsystem.extension.showCameraPermissionToastWithNavigateToSe
 import com.twix.designsystem.theme.CommonColor
 import com.twix.designsystem.theme.GrayColor
 import com.twix.domain.model.enums.AppTextStyle
+import com.twix.domain.model.enums.BetweenUs
 import com.twix.domain.model.enums.GoalCheckState
 import com.twix.domain.model.goal.Goal
 import com.twix.domain.model.goal.checkState
@@ -69,7 +70,7 @@ fun HomeRoute(
     navigateToGoalManage: (LocalDate) -> Unit,
     navigateToSettings: () -> Unit,
     navigateToCertification: (Long) -> Unit,
-    navigateToCertificationDetail: (Long, LocalDate) -> Unit,
+    navigateToCertificationDetail: (Long, LocalDate, BetweenUs) -> Unit,
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val context = LocalContext.current
@@ -137,6 +138,7 @@ fun HomeRoute(
                 }
             }
         },
+        onClickCard = navigateToCertificationDetail,
         onSettingClick = navigateToSettings,
     )
 }
@@ -153,6 +155,7 @@ fun HomeScreen(
     onAddNewGoal: () -> Unit,
     onEditClick: () -> Unit,
     onVerificationClick: (Long, GoalCheckState) -> Unit,
+    onClickCard: (Long, LocalDate, BetweenUs) -> Unit,
     onSettingClick: () -> Unit,
 ) {
     Box(
@@ -199,6 +202,7 @@ fun HomeScreen(
                     selectedDate = uiState.selectedDate,
                     onVerificationClick = onVerificationClick,
                     onEditClick = onEditClick,
+                    onClickGoalCard = onClickCard,
                 )
             }
         }
@@ -219,6 +223,7 @@ fun GoalList(
     goals: List<Goal>,
     selectedDate: LocalDate,
     onVerificationClick: (Long, GoalCheckState) -> Unit,
+    onClickGoalCard: (Long, LocalDate, BetweenUs) -> Unit,
     onEditClick: () -> Unit,
 ) {
     val today = remember { LocalDate.now() }
@@ -281,6 +286,8 @@ fun GoalList(
                         GoalVerifications(
                             myVerification = goal.myVerification,
                             partnerVerification = goal.partnerVerification,
+                            onMyClick = { onClickGoalCard(goal.goalId, selectedDate, BetweenUs.ME) },
+                            onPartnerClick = { onClickGoalCard(goal.goalId, selectedDate, BetweenUs.PARTNER) },
                         )
                     }
                 },

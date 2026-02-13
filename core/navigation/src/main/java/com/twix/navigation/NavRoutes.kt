@@ -32,14 +32,16 @@ sealed class NavRoutes(
     object TaskCertificationGraph : NavRoutes("task_certification_graph")
 
     object TaskCertificationDetailRoute :
-        NavRoutes("task_certification_detail/{goalId}/{date}") {
+        NavRoutes("task_certification_detail/{goalId}/{date}/{betweenUs}") {
         const val ARG_GOAL_ID = "goalId"
         const val ARG_DATE = "date"
+        const val ARG_BETWEEN_US = "betweenUs"
 
         fun createRoute(
             goalId: Long,
             date: LocalDate,
-        ) = "task_certification_detail/$goalId/$date"
+            betweenUs: String,
+        ) = "task_certification_detail/$goalId/$date/$betweenUs"
     }
 
     object TaskCertificationRoute : NavRoutes("task_certification/{goalId}/{from}") {

@@ -16,6 +16,7 @@ import com.twix.designsystem.components.bottomsheet.CommonBottomSheet
 import com.twix.designsystem.components.bottomsheet.model.CommonBottomSheetConfig
 import com.twix.designsystem.components.calendar.Calendar
 import com.twix.designsystem.theme.CommonColor
+import com.twix.domain.model.enums.BetweenUs
 import com.twix.home.HomeIntent
 import com.twix.home.HomeRoute
 import com.twix.home.HomeViewModel
@@ -31,7 +32,7 @@ fun MainRoute(
     navigateToGoalManage: (LocalDate) -> Unit,
     navigateToSettings: () -> Unit,
     navigateToCertification: (Long) -> Unit,
-    navigateToCertificationDetail: (Long, LocalDate) -> Unit,
+    navigateToCertificationDetail: (Long, LocalDate, BetweenUs) -> Unit,
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val homeViewModel: HomeViewModel = koinViewModel()
@@ -57,7 +58,7 @@ private fun MainScreen(
     navigateToGoalManage: (LocalDate) -> Unit,
     navigateToSettings: () -> Unit,
     navigateToCertification: (Long) -> Unit,
-    navigateToCertificationDetail: (Long, LocalDate) -> Unit,
+    navigateToCertificationDetail: (Long, LocalDate, BetweenUs) -> Unit,
 ) {
     val calendarState by homeViewModel.calendarState.collectAsStateWithLifecycle()
     var showCalendarBottomSheet by remember { mutableStateOf(false) }

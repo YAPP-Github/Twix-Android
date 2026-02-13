@@ -3,6 +3,7 @@ package com.twix.task_certification.detail
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.twix.designsystem.components.toast.model.ToastType
+import com.twix.domain.model.enums.BetweenUs
 import com.twix.domain.model.enums.GoalReactionType
 import com.twix.domain.repository.PhotoLogRepository
 import com.twix.navigation.NavRoutes
@@ -37,6 +38,10 @@ class TaskCertificationDetailViewModel(
         savedStateHandle[NavRoutes.TaskCertificationDetailRoute.ARG_DATE]
             ?: error(TARGET_DATE_NOT_FOUND)
 
+    private val betweenUs: String =
+        savedStateHandle[NavRoutes.TaskCertificationDetailRoute.ARG_BETWEEN_US]
+            ?: error(BETWEEN_US_NOT_FOUND)
+
     private val reactionFlow =
         MutableSharedFlow<GoalReactionType>(
             extraBufferCapacity = 1,
@@ -44,7 +49,7 @@ class TaskCertificationDetailViewModel(
         )
 
     init {
-        reduceGoalId()
+        reduceInitialState()
         collectReactionFlow()
         fetchPhotolog()
         collectEventBus()
@@ -71,7 +76,10 @@ class TaskCertificationDetailViewModel(
         )
     }
 
-    private fun reduceGoalId() = reduce { copy(currentGoalId = goalId) }
+    private fun reduceInitialState() =
+        reduce {
+            copy(currentGoalId = goalId, currentShow = BetweenUs.valueOf(betweenUs))
+        }
 
     private fun collectEventBus() {
         viewModelScope.launch {
@@ -119,6 +127,7 @@ class TaskCertificationDetailViewModel(
     companion object {
         private const val GOAL_ID_NOT_FOUND = "Goal Id Argument Not Found"
         private const val TARGET_DATE_NOT_FOUND = "Target Date Argument Not Found"
+        private const val BETWEEN_US_NOT_FOUND = "Between Us Argument Not Found"
         private const val DEBOUNCE_INTERVAL = 600L
     }
 }

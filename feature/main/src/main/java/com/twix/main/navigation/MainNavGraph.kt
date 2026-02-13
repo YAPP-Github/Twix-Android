@@ -44,15 +44,14 @@ object MainNavGraph : NavGraphContributor {
                             )
                         navController.navigate(destination)
                     },
-                    navigateToCertificationDetail = { goalId, date ->
+                    navigateToCertificationDetail = { goalId, date, betweenUs ->
                         navController.navigate(
                             NavRoutes.TaskCertificationDetailRoute.createRoute(
                                 goalId,
                                 date,
+                                betweenUs.name,
                             ),
-                        ) {
-                            launchSingleTop = true
-                        }
+                        )
                     },
                 )
             }
