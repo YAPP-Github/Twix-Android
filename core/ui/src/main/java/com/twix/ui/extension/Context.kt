@@ -1,9 +1,12 @@
 package com.twix.ui.extension
 
+import android.Manifest
 import android.content.Context
+import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
+import androidx.core.content.ContextCompat
 import java.io.ByteArrayOutputStream
 
 /**
@@ -38,3 +41,9 @@ fun Context.uriToByteArray(imageUri: Uri): ByteArray? {
         null
     }
 }
+
+fun Context.hasCameraPermission(): Boolean =
+    ContextCompat.checkSelfPermission(
+        this,
+        Manifest.permission.CAMERA,
+    ) == PackageManager.PERMISSION_GRANTED
