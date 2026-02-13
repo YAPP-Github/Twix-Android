@@ -13,6 +13,7 @@ import com.twix.task_certification.certification.model.TaskCertificationIntent
 import com.twix.task_certification.certification.model.TaskCertificationSideEffect
 import com.twix.task_certification.certification.model.TaskCertificationUiState
 import com.twix.ui.base.BaseViewModel
+import com.twix.util.bus.GoalRefreshBus
 import com.twix.util.bus.TaskCertificationRefreshBus
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -20,14 +21,19 @@ import java.time.LocalDate
 
 class TaskCertificationViewModel(
     private val photologRepository: PhotoLogRepository,
-    private val eventBus: TaskCertificationRefreshBus,
+    private val taskCertificationRefreshBus: TaskCertificationRefreshBus,
+    private val goalRefreshBus: GoalRefreshBus,
     saveStateHandle: SavedStateHandle,
 ) : BaseViewModel<TaskCertificationUiState, TaskCertificationIntent, TaskCertificationSideEffect>(
         TaskCertificationUiState(),
     ) {
     private val goalId: Long =
         saveStateHandle[NavRoutes.TaskCertificationRoute.ARG_GOAL_ID]
-            ?: throw IllegalStateException(GOAL_ID_NOT_FOUND)
+            ?: error(GOAL_ID_NOT_FOUND)
+
+    private val from: String =
+        saveStateHandle[NavRoutes.TaskCertificationRoute.ARG_FROM]
+            ?: error(FROM_NOT_FOUND)
 
     override suspend fun handleIntent(intent: TaskCertificationIntent) {
         when (intent) {
@@ -134,7 +140,10 @@ class TaskCertificationViewModel(
                 )
             },
             onSuccess = {
-                eventBus.notifyChanged()
+                when (NavRoutes.TaskCertificationRoute.From.valueOf(from)) {
+                    NavRoutes.TaskCertificationRoute.From.DETAIL -> taskCertificationRefreshBus.notifyChanged()
+                    NavRoutes.TaskCertificationRoute.From.HOME -> goalRefreshBus.notifyGoalListChanged()
+                }
                 tryEmitSideEffect(TaskCertificationSideEffect.NavigateToDetail)
             },
             onError = {
@@ -151,5 +160,6 @@ class TaskCertificationViewModel(
     companion object {
         private const val ERROR_DISPLAY_DURATION_MS = 1500L
         private const val GOAL_ID_NOT_FOUND = "Goal Id Argument Not Found"
+        private const val FROM_NOT_FOUND = "From Argument Not Found"
     }
 }

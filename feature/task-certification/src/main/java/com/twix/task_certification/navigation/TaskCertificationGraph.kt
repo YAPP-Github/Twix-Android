@@ -36,8 +36,12 @@ object TaskCertificationGraph : NavGraphContributor {
             ) {
                 TaskCertificationDetailRoute(
                     navigateToBack = navController::popBackStack,
-                    navigateToUpload = { goalId ->
-                        val destination = NavRoutes.TaskCertificationRoute.createRoute(goalId)
+                    navigateToUpload = {
+                        val destination =
+                            NavRoutes.TaskCertificationRoute.createRoute(
+                                goalId = it,
+                                from = NavRoutes.TaskCertificationRoute.From.DETAIL,
+                            )
                         navController.navigate(destination)
                     },
                 )
@@ -48,7 +52,10 @@ object TaskCertificationGraph : NavGraphContributor {
                 arguments =
                     listOf(
                         navArgument(NavRoutes.TaskCertificationRoute.ARG_GOAL_ID) {
-                            defaultValue = -1L
+                            type = NavType.LongType
+                        },
+                        navArgument(NavRoutes.TaskCertificationRoute.ARG_FROM) {
+                            type = NavType.StringType
                         },
                     ),
             ) {

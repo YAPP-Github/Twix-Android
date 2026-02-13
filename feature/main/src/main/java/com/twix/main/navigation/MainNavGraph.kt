@@ -37,7 +37,12 @@ object MainNavGraph : NavGraphContributor {
                         }
                     },
                     navigateToCertification = {
-                        navController.navigate(NavRoutes.TaskCertificationRoute.createRoute(it))
+                        val destination =
+                            NavRoutes.TaskCertificationRoute.createRoute(
+                                goalId = it,
+                                from = NavRoutes.TaskCertificationRoute.From.HOME,
+                            )
+                        navController.navigate(destination)
                     },
                     navigateToCertificationDetail = { goalId, date ->
                         navController.navigate(

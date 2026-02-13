@@ -69,6 +69,7 @@ fun HomeRoute(
     navigateToGoalManage: (LocalDate) -> Unit,
     navigateToSettings: () -> Unit,
     navigateToCertification: (Long) -> Unit,
+    navigateToCertificationDetail: (Long, LocalDate) -> Unit,
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val context = LocalContext.current
