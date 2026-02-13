@@ -39,6 +39,8 @@ dependencies {
     implementation(projects.feature.taskCertification)
     implementation(projects.feature.onboarding)
     implementation(projects.feature.goalEditor)
+    implementation(projects.feature.goalManage)
+    implementation(projects.feature.settings)
 
     // Firebase
     implementation(platform(libs.google.firebase.bom))

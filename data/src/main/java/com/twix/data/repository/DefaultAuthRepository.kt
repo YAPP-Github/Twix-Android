@@ -2,8 +2,10 @@ package com.twix.data.repository
 
 import com.twix.domain.login.LoginType
 import com.twix.domain.repository.AuthRepository
+import com.twix.network.execute.safeApiCall
 import com.twix.network.model.request.LoginRequest
 import com.twix.network.service.AuthService
+import com.twix.result.AppResult
 import com.twix.token.TokenProvider
 
 class DefaultAuthRepository(
@@ -22,4 +24,16 @@ class DefaultAuthRepository(
 
         tokenProvider.saveToken(response.accessToken, response.refreshToken)
     }
+
+    override suspend fun logout(): AppResult<Unit> =
+        safeApiCall {
+            service.logout()
+            tokenProvider.clear()
+        }
+
+    override suspend fun withdrawAccount() =
+        safeApiCall {
+            service.withdrawAccount()
+            tokenProvider.clear()
+        }
 }

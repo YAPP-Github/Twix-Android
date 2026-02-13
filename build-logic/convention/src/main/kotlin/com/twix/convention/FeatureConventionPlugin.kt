@@ -15,6 +15,7 @@ class FeatureConventionPlugin : BuildLogicConventionPlugin({
         implementation(project(":core:design-system"))
         implementation(project(":core:navigation"))
         implementation(project(":core:ui"))
+        implementation(project(":core:util"))
         implementation(project(":core:result"))
         implementation(project(":domain"))
     }

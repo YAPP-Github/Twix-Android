@@ -11,11 +11,11 @@ data class GoalEditorUiState(
     val selectedIcon: GoalIconType = GoalIconType.DEFAULT,
     val goalTitle: String = "",
     val selectedRepeatCycle: RepeatCycle = RepeatCycle.DAILY,
-    val repeatCount: Int = 0,
+    val repeatCount: Int = 1,
     val startDate: LocalDate = LocalDate.now(),
     val endDateEnabled: Boolean = false,
     val endDate: LocalDate = LocalDate.now(),
 ) : State {
     val isEnabled: Boolean
-        get() = goalTitle.isNotBlank() && repeatCount > 0
+        get() = goalTitle.isNotBlank()
 }

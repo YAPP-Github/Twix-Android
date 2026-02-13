@@ -1,5 +1,6 @@
 package com.twix.login.model
 
+import com.twix.designsystem.components.toast.model.ToastType
 import com.twix.domain.model.OnboardingStatus
 import com.twix.ui.base.SideEffect
 
@@ -10,7 +11,8 @@ sealed interface LoginSideEffect : SideEffect {
         val status: OnboardingStatus,
     ) : LoginSideEffect
 
-    data object ShowLoginFailToast : LoginSideEffect
-
-    data object ShowFetchOnBoardingStatusFailToast : LoginSideEffect
+    data class ShowToast(
+        val message: Int,
+        val type: ToastType,
+    ) : LoginSideEffect
 }

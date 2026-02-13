@@ -6,6 +6,8 @@ enum class RepeatCycle {
     MONTHLY,
     ;
 
+    fun toApi(): String = name
+
     companion object {
         fun fromApi(value: String): RepeatCycle = runCatching { valueOf(value) }.getOrElse { DAILY }
     }

@@ -1,22 +1,27 @@
 package com.twix.goal_editor
 
-import androidx.lifecycle.viewModelScope
 import com.twix.designsystem.R
 import com.twix.designsystem.components.toast.model.ToastType
 import com.twix.domain.model.enums.GoalIconType
 import com.twix.domain.model.enums.RepeatCycle
+import com.twix.domain.model.goal.CreateGoalParam
+import com.twix.domain.model.goal.GoalDetail
+import com.twix.domain.model.goal.UpdateGoalParam
+import com.twix.domain.repository.GoalRepository
 import com.twix.goal_editor.model.GoalEditorUiState
 import com.twix.ui.base.BaseViewModel
-import kotlinx.coroutines.launch
+import com.twix.util.bus.GoalRefreshBus
 import java.time.LocalDate
 
-class GoalEditorViewModel :
-    BaseViewModel<GoalEditorUiState, GoalEditorIntent, GoalEditorSideEffect>(
+class GoalEditorViewModel(
+    private val goalRepository: GoalRepository,
+    private val goalRefreshBus: GoalRefreshBus,
+) : BaseViewModel<GoalEditorUiState, GoalEditorIntent, GoalEditorSideEffect>(
         GoalEditorUiState(),
     ) {
     override suspend fun handleIntent(intent: GoalEditorIntent) {
         when (intent) {
-            GoalEditorIntent.Save -> save()
+            is GoalEditorIntent.Save -> save(intent.id)
             is GoalEditorIntent.SetIcon -> setIcon(intent.icon)
             is GoalEditorIntent.SetEndDate -> setEndDate(intent.endDate)
             is GoalEditorIntent.SetRepeatCount -> setRepeatCount(intent.repeatCount)
@@ -24,6 +29,7 @@ class GoalEditorViewModel :
             is GoalEditorIntent.SetStartDate -> setStartDate(intent.startDate)
             is GoalEditorIntent.SetTitle -> setTitle(intent.title)
             is GoalEditorIntent.SetEndDateEnabled -> setEndDateEnabled(intent.enabled)
+            is GoalEditorIntent.InitGoal -> initGoal(intent.id)
         }
     }
 
@@ -38,7 +44,7 @@ class GoalEditorViewModel :
     }
 
     private fun setRepeatType(repeatCycle: RepeatCycle) {
-        reduce { copy(selectedRepeatCycle = repeatCycle) }
+        reduce { copy(selectedRepeatCycle = repeatCycle, repeatCount = 1) }
     }
 
     private fun setRepeatCount(repeatCount: Int) {
@@ -59,14 +65,77 @@ class GoalEditorViewModel :
         reduce { copy(endDateEnabled = enabled) }
     }
 
-    private fun save() {
-        if (!currentState.isEnabled) return
-
-        if (currentState.endDateEnabled && currentState.endDate.isBefore(currentState.startDate)) {
-            viewModelScope.launch {
-                emitSideEffect(GoalEditorSideEffect.ShowToast(R.string.toast_end_date_before_start_date, ToastType.ERROR))
-            }
-            return
+    private fun setGoal(goal: GoalDetail) {
+        reduce {
+            copy(
+                goalTitle = goal.name,
+                selectedIcon = goal.icon,
+                selectedRepeatCycle = goal.repeatCycle,
+                repeatCount = goal.repeatCount,
+                endDate = goal.endDate ?: LocalDate.now(),
+                endDateEnabled = goal.endDate != null,
+            )
         }
     }
+
+    private suspend fun save(id: Long) {
+        if (!currentState.isEnabled) {
+            emitSideEffect(GoalEditorSideEffect.ShowToast(R.string.toast_input_goal_title, ToastType.ERROR))
+            return
+        }
+
+        if (currentState.endDateEnabled && currentState.endDate.isBefore(currentState.startDate)) {
+            emitSideEffect(GoalEditorSideEffect.ShowToast(R.string.toast_end_date_before_start_date, ToastType.ERROR))
+            return
+        }
+
+        if (id == -1L) {
+            launchResult(
+                block = { goalRepository.createGoal(currentState.toCreateParam()) },
+                onSuccess = {
+                    goalRefreshBus.notifyGoalListChanged()
+                    tryEmitSideEffect(GoalEditorSideEffect.NavigateToHome)
+                },
+                onError = { emitSideEffect(GoalEditorSideEffect.ShowToast(R.string.toast_create_goal_failed, ToastType.ERROR)) },
+            )
+        } else {
+            launchResult(
+                block = { goalRepository.updateGoal(currentState.toUpdateParam(id)) },
+                onSuccess = {
+                    goalRefreshBus.notifyGoalListChanged()
+                    goalRefreshBus.notifyGoalSummariesChanged()
+                    tryEmitSideEffect(GoalEditorSideEffect.NavigateToHome)
+                },
+                onError = { emitSideEffect(GoalEditorSideEffect.ShowToast(R.string.toast_update_goal_failed, ToastType.ERROR)) },
+            )
+        }
+    }
+
+    private fun initGoal(id: Long) {
+        launchResult(
+            block = { goalRepository.fetchGoalDetail(id) },
+            onSuccess = { setGoal(it) },
+            onError = { emitSideEffect(GoalEditorSideEffect.ShowToast(R.string.toast_goal_fetch_failed, ToastType.ERROR)) },
+        )
+    }
+
+    private fun GoalEditorUiState.toCreateParam(): CreateGoalParam =
+        CreateGoalParam(
+            name = goalTitle.trim(),
+            icon = selectedIcon,
+            repeatCycle = selectedRepeatCycle,
+            repeatCount = repeatCount,
+            startDate = startDate,
+            endDate = if (endDateEnabled) endDate else null,
+        )
+
+    private fun GoalEditorUiState.toUpdateParam(id: Long): UpdateGoalParam =
+        UpdateGoalParam(
+            goalId = id,
+            name = goalTitle.trim(),
+            icon = selectedIcon,
+            repeatCycle = selectedRepeatCycle,
+            repeatCount = repeatCount,
+            endDate = if (endDateEnabled) endDate else null,
+        )
 }

@@ -69,6 +69,10 @@ abstract class BaseViewModel<S : State, I : Intent, SE : SideEffect>(
         sideEffectHolder.emit(effect)
     }
 
+    protected fun tryEmitSideEffect(effect: SE) {
+        sideEffectHolder.tryEmit(effect)
+    }
+
     /**
      * Intent를 처리하는 메서드
      * */

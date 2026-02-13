@@ -1,6 +1,7 @@
 package com.twix.login
 
 import androidx.lifecycle.viewModelScope
+import com.twix.designsystem.components.toast.model.ToastType
 import com.twix.domain.login.LoginResult
 import com.twix.domain.model.OnboardingStatus
 import com.twix.domain.repository.AuthRepository
@@ -30,7 +31,10 @@ class LoginViewModel(
                 }
 
                 is LoginResult.Failure -> {
-                    emitSideEffect(LoginSideEffect.ShowLoginFailToast)
+                    LoginSideEffect.ShowToast(
+                        message = R.string.login_fail_message,
+                        type = ToastType.ERROR,
+                    )
                 }
 
                 LoginResult.Cancel -> Unit
@@ -57,7 +61,12 @@ class LoginViewModel(
                 }
             },
             onError = {
-                emitSideEffect(LoginSideEffect.ShowFetchOnBoardingStatusFailToast)
+                emitSideEffect(
+                    LoginSideEffect.ShowToast(
+                        message = R.string.fetch_onboarding_status_fail_message,
+                        type = ToastType.ERROR,
+                    ),
+                )
             },
         )
     }
