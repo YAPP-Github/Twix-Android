@@ -33,9 +33,9 @@ import com.twix.designsystem.R as DesR
 fun TaskCertificationDetailTopBar(
     goalTitle: String,
     onBack: () -> Unit,
-    actionTitle: String?,
-    onClickModify: (() -> Unit)?,
     modifier: Modifier = Modifier,
+    actionTitle: String? = null,
+    onClickModify: (() -> Unit)? = null,
 ) {
     Column(
         modifier =
@@ -114,14 +114,11 @@ fun TaskCertificationDetailTopBarPreview() {
                 actionTitle = "수정",
                 goalTitle = "목표 타이틀",
                 onBack = {},
-                onClickModify = {},
             )
 
             TaskCertificationDetailTopBar(
                 goalTitle = "목표 타이틀",
                 onBack = {},
-                actionTitle = null,
-                onClickModify = null,
             )
         }
     }
