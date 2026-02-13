@@ -2,11 +2,6 @@ package com.twix.task_certification.detail
 
 import android.Manifest
 import android.app.Activity
-import android.content.Context
-import android.content.Intent
-import android.content.pm.PackageManager
-import android.net.Uri
-import android.provider.Settings
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
@@ -22,6 +17,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
@@ -31,12 +27,11 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.twix.designsystem.components.toast.ToastManager
-import com.twix.designsystem.components.toast.model.ToastAction
 import com.twix.designsystem.components.toast.model.ToastData
 import com.twix.designsystem.components.toast.model.ToastType
+import com.twix.designsystem.extension.showCameraPermissionToastWithNavigateToSettingAction
 import com.twix.designsystem.theme.CommonColor
 import com.twix.designsystem.theme.TwixTheme
 import com.twix.domain.model.enums.BetweenUs
@@ -54,8 +49,11 @@ import com.twix.task_certification.detail.reaction.ReactionEffect
 import com.twix.task_certification.detail.reaction.ReactionUiModel
 import com.twix.task_certification.detail.swipe.SwipeableCard
 import com.twix.ui.base.ObserveAsEvents
+import com.twix.ui.extension.hasCameraPermission
+import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 import org.koin.compose.koinInject
+import com.twix.designsystem.R as DesR
 
 @Composable
 fun TaskCertificationDetailRoute(
@@ -67,6 +65,7 @@ fun TaskCertificationDetailRoute(
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val context = LocalContext.current
     val currentContext by rememberUpdatedState(context)
+    val coroutineScope = rememberCoroutineScope()
 
     ObserveAsEvents(viewModel.sideEffect) { sideEffect ->
         when (sideEffect) {
@@ -87,40 +86,24 @@ fun TaskCertificationDetailRoute(
                 navigateToUpload(uiState.currentGoalId)
                 return@rememberLauncherForActivityResult
             }
-
-            val activity = currentContext as? Activity
-
             val shouldShowRationale =
-                activity?.let {
-                    ActivityCompat.shouldShowRequestPermissionRationale(
-                        it,
-                        Manifest.permission.CAMERA,
-                    )
-                } ?: false
-
-            if (!shouldShowRationale) {
-                toastManager.tryShow(
-                    ToastData(
-                        currentContext.getString(
-                            R.string.task_certification_camera_permission_denied_permanently,
-                        ),
-                        ToastType.ERROR,
-                        action =
-                            ToastAction(
-                                label = currentContext.getString(R.string.move_to_setting),
-                                onClick = { openAppSettings(currentContext) },
+                ActivityCompat.shouldShowRequestPermissionRationale(
+                    currentContext as Activity,
+                    Manifest.permission.CAMERA,
+                )
+            coroutineScope.launch {
+                if (!shouldShowRationale) {
+                    toastManager.showCameraPermissionToastWithNavigateToSettingAction(currentContext)
+                } else {
+                    toastManager.show(
+                        ToastData(
+                            currentContext.getString(
+                                DesR.string.toast_camera_permission_request,
                             ),
-                    ),
-                )
-            } else {
-                toastManager.tryShow(
-                    ToastData(
-                        currentContext.getString(
-                            R.string.task_certification_camera_permission_denied_permanently,
+                            ToastType.ERROR,
                         ),
-                        ToastType.ERROR,
-                    ),
-                )
+                    )
+                }
             }
         }
 
@@ -130,7 +113,7 @@ fun TaskCertificationDetailRoute(
         onClickModify = { },
         onClickReaction = { viewModel.dispatch(TaskCertificationDetailIntent.Reaction(it)) },
         onClickUpload = {
-            if (hasCameraPermission(currentContext)) {
+            if (currentContext.hasCameraPermission()) {
                 navigateToUpload(uiState.currentGoalId)
             } else {
                 permissionLauncher.launch(Manifest.permission.CAMERA)
@@ -249,21 +232,6 @@ private fun ReactionSection(
             modifier = Modifier.padding(bottom = 100.dp),
         )
     }
-}
-
-private fun hasCameraPermission(context: Context): Boolean =
-    ContextCompat.checkSelfPermission(
-        context,
-        Manifest.permission.CAMERA,
-    ) == PackageManager.PERMISSION_GRANTED
-
-private fun openAppSettings(context: Context) {
-    val intent =
-        Intent(
-            Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
-            Uri.fromParts("package", context.packageName, null),
-        )
-    context.startActivity(intent)
 }
 
 @Preview(showBackground = true)

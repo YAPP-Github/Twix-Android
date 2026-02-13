@@ -36,6 +36,9 @@ object MainNavGraph : NavGraphContributor {
                             launchSingleTop = true
                         }
                     },
+                    navigateToCertification = {
+                        navController.navigate(NavRoutes.TaskCertificationRoute.createRoute(it))
+                    },
                     navigateToCertificationDetail = { goalId, date ->
                         navController.navigate(
                             NavRoutes.TaskCertificationDetailRoute.createRoute(

@@ -30,6 +30,7 @@ fun MainRoute(
     navigateToGoalEditor: () -> Unit,
     navigateToGoalManage: (LocalDate) -> Unit,
     navigateToSettings: () -> Unit,
+    navigateToCertification: (Long) -> Unit,
     navigateToCertificationDetail: (Long, LocalDate) -> Unit,
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -42,6 +43,7 @@ fun MainRoute(
         navigateToGoalEditor = navigateToGoalEditor,
         navigateToGoalManage = navigateToGoalManage,
         navigateToCertificationDetail = navigateToCertificationDetail,
+        navigateToCertification = navigateToCertification,
         navigateToSettings = navigateToSettings,
     )
 }
@@ -54,6 +56,7 @@ private fun MainScreen(
     navigateToGoalEditor: () -> Unit,
     navigateToGoalManage: (LocalDate) -> Unit,
     navigateToSettings: () -> Unit,
+    navigateToCertification: (Long) -> Unit,
     navigateToCertificationDetail: (Long, LocalDate) -> Unit,
 ) {
     val calendarState by homeViewModel.calendarState.collectAsStateWithLifecycle()
@@ -92,6 +95,7 @@ private fun MainScreen(
                             navigateToGoalManage = navigateToGoalManage,
                             navigateToCertificationDetail = navigateToCertificationDetail,
                             navigateToSettings = navigateToSettings,
+                            navigateToCertification = navigateToCertification,
                         )
 
                     MainTab.STATS -> Box(modifier = Modifier.fillMaxSize())
