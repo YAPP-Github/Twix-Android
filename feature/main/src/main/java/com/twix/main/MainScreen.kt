@@ -29,6 +29,7 @@ fun MainRoute(
     viewModel: MainViewModel = koinViewModel(),
     navigateToGoalEditor: () -> Unit,
     navigateToGoalManage: (LocalDate) -> Unit,
+    navigateToCertificationDetail: (Long) -> Unit,
     navigateToSettings: () -> Unit,
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -40,6 +41,7 @@ fun MainRoute(
         onTabClick = { tab -> viewModel.dispatch(MainIntent.SelectTab(tab)) },
         navigateToGoalEditor = navigateToGoalEditor,
         navigateToGoalManage = navigateToGoalManage,
+        navigateToCertificationDetail = navigateToCertificationDetail,
         navigateToSettings = navigateToSettings,
     )
 }
@@ -51,6 +53,7 @@ private fun MainScreen(
     onTabClick: (MainTab) -> Unit,
     navigateToGoalEditor: () -> Unit,
     navigateToGoalManage: (LocalDate) -> Unit,
+    navigateToCertificationDetail: (Long) -> Unit,
     navigateToSettings: () -> Unit,
 ) {
     val calendarState by homeViewModel.calendarState.collectAsStateWithLifecycle()
@@ -87,8 +90,10 @@ private fun MainScreen(
                             onShowCalendarBottomSheet = { showCalendarBottomSheet = true },
                             navigateToGoalEditor = navigateToGoalEditor,
                             navigateToGoalManage = navigateToGoalManage,
+                            navigateToCertificationDetail = navigateToCertificationDetail,
                             navigateToSettings = navigateToSettings,
                         )
+
                     MainTab.STATS -> Box(modifier = Modifier.fillMaxSize())
                     MainTab.COUPLE -> Box(modifier = Modifier.fillMaxSize())
                 }

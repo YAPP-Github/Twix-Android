@@ -1,7 +1,6 @@
 package com.twix.task_certification.certification.model
 
 import android.net.Uri
-import androidx.compose.ui.text.input.TextFieldValue
 import com.twix.ui.base.Intent
 
 sealed interface TaskCertificationIntent : Intent {
@@ -20,12 +19,27 @@ sealed interface TaskCertificationIntent : Intent {
     data object RetakePicture : TaskCertificationIntent
 
     data class UpdateComment(
-        val comment: TextFieldValue,
+        val value: String,
     ) : TaskCertificationIntent
 
     data class CommentFocusChanged(
         val isFocused: Boolean,
     ) : TaskCertificationIntent
 
-    data object Upload : TaskCertificationIntent
+    data object TryUpload : TaskCertificationIntent
+
+    data class Upload(
+        val image: ByteArray,
+    ) : TaskCertificationIntent {
+        override fun equals(other: Any?): Boolean {
+            if (this === other) return true
+            if (javaClass != other?.javaClass) return false
+
+            other as Upload
+
+            return image.contentEquals(other.image)
+        }
+
+        override fun hashCode(): Int = image.contentHashCode()
+    }
 }
