@@ -1,7 +1,6 @@
 package com.twix.home
 
 import android.Manifest
-import android.app.Activity
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
@@ -55,6 +54,7 @@ import com.twix.domain.model.goal.checkState
 import com.twix.home.component.GoalVerifications
 import com.twix.home.component.HomeTopBar
 import com.twix.home.model.HomeUiState
+import com.twix.ui.extension.findActivity
 import com.twix.ui.extension.noRippleClickable
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
@@ -87,9 +87,12 @@ fun HomeRoute(
                 }
                 return@rememberLauncherForActivityResult
             }
+
+            val activity = currentContext.findActivity() ?: return@rememberLauncherForActivityResult
+
             val shouldShowRationale =
                 ActivityCompat.shouldShowRequestPermissionRationale(
-                    currentContext as Activity,
+                    activity,
                     Manifest.permission.CAMERA,
                 )
             coroutineScope.launch {
@@ -286,8 +289,20 @@ fun GoalList(
                         GoalVerifications(
                             myVerification = goal.myVerification,
                             partnerVerification = goal.partnerVerification,
-                            onMyClick = { onClickGoalCard(goal.goalId, selectedDate, BetweenUs.ME) },
-                            onPartnerClick = { onClickGoalCard(goal.goalId, selectedDate, BetweenUs.PARTNER) },
+                            onMyClick = {
+                                onClickGoalCard(
+                                    goal.goalId,
+                                    selectedDate,
+                                    BetweenUs.ME,
+                                )
+                            },
+                            onPartnerClick = {
+                                onClickGoalCard(
+                                    goal.goalId,
+                                    selectedDate,
+                                    BetweenUs.PARTNER,
+                                )
+                            },
                         )
                     }
                 },

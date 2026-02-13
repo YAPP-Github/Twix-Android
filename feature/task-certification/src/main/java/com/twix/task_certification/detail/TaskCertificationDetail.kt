@@ -1,7 +1,6 @@
 package com.twix.task_certification.detail
 
 import android.Manifest
-import android.app.Activity
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
@@ -49,6 +48,7 @@ import com.twix.task_certification.detail.reaction.ReactionEffect
 import com.twix.task_certification.detail.reaction.ReactionUiModel
 import com.twix.task_certification.detail.swipe.SwipeableCard
 import com.twix.ui.base.ObserveAsEvents
+import com.twix.ui.extension.findActivity
 import com.twix.ui.extension.hasCameraPermission
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
@@ -86,9 +86,10 @@ fun TaskCertificationDetailRoute(
                 navigateToUpload(uiState.currentGoalId)
                 return@rememberLauncherForActivityResult
             }
+            val activity = currentContext.findActivity() ?: return@rememberLauncherForActivityResult
             val shouldShowRationale =
                 ActivityCompat.shouldShowRequestPermissionRationale(
-                    currentContext as Activity,
+                    activity,
                     Manifest.permission.CAMERA,
                 )
             coroutineScope.launch {
