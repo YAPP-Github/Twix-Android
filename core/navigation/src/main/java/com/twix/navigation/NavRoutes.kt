@@ -51,6 +51,8 @@ sealed class NavRoutes(
         const val ARG_GOAL_ID = "goalId"
         const val ARG_FROM = "from"
 
+        private const val NOT_NEED_GOAL_ID = -1L
+
         enum class From {
             HOME,
             DETAIL,
@@ -58,7 +60,7 @@ sealed class NavRoutes(
         }
 
         fun createRoute(
-            goalId: Long,
+            goalId: Long = NOT_NEED_GOAL_ID,
             from: From,
         ) = "task_certification/$goalId/${from.name}"
     }

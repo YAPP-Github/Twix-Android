@@ -4,26 +4,33 @@ import android.Manifest
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.rememberUpdatedState
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.core.app.ActivityCompat
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import coil3.compose.AsyncImage
+import coil3.request.ImageRequest
+import coil3.request.crossfade
 import com.twix.designsystem.components.button.AppRoundButton
+import com.twix.designsystem.components.comment.CommentTextField
 import com.twix.designsystem.components.toast.ToastManager
 import com.twix.designsystem.components.toast.model.ToastData
 import com.twix.designsystem.components.toast.model.ToastType
@@ -32,12 +39,9 @@ import com.twix.designsystem.theme.CommonColor
 import com.twix.designsystem.theme.GrayColor
 import com.twix.designsystem.theme.TwixTheme
 import com.twix.task_certification.R
-import com.twix.task_certification.detail.TaskCertificationDetailViewModel
-import com.twix.task_certification.detail.component.CertificatedCard
 import com.twix.task_certification.detail.component.PhotologCard
 import com.twix.task_certification.detail.component.TaskCertificationDetailTopBar
-import com.twix.task_certification.detail.model.TaskCertificationDetailUiState
-import com.twix.task_certification.detail.preview.TaskCertificationDetailPreviewProvider
+import com.twix.task_certification.editor.model.TaskCertificationEditorUiState
 import com.twix.ui.extension.findActivity
 import com.twix.ui.extension.hasCameraPermission
 import com.twix.ui.extension.noRippleClickable
@@ -49,9 +53,9 @@ import com.twix.designsystem.R as DesR
 @Composable
 fun TaskCertificationEditorRoute(
     navigateToBack: () -> Unit,
-    navigateToCertification: (Long) -> Unit,
+    navigateToCertification: () -> Unit,
     toastManager: ToastManager = koinInject(),
-    viewModel: TaskCertificationDetailViewModel = koinViewModel(),
+    viewModel: TaskCertificationEditorViewModel = koinViewModel(),
 ) {
     val context = LocalContext.current
     val currentContext by rememberUpdatedState(context)
@@ -64,7 +68,7 @@ fun TaskCertificationEditorRoute(
         ) { granted ->
 
             if (granted) {
-                navigateToCertification(uiState.currentGoalId)
+                navigateToCertification()
                 return@rememberLauncherForActivityResult
             }
             val activity = currentContext.findActivity() ?: return@rememberLauncherForActivityResult
@@ -92,10 +96,11 @@ fun TaskCertificationEditorRoute(
     TaskCertificationEditorScreen(
         uiState = uiState,
         onBack = navigateToBack,
+        onClickComment = {},
         onClickSave = { },
         onClickRetake = {
             if (currentContext.hasCameraPermission()) {
-                navigateToCertification(uiState.currentGoalId)
+                navigateToCertification()
             } else {
                 permissionLauncher.launch(Manifest.permission.CAMERA)
             }
@@ -105,16 +110,17 @@ fun TaskCertificationEditorRoute(
 
 @Composable
 fun TaskCertificationEditorScreen(
-    uiState: TaskCertificationDetailUiState,
+    uiState: TaskCertificationEditorUiState,
     onBack: () -> Unit,
+    onClickComment: () -> Unit,
     onClickSave: () -> Unit,
-    onClickRetake: (Long) -> Unit,
+    onClickRetake: () -> Unit,
 ) {
     Scaffold(
         topBar = {
             TaskCertificationDetailTopBar(
                 actionTitle = stringResource(DesR.string.word_save),
-                goalTitle = uiState.currentGoal.goalName,
+                goalTitle = uiState.goalName,
                 onBack = onBack,
                 onClickModify = onClickSave,
                 modifier =
@@ -127,15 +133,36 @@ fun TaskCertificationEditorScreen(
             Modifier
                 .padding(innerPadding)
                 .fillMaxSize()
-                .background(color = CommonColor.White),
+                .background(color = CommonColor.White)
+                .imePadding(),
         ) {
             Spacer(Modifier.height(103.dp))
 
             PhotologCard {
-                CertificatedCard(
-                    imageUrl = uiState.displayedGoalImageUrl,
-                    comment = uiState.displayedGoalComment,
-                )
+                PhotologCard {
+                    Box(Modifier.fillMaxSize()) {
+                        AsyncImage(
+                            model =
+                                ImageRequest
+                                    .Builder(LocalContext.current)
+                                    .data(uiState.imageUrl)
+                                    .crossfade(true)
+                                    .build(),
+                            contentDescription = null,
+                            contentScale = ContentScale.Crop,
+                            modifier = Modifier.fillMaxSize(),
+                        )
+                        CommentTextField(
+                            uiModel = uiState.comment,
+                            enabled = false,
+                            modifier =
+                                Modifier
+                                    .align(Alignment.BottomCenter)
+                                    .padding(bottom = 28.dp)
+                                    .noRippleClickable { onClickComment() },
+                        )
+                    }
+                }
             }
 
             Spacer(Modifier.height(101.dp))
@@ -149,7 +176,7 @@ fun TaskCertificationEditorScreen(
                         .fillMaxWidth()
                         .height(68.dp)
                         .padding(horizontal = 30.dp)
-                        .noRippleClickable { onClickRetake(uiState.currentGoalId) },
+                        .noRippleClickable { onClickRetake() },
             )
         }
     }
@@ -157,14 +184,16 @@ fun TaskCertificationEditorScreen(
 
 @Preview(showBackground = true)
 @Composable
-private fun TaskCertificationEditorScreenPreview(
-    @PreviewParameter(TaskCertificationDetailPreviewProvider::class)
-    uiState: TaskCertificationDetailUiState,
-) {
+private fun TaskCertificationEditorScreenPreview() {
     TwixTheme {
         TaskCertificationEditorScreen(
-            uiState = uiState,
+            uiState =
+                TaskCertificationEditorUiState(
+                    nickname = "페토",
+                    goalName = "아이스크림 먹기",
+                ),
             onBack = {},
+            onClickComment = {},
             onClickSave = {},
             onClickRetake = {},
         )

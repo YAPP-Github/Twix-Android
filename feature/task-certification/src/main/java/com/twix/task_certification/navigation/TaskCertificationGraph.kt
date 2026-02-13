@@ -66,10 +66,9 @@ object TaskCertificationGraph : NavGraphContributor {
             ) {
                 TaskCertificationEditorRoute(
                     navigateToBack = navController::popBackStack,
-                    navigateToCertification = { goalId ->
+                    navigateToCertification = {
                         navController.navigate(
                             NavRoutes.TaskCertificationRoute.createRoute(
-                                goalId = goalId,
                                 from = NavRoutes.TaskCertificationRoute.From.EDITOR,
                             ),
                         )

@@ -89,8 +89,7 @@ fun TaskCertificationDetailTopBar(
                             } else {
                                 GrayColor.C100
                             },
-                        )
-                        .noRippleClickable { onClickModify?.invoke() },
+                        ).noRippleClickable { onClickModify?.invoke() },
                 contentAlignment = Alignment.Center,
             ) {
                 actionTitle?.let {
