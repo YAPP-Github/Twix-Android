@@ -57,12 +57,12 @@ class TaskCertificationDetailViewModel(
                 .distinctUntilChanged()
                 .debounce(DEBOUNCE_INTERVAL)
                 .collect { reaction ->
-                    sendReactionToServer(reaction)
+                    reactToPhotolog(reaction)
                 }
         }
     }
 
-    private fun sendReactionToServer(reaction: GoalReactionType) {
+    private fun reactToPhotolog(reaction: GoalReactionType) {
         val photologId = currentState.currentGoal.partnerPhotolog?.photologId ?: return
 
         launchResult(
@@ -84,7 +84,7 @@ class TaskCertificationDetailViewModel(
 
     override suspend fun handleIntent(intent: TaskCertificationDetailIntent) {
         when (intent) {
-            is TaskCertificationDetailIntent.Reaction -> reactToPhotolog(intent.type)
+            is TaskCertificationDetailIntent.Reaction -> reduceReaction(intent.type)
             TaskCertificationDetailIntent.Sting -> TODO("찌르기 API 연동")
             TaskCertificationDetailIntent.SwipeCard -> reduceShownCard()
         }
@@ -107,7 +107,7 @@ class TaskCertificationDetailViewModel(
         )
     }
 
-    private fun reactToPhotolog(reaction: GoalReactionType) {
+    private fun reduceReaction(reaction: GoalReactionType) {
         reduce { updatePartnerReaction(reaction) }
         viewModelScope.launch { reactionFlow.emit(reaction) }
     }
