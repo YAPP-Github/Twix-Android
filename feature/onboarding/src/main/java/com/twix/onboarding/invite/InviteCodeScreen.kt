@@ -43,8 +43,6 @@ import com.twix.designsystem.components.text.AppText
 import com.twix.designsystem.components.toast.ToastManager
 import com.twix.designsystem.components.toast.model.ToastData
 import com.twix.designsystem.components.toast.model.ToastType
-import com.twix.designsystem.keyboard.Keyboard
-import com.twix.designsystem.keyboard.keyboardAsState
 import com.twix.designsystem.theme.CommonColor
 import com.twix.designsystem.theme.GrayColor
 import com.twix.designsystem.theme.TwixTheme
@@ -56,6 +54,8 @@ import com.twix.onboarding.model.OnBoardingSideEffect
 import com.twix.onboarding.vm.OnBoardingViewModel
 import com.twix.ui.base.ObserveAsEvents
 import com.twix.ui.extension.noRippleClickable
+import com.twix.ui.keyboard.Keyboard
+import com.twix.ui.keyboard.keyboardAsState
 import kotlinx.coroutines.launch
 import org.koin.compose.koinInject
 
