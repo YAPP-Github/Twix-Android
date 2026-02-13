@@ -141,16 +141,8 @@ fun TaskCertificationDetailScreen(
             TaskCertificationDetailTopBar(
                 goalTitle = uiState.currentGoal.goalName,
                 onBack = onBack,
-                actionTitle =
-                    when (uiState.currentShow) {
-                        BetweenUs.ME -> stringResource(DesR.string.word_modify)
-                        BetweenUs.PARTNER -> null
-                    },
-                onClickModify =
-                    when (uiState.currentShow) {
-                        BetweenUs.ME -> onClickModify
-                        BetweenUs.PARTNER -> null
-                    },
+                actionTitle = if (uiState.canModify) stringResource(DesR.string.word_modify) else null,
+                onClickModify = if (uiState.canModify) onClickModify else null,
                 modifier =
                     Modifier
                         .background(color = CommonColor.White),
