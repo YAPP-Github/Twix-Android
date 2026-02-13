@@ -8,10 +8,8 @@ import androidx.navigation.navArgument
 import androidx.navigation.navigation
 import com.twix.navigation.NavRoutes
 import com.twix.navigation.base.NavGraphContributor
-import com.twix.navigation.graphViewModel
 import com.twix.task_certification.certification.TaskCertificationRoute
 import com.twix.task_certification.detail.TaskCertificationDetailRoute
-import com.twix.task_certification.detail.TaskCertificationDetailViewModel
 import com.twix.task_certification.editor.TaskCertificationEditorRoute
 
 object TaskCertificationGraph : NavGraphContributor {
@@ -39,10 +37,7 @@ object TaskCertificationGraph : NavGraphContributor {
                             type = NavType.StringType
                         },
                     ),
-            ) { backStackEntry ->
-                val vm: TaskCertificationDetailViewModel =
-                    backStackEntry.graphViewModel(navController, graphRoute.route)
-
+            ) {
                 TaskCertificationDetailRoute(
                     navigateToBack = navController::popBackStack,
                     navigateToUpload = {
@@ -53,21 +48,23 @@ object TaskCertificationGraph : NavGraphContributor {
                             )
                         navController.navigate(destination)
                     },
-                    navigateToEditor = {
-                        navController.navigate(NavRoutes.TaskCertificationEditorRoute.route)
+                    navigateToEditor = { uiState ->
+                        val serializer = uiState.toSerializer()
+                        navController.navigate(NavRoutes.TaskCertificationEditorRoute.createRoute(serializer))
                     },
-                    viewModel = vm,
                 )
             }
 
             composable(
                 route = NavRoutes.TaskCertificationEditorRoute.route,
-            ) { backStackEntry ->
-                val vm: TaskCertificationDetailViewModel =
-                    backStackEntry.graphViewModel(navController, graphRoute.route)
-
+                arguments =
+                    listOf(
+                        navArgument(NavRoutes.TaskCertificationEditorRoute.ARG_DATA) {
+                            type = NavType.StringType
+                        },
+                    ),
+            ) {
                 TaskCertificationEditorRoute(
-                    viewModel = vm,
                     navigateToBack = navController::popBackStack,
                     navigateToCertification = { goalId ->
                         navController.navigate(

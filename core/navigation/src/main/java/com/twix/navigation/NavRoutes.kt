@@ -1,5 +1,8 @@
 package com.twix.navigation
 
+import android.net.Uri
+import com.twix.navigation.serializer.TaskCertificationSerializer
+import kotlinx.serialization.json.Json
 import java.time.LocalDate
 
 /**
@@ -60,7 +63,16 @@ sealed class NavRoutes(
         ) = "task_certification/$goalId/${from.name}"
     }
 
-    object TaskCertificationEditorRoute : NavRoutes("task_certification_editor")
+    object TaskCertificationEditorRoute :
+        NavRoutes("task_certification_editor/{data}") {
+        const val ARG_DATA = "data"
+
+        fun createRoute(data: TaskCertificationSerializer): String {
+            val json = Json.encodeToString(data)
+            val encoded = Uri.encode(json)
+            return "task_certification_editor/$encoded"
+        }
+    }
 
     /**
      * OnboardingGraph

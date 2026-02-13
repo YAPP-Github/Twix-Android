@@ -3,6 +3,7 @@ package com.twix.task_certification.detail.model
 import androidx.compose.runtime.Immutable
 import com.twix.domain.model.enums.BetweenUs
 import com.twix.domain.model.enums.GoalReactionType
+import com.twix.navigation.serializer.TaskCertificationSerializer
 import com.twix.ui.base.State
 
 @Immutable
@@ -60,4 +61,13 @@ data class TaskCertificationDetailUiState(
         )
 
     fun updatePartnerReaction(type: GoalReactionType) = copy(photoLogs = photoLogs.updatePartnerReaction(currentGoalId, type))
+
+    fun toSerializer() =
+        TaskCertificationSerializer(
+            nickname = photoLogs.myNickname,
+            goalName = currentGoal.goalName,
+            photologId = currentGoal.myPhotolog?.photologId ?: -1,
+            imageUrl = currentGoal.myPhotolog?.imageUrl ?: "",
+            comment = currentGoal.myPhotolog?.comment,
+        )
 }
