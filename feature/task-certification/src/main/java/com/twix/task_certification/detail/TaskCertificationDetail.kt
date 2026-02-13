@@ -139,10 +139,18 @@ fun TaskCertificationDetailScreen(
     Scaffold(
         topBar = {
             TaskCertificationDetailTopBar(
-                actionTitle = stringResource(DesR.string.word_modify),
                 goalTitle = uiState.currentGoal.goalName,
                 onBack = onBack,
-                onClickModify = onClickModify,
+                actionTitle =
+                    when (uiState.currentShow) {
+                        BetweenUs.ME -> stringResource(DesR.string.word_modify)
+                        BetweenUs.PARTNER -> null
+                    },
+                onClickModify =
+                    when (uiState.currentShow) {
+                        BetweenUs.ME -> onClickModify
+                        BetweenUs.PARTNER -> null
+                    },
                 modifier =
                     Modifier
                         .background(color = CommonColor.White),
