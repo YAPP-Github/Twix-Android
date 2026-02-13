@@ -60,7 +60,7 @@ import com.twix.task_certification.certification.model.TaskCertificationSideEffe
 import com.twix.task_certification.certification.model.TaskCertificationUiState
 import com.twix.ui.base.ObserveAsEvents
 import com.twix.ui.extension.noRippleClickable
-import com.twix.ui.extension.uriToByteArray
+import com.twix.ui.image.ImageGenerator
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -69,6 +69,7 @@ import org.koin.compose.koinInject
 
 @Composable
 fun TaskCertificationRoute(
+    imageGenerator: ImageGenerator = koinInject(),
     toastManager: ToastManager = koinInject(),
     camera: Camera = koinInject(),
     viewModel: TaskCertificationViewModel = koinViewModel(),
@@ -124,7 +125,7 @@ fun TaskCertificationRoute(
             is TaskCertificationSideEffect.GetImageFromUri -> {
                 val bytes =
                     withContext(Dispatchers.IO) {
-                        currentContext.uriToByteArray(event.uri)
+                        imageGenerator.uriToByteArray(event.uri)
                     }
 
                 if (bytes != null) {
