@@ -84,6 +84,7 @@ fun UnderlineTextField(
                     maxLines = maxLines,
                     keyboardOptions = keyboardOptions,
                     keyboardActions = keyboardActions,
+                    modifier = Modifier.weight(1f),
                 )
 
                 if (shouldShowTrailing) {

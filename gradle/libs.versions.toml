@@ -153,7 +153,6 @@ kotlin-test = { group = "org.jetbrains.kotlin", name = "kotlin-test", version.re
 
 # Logging
 kermit = { group = "co.touchlab", name = "kermit", version.ref = "kermit" }
-junit = { group = "junit", name = "junit", version.ref = "junit" }
 
 # Guava
 guava = { module = "com.google.guava:guava", version.ref = "guava" }
