@@ -10,17 +10,20 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.rememberUpdatedState
-import androidx.compose.ui.Alignment
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.layout.boundsInParent
+import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -30,7 +33,7 @@ import coil3.compose.AsyncImage
 import coil3.request.ImageRequest
 import coil3.request.crossfade
 import com.twix.designsystem.components.button.AppRoundButton
-import com.twix.designsystem.components.comment.CommentTextField
+import com.twix.designsystem.components.comment.CommentAnchorFrame
 import com.twix.designsystem.components.toast.ToastManager
 import com.twix.designsystem.components.toast.model.ToastData
 import com.twix.designsystem.components.toast.model.ToastType
@@ -41,6 +44,7 @@ import com.twix.designsystem.theme.TwixTheme
 import com.twix.task_certification.R
 import com.twix.task_certification.detail.component.PhotologCard
 import com.twix.task_certification.detail.component.TaskCertificationDetailTopBar
+import com.twix.task_certification.editor.model.TaskCertificationEditorIntent
 import com.twix.task_certification.editor.model.TaskCertificationEditorUiState
 import com.twix.ui.extension.findActivity
 import com.twix.ui.extension.hasCameraPermission
@@ -96,8 +100,8 @@ fun TaskCertificationEditorRoute(
     TaskCertificationEditorScreen(
         uiState = uiState,
         onBack = navigateToBack,
-        onClickComment = {},
         onClickSave = { },
+        onFocusChanged = { viewModel.dispatch(TaskCertificationEditorIntent.CommentModify(it)) },
         onClickRetake = {
             if (currentContext.hasCameraPermission()) {
                 navigateToCertification()
@@ -112,57 +116,50 @@ fun TaskCertificationEditorRoute(
 fun TaskCertificationEditorScreen(
     uiState: TaskCertificationEditorUiState,
     onBack: () -> Unit,
-    onClickComment: () -> Unit,
     onClickSave: () -> Unit,
+    onFocusChanged: (Boolean) -> Unit,
     onClickRetake: () -> Unit,
 ) {
-    Scaffold(
-        topBar = {
+    val focusManager = LocalFocusManager.current
+    var photologBottom by remember { mutableFloatStateOf(0f) }
+
+    Box(
+        modifier =
+            Modifier
+                .fillMaxSize()
+                .background(color = CommonColor.White)
+                .noRippleClickable { focusManager.clearFocus() },
+    ) {
+        Column {
             TaskCertificationDetailTopBar(
                 actionTitle = stringResource(DesR.string.word_save),
                 goalTitle = uiState.goalName,
                 onBack = onBack,
                 onClickModify = onClickSave,
-                modifier =
-                    Modifier
-                        .background(color = CommonColor.White),
             )
-        },
-    ) { innerPadding ->
-        Column(
-            Modifier
-                .padding(innerPadding)
-                .fillMaxSize()
-                .background(color = CommonColor.White)
-                .imePadding(),
-        ) {
+
             Spacer(Modifier.height(103.dp))
 
-            PhotologCard {
-                PhotologCard {
-                    Box(Modifier.fillMaxSize()) {
-                        AsyncImage(
-                            model =
-                                ImageRequest
-                                    .Builder(LocalContext.current)
-                                    .data(uiState.imageUrl)
-                                    .crossfade(true)
-                                    .build(),
-                            contentDescription = null,
-                            contentScale = ContentScale.Crop,
-                            modifier = Modifier.fillMaxSize(),
-                        )
-                        CommentTextField(
-                            uiModel = uiState.comment,
-                            enabled = false,
-                            modifier =
-                                Modifier
-                                    .align(Alignment.BottomCenter)
-                                    .padding(bottom = 28.dp)
-                                    .noRippleClickable { onClickComment() },
-                        )
-                    }
-                }
+            PhotologCard(
+                modifier =
+                    Modifier
+                        .onGloballyPositioned { coordinates ->
+                            val bottom = coordinates.boundsInParent().bottom
+                            if (photologBottom != bottom) {
+                                photologBottom = bottom
+                            }
+                        },
+            ) {
+                AsyncImage(
+                    model =
+                        ImageRequest
+                            .Builder(LocalContext.current)
+                            .data(uiState.imageUrl)
+                            .crossfade(true)
+                            .build(),
+                    contentDescription = null,
+                    contentScale = ContentScale.Crop,
+                )
             }
 
             Spacer(Modifier.height(101.dp))
@@ -179,6 +176,13 @@ fun TaskCertificationEditorScreen(
                         .noRippleClickable { onClickRetake() },
             )
         }
+
+        CommentAnchorFrame(
+            uiModel = uiState.comment,
+            anchorBottom = photologBottom,
+            onCommentChanged = { },
+            onFocusChanged = { onFocusChanged(it) },
+        )
     }
 }
 
@@ -193,8 +197,8 @@ private fun TaskCertificationEditorScreenPreview() {
                     goalName = "아이스크림 먹기",
                 ),
             onBack = {},
-            onClickComment = {},
             onClickSave = {},
+            onFocusChanged = {},
             onClickRetake = {},
         )
     }

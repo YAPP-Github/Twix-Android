@@ -12,11 +12,11 @@ data class TaskCertificationUiState(
     val torch: TorchStatus = TorchStatus.Off,
     val lens: CameraSelector = CameraSelector.DEFAULT_BACK_CAMERA,
     val preview: CameraPreview? = null,
-    val commentUiModel: CommentUiModel = CommentUiModel(),
+    val comment: CommentUiModel = CommentUiModel(),
     val showCommentError: Boolean = false,
 ) : State {
     val hasMaxCommentLength: Boolean
-        get() = commentUiModel.hasMaxCommentLength
+        get() = comment.hasMaxCommentLength
 
     val showTorch: Boolean
         get() = capture is CaptureStatus.NotCaptured && lens == CameraSelector.DEFAULT_BACK_CAMERA
@@ -47,9 +47,9 @@ data class TaskCertificationUiState(
 
     fun removePicture(): TaskCertificationUiState = copy(capture = CaptureStatus.NotCaptured)
 
-    fun updateComment(comment: String) = copy(commentUiModel = commentUiModel.updateComment(comment))
+    fun updateComment(newComment: String) = copy(comment = comment.updateComment(newComment))
 
-    fun updateCommentFocus(isFocused: Boolean) = copy(commentUiModel = commentUiModel.updateFocus(isFocused))
+    fun updateCommentFocus(isFocused: Boolean) = copy(comment = comment.updateFocus(isFocused))
 
     fun showCommentError() = copy(showCommentError = true)
 

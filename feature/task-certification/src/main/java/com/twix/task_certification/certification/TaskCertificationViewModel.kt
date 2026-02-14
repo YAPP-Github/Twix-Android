@@ -93,7 +93,7 @@ class TaskCertificationViewModel(
             val capture = currentState.capture
             if (capture !is CaptureStatus.Captured) return@launch
 
-            if (!currentState.commentUiModel.canUpload) {
+            if (!currentState.comment.canUpload) {
                 reduce { showCommentError() }
                 delay(ERROR_DISPLAY_DURATION_MS)
                 reduce { hideCommentError() }
@@ -134,13 +134,14 @@ class TaskCertificationViewModel(
                     PhotologParam(
                         goalId = goalId,
                         fileName = fileName,
-                        comment = currentState.commentUiModel.comment,
+                        comment = currentState.comment.comment,
                         verificationDate = LocalDate.now(),
                     ),
                 )
             },
             onSuccess = {
                 when (NavRoutes.TaskCertificationRoute.From.valueOf(from)) {
+                    NavRoutes.TaskCertificationRoute.From.EDITOR -> Unit
                     NavRoutes.TaskCertificationRoute.From.DETAIL -> taskCertificationRefreshBus.notifyChanged()
                     NavRoutes.TaskCertificationRoute.From.HOME -> goalRefreshBus.notifyGoalListChanged()
                 }
