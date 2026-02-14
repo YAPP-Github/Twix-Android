@@ -9,9 +9,12 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -19,11 +22,11 @@ import androidx.compose.ui.unit.dp
 import com.twix.designsystem.components.text.AppText
 import com.twix.designsystem.components.toast.ToastManager
 import com.twix.designsystem.components.toast.model.ToastData
-import com.twix.designsystem.components.toast.model.ToastType
 import com.twix.designsystem.theme.CommonColor
 import com.twix.designsystem.theme.GrayColor
 import com.twix.designsystem.theme.TwixTheme
 import com.twix.domain.login.LoginType
+import com.twix.domain.model.OnboardingStatus
 import com.twix.domain.model.enums.AppTextStyle
 import com.twix.login.component.LoginButton
 import com.twix.login.model.LoginIntent
@@ -36,21 +39,27 @@ import org.koin.compose.koinInject
 @Composable
 fun LoginRoute(
     navigateToHome: () -> Unit,
-    navigateToOnBoarding: () -> Unit,
+    navigateToOnBoarding: (OnboardingStatus) -> Unit,
     toastManager: ToastManager = koinInject(),
     loginProvider: LoginProviderFactory = koinInject(),
     viewModel: LoginViewModel = koinViewModel(),
 ) {
     val coroutineScope = rememberCoroutineScope()
+    val context = LocalContext.current
+    val currentContext by rememberUpdatedState(context)
 
-    val loginFailMessage = stringResource(R.string.login_fail_message)
     ObserveAsEvents(viewModel.sideEffect) { sideEffect ->
         when (sideEffect) {
             LoginSideEffect.NavigateToHome -> navigateToHome()
-            LoginSideEffect.NavigateToOnBoarding -> navigateToOnBoarding()
-            LoginSideEffect.ShowLoginFailToast -> {
-                toastManager.tryShow(ToastData(loginFailMessage, ToastType.ERROR))
-            }
+            is LoginSideEffect.NavigateToOnBoarding -> navigateToOnBoarding(sideEffect.status)
+            is LoginSideEffect.ShowToast ->
+                toastManager
+                    .tryShow(
+                        ToastData(
+                            currentContext.getString(sideEffect.message),
+                            sideEffect.type,
+                        ),
+                    )
         }
     }
 
