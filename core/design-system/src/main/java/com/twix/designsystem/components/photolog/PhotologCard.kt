@@ -1,4 +1,4 @@
-package com.twix.task_certification.detail.component
+package com.twix.designsystem.components.photolog
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -21,7 +21,7 @@ import com.twix.designsystem.theme.GrayColor
 import com.twix.designsystem.theme.TwixTheme
 
 @Composable
-internal fun PhotologCard(
+fun PhotologCard(
     modifier: Modifier = Modifier,
     borderColor: Color = GrayColor.C500,
     background: Color = CommonColor.White,

@@ -28,6 +28,8 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.core.app.ActivityCompat
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.twix.designsystem.components.photolog.BackgroundCard
+import com.twix.designsystem.components.photolog.ForegroundCard
 import com.twix.designsystem.components.toast.ToastManager
 import com.twix.designsystem.components.toast.model.ToastData
 import com.twix.designsystem.components.toast.model.ToastType
@@ -37,8 +39,6 @@ import com.twix.designsystem.theme.TwixTheme
 import com.twix.domain.model.enums.BetweenUs
 import com.twix.domain.model.enums.GoalReactionType
 import com.twix.task_certification.R
-import com.twix.task_certification.detail.component.BackgroundCard
-import com.twix.task_certification.detail.component.ForegroundCard
 import com.twix.task_certification.detail.component.TaskCertificationDetailTopBar
 import com.twix.task_certification.detail.model.TaskCertificationDetailIntent
 import com.twix.task_certification.detail.model.TaskCertificationDetailSideEffect
@@ -165,7 +165,7 @@ fun TaskCertificationDetailScreen(
                     buttonTitle =
                         when (uiState.currentShow) {
                             BetweenUs.ME -> stringResource(R.string.task_certification_take_picture)
-                            BetweenUs.PARTNER -> stringResource(R.string.task_certification_detail_partner_sting)
+                            BetweenUs.PARTNER -> stringResource(DesR.string.partner_sting)
                         },
                     rotation =
                         when (uiState.currentShow) {

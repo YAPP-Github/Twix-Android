@@ -1,4 +1,4 @@
-package com.twix.task_certification.detail.component
+package com.twix.designsystem.components.photolog
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
@@ -16,15 +16,14 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.twix.designsystem.R
 import com.twix.designsystem.components.button.AppRoundButton
 import com.twix.designsystem.components.text.AppText
 import com.twix.designsystem.theme.CommonColor
 import com.twix.designsystem.theme.GrayColor
 import com.twix.designsystem.theme.TwixTheme
 import com.twix.domain.model.enums.AppTextStyle
-import com.twix.task_certification.R
 import com.twix.ui.extension.noRippleClickable
-import com.twix.designsystem.R as DesR
 
 @Composable
 fun BackgroundCard(
@@ -69,7 +68,7 @@ fun BackgroundCard(
                 }
 
                 Image(
-                    imageVector = ImageVector.vectorResource(DesR.drawable.ic_keepi_sting),
+                    imageVector = ImageVector.vectorResource(R.drawable.ic_keepi_sting),
                     contentDescription = null,
                     modifier =
                         Modifier
@@ -86,7 +85,7 @@ fun BackgroundCard(
 fun PreviewBackgroundCard() {
     TwixTheme {
         BackgroundCard(
-            buttonTitle = stringResource(R.string.task_certification_detail_partner_sting),
+            buttonTitle = stringResource(R.string.partner_sting),
             uploadedAt = "2023.10.31 23:59",
             onClick = {},
             isCertificated = true,
