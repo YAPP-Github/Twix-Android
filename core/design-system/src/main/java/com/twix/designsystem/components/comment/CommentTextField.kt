@@ -21,10 +21,7 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.graphics.drawscope.Stroke
-import androidx.compose.ui.layout.boundsInRoot
-import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
@@ -50,7 +47,6 @@ fun CommentTextField(
     enabled: Boolean = true,
     onCommitComment: (String) -> Unit = {},
     onFocusChanged: (Boolean) -> Unit = {},
-    onPositioned: (Rect) -> Unit = {},
 ) {
     val focusManager = LocalFocusManager.current
     val focusRequester = remember { FocusRequester() }
@@ -74,15 +70,17 @@ fun CommentTextField(
     }
 
     LaunchedEffect(uiModel.isFocused) {
+        /**
+         * 외부에서 포커스 상태를 제어하는 경우
+         * e.g 사진 촬영 & 사진 선택
+         * */
         if (uiModel.isFocused) focusRequester.requestFocus()
     }
 
     Box(
         modifier =
             modifier
-                .onGloballyPositioned { coordinates ->
-                    onPositioned(coordinates.boundsInRoot())
-                }.noRippleClickable {
+                .noRippleClickable {
                     focusRequester.requestFocus()
                 },
     ) {
@@ -159,7 +157,6 @@ private fun CommentTextFieldPreview() {
         CommentTextField(
             uiModel = CommentUiModel(text, isFocused),
             onFocusChanged = { isFocused = it },
-            onPositioned = {},
         )
     }
 }
