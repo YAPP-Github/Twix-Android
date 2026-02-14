@@ -13,4 +13,7 @@
 
     <!-- 인증샷 수정 화면 !-->
     <string name="task_certification_editor_retake">다시 찍기</string>
+    <string name="task_certification_editor_modify_success">코멘트가 수정 되었어요.</string>
+    <string name="task_certification_editor_not_modified">코멘트가 수정되지 않았어요.</string>
+    <string name="task_certification_editor_modify_fail">코멘트 수정에 실패했어요.</string>
 </resources>

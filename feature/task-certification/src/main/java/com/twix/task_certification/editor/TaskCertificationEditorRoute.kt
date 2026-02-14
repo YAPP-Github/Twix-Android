@@ -45,7 +45,9 @@ import com.twix.designsystem.theme.TwixTheme
 import com.twix.task_certification.R
 import com.twix.task_certification.detail.component.TaskCertificationDetailTopBar
 import com.twix.task_certification.editor.model.TaskCertificationEditorIntent
+import com.twix.task_certification.editor.model.TaskCertificationEditorSideEffect
 import com.twix.task_certification.editor.model.TaskCertificationEditorUiState
+import com.twix.ui.base.ObserveAsEvents
 import com.twix.ui.extension.findActivity
 import com.twix.ui.extension.hasCameraPermission
 import com.twix.ui.extension.noRippleClickable
@@ -65,6 +67,18 @@ fun TaskCertificationEditorRoute(
     val currentContext by rememberUpdatedState(context)
     val coroutineScope = rememberCoroutineScope()
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+
+    ObserveAsEvents(viewModel.sideEffect) { sideEffect ->
+        when (sideEffect) {
+            is TaskCertificationEditorSideEffect.ShowToast ->
+                toastManager.tryShow(
+                    ToastData(
+                        currentContext.getString(sideEffect.message),
+                        sideEffect.type,
+                    ),
+                )
+        }
+    }
 
     val permissionLauncher =
         rememberLauncherForActivityResult(
