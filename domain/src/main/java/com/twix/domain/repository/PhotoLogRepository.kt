@@ -23,4 +23,10 @@ interface PhotoLogRepository {
         photologId: Long,
         reaction: GoalReactionType,
     ): AppResult<Unit>
+
+    suspend fun modifyPhotolog(
+        photologId: Long,
+        fileName: String,
+        comment: String,
+    ): AppResult<Unit>
 }

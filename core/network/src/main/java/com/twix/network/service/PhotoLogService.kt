@@ -1,6 +1,7 @@
 package com.twix.network.service
 
 import com.twix.network.model.request.ReactionRequest
+import com.twix.network.model.request.photolog.model.PhotologModifyRequest
 import com.twix.network.model.request.photolog.model.PhotologRequest
 import com.twix.network.model.response.photo.model.PhotoLogUploadUrlResponse
 import com.twix.network.model.response.photolog.PhotoLogsResponse
@@ -31,5 +32,11 @@ interface PhotoLogService {
     suspend fun reactToPhotolog(
         @Path("photologId") photologId: Long,
         @Body request: ReactionRequest,
+    )
+
+    @PUT("api/v1/photologs/{photologId}")
+    suspend fun modifyPhotolog(
+        @Path("photologId") photologId: Long,
+        @Body request: PhotologModifyRequest,
     )
 }
