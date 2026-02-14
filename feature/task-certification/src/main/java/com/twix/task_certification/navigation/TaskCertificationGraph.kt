@@ -43,14 +43,17 @@ object TaskCertificationGraph : NavGraphContributor {
                     navigateToUpload = {
                         val destination =
                             NavRoutes.TaskCertificationRoute.createRoute(
-                                goalId = it,
-                                from = NavRoutes.TaskCertificationRoute.From.DETAIL,
+                                NavRoutes.TaskCertificationRoute.From.Detail(it),
                             )
                         navController.navigate(destination)
                     },
                     navigateToEditor = { uiState ->
                         val serializer = uiState.toSerializer()
-                        navController.navigate(NavRoutes.TaskCertificationEditorRoute.createRoute(serializer))
+                        navController.navigate(
+                            NavRoutes.TaskCertificationEditorRoute.createRoute(
+                                serializer,
+                            ),
+                        )
                     },
                 )
             }
@@ -66,10 +69,15 @@ object TaskCertificationGraph : NavGraphContributor {
             ) {
                 TaskCertificationEditorRoute(
                     navigateToBack = navController::popBackStack,
-                    navigateToCertification = {
+                    navigateToCertification = { goalId, photologId, comment ->
                         navController.navigate(
                             NavRoutes.TaskCertificationRoute.createRoute(
-                                from = NavRoutes.TaskCertificationRoute.From.EDITOR,
+                                from =
+                                    NavRoutes.TaskCertificationRoute.From.Editor(
+                                        goalId,
+                                        photologId,
+                                        comment,
+                                    ),
                             ),
                         )
                     },
@@ -86,10 +94,22 @@ object TaskCertificationGraph : NavGraphContributor {
                         navArgument(NavRoutes.TaskCertificationRoute.ARG_FROM) {
                             type = NavType.StringType
                         },
+                        navArgument(NavRoutes.TaskCertificationRoute.ARG_PHOTOLOG_ID) {
+                            type = NavType.LongType
+                        },
+                        navArgument(NavRoutes.TaskCertificationRoute.ARG_COMMENT) {
+                            type = NavType.StringType
+                        },
                     ),
             ) {
                 TaskCertificationRoute(
                     navigateToBack = navController::popBackStack,
+                    navigateToDetail = {
+                        navController.popBackStack(
+                            route = NavRoutes.TaskCertificationDetailRoute.route,
+                            inclusive = false,
+                        )
+                    },
                 )
             }
         }

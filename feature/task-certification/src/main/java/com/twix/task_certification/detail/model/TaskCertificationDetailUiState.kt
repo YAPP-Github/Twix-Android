@@ -64,6 +64,7 @@ data class TaskCertificationDetailUiState(
 
     fun toSerializer() =
         TaskCertificationSerializer(
+            goalId = currentGoal.goalId,
             nickname = photoLogs.myNickname,
             goalName = currentGoal.goalName,
             photologId = currentGoal.myPhotolog?.photologId ?: -1,

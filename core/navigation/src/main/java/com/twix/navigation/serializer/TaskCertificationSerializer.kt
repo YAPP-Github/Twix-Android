@@ -4,8 +4,9 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class TaskCertificationSerializer(
-    val nickname: String,
+    val goalId: Long,
     val goalName: String,
+    val nickname: String,
     val photologId: Long,
     val imageUrl: String,
     val comment: String?,

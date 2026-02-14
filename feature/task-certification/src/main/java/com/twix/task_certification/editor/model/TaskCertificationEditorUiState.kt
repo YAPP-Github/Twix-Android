@@ -7,9 +7,10 @@ import com.twix.ui.base.State
 
 @Immutable
 data class TaskCertificationEditorUiState(
+    val goalId: Long = -1,
+    val photologId: Long = -1,
     val nickname: String = "",
     val goalName: String = "",
-    val photologId: Long = -1,
     val imageUrl: String = "",
     val comment: CommentUiModel = CommentUiModel(),
     val originComment: String = "",
@@ -26,6 +27,7 @@ data class TaskCertificationEditorUiState(
 
     fun updateInitialState(serializer: TaskCertificationSerializer) =
         copy(
+            goalId = serializer.goalId,
             nickname = serializer.nickname,
             goalName = serializer.goalName,
             photologId = serializer.photologId,
