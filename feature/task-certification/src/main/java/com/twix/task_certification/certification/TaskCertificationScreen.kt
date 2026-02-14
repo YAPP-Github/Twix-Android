@@ -300,7 +300,10 @@ private fun TaskCertificationScreen(
                     )
                 }
 
-                Box(
+                CommentBox(
+                    uiModel = uiState.commentUiModel,
+                    onCommentChanged = onCommentChanged,
+                    onFocusChanged = onFocusChanged,
                     modifier =
                         Modifier
                             .fillMaxWidth()
@@ -323,14 +326,7 @@ private fun TaskCertificationScreen(
                                         },
                                 )
                             },
-                    contentAlignment = Alignment.Center,
-                ) {
-                    CommentBox(
-                        uiModel = uiState.commentUiModel,
-                        onCommentChanged = onCommentChanged,
-                        onFocusChanged = onFocusChanged,
-                    )
-                }
+                )
             }
         }
     }
