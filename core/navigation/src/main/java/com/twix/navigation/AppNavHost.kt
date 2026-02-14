@@ -23,7 +23,7 @@ fun AppNavHost() {
         }
     val start =
         contributors
-            .firstOrNull { it.graphRoute == NavRoutes.MainGraph }
+            .firstOrNull { it.graphRoute == NavRoutes.LoginGraph }
             ?.graphRoute
             ?: error("해당 Graph를 찾을 수 없습니다.")
     val duration = 300
