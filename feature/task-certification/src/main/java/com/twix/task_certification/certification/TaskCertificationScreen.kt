@@ -60,7 +60,7 @@ import com.twix.task_certification.certification.model.TaskCertificationSideEffe
 import com.twix.task_certification.certification.model.TaskCertificationUiState
 import com.twix.ui.base.ObserveAsEvents
 import com.twix.ui.extension.noRippleClickable
-import com.twix.ui.extension.uriToByteArray
+import com.twix.ui.image.ImageGenerator
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -69,6 +69,7 @@ import org.koin.compose.koinInject
 
 @Composable
 fun TaskCertificationRoute(
+    imageGenerator: ImageGenerator = koinInject(),
     toastManager: ToastManager = koinInject(),
     camera: Camera = koinInject(),
     viewModel: TaskCertificationViewModel = koinViewModel(),
@@ -124,7 +125,7 @@ fun TaskCertificationRoute(
             is TaskCertificationSideEffect.GetImageFromUri -> {
                 val bytes =
                     withContext(Dispatchers.IO) {
-                        currentContext.uriToByteArray(event.uri)
+                        imageGenerator.uriToByteArray(event.uri)
                     }
 
                 if (bytes != null) {
@@ -202,6 +203,23 @@ private fun TaskCertificationScreen(
     val density = LocalDensity.current
     val imeBottom = WindowInsets.ime.getBottom(density)
 
+    /**
+     * Comment Circle UI의 높이
+     * */
+    val commentBoxHeight = with(density) { CIRCLE_SIZE.toPx() }
+
+    /**
+     * [기본 위치 설정]
+     * 프리뷰 박스 하단(previewBoxBottom)을 기준으로 배치
+     * circlePx * 2 만큼 위로 올리고 패딩(+20f)
+     */
+    val defaultY = previewBoxBottom - (commentBoxHeight * 2) + 20f
+
+    /**
+     * 키보드가 올라왔을 때 CommentBox와 키보드 사이의 최소 간격
+     */
+    val keyboardPadding = 60f
+
     Box(
         modifier =
             Modifier
@@ -265,23 +283,6 @@ private fun TaskCertificationScreen(
                 val keyboardTop = screenHeight - imeBottom
 
                 /**
-                 * Comment Circle UI의 크기 계산 (밀도 반영)
-                 * */
-                val commentBoxHeight = with(density) { CIRCLE_SIZE.toPx() }
-
-                /**
-                 * [기본 위치 설정]
-                 * 프리뷰 박스 하단(previewBoxBottom)을 기준으로 배치합니다.
-                 * circlePx * 2 만큼 위로 올리고 패딩(+20f)을 줍니다.
-                 */
-                val defaultY = previewBoxBottom - (commentBoxHeight * 2) + 20f
-
-                /**
-                 * 키보드가 올라왔을 때 CommentBox와 키보드 사이의 최소 간격
-                 */
-                val keyboardPadding = 60f
-
-                /**
                  * Dimmed 배경 레이어
                  * 키보드가 올라왔을 때만 나타나도록 하며, 클릭 시 포커스를 해제
                  */
@@ -299,7 +300,10 @@ private fun TaskCertificationScreen(
                     )
                 }
 
-                Box(
+                CommentBox(
+                    uiModel = uiState.commentUiModel,
+                    onCommentChanged = onCommentChanged,
+                    onFocusChanged = onFocusChanged,
                     modifier =
                         Modifier
                             .fillMaxWidth()
@@ -322,14 +326,7 @@ private fun TaskCertificationScreen(
                                         },
                                 )
                             },
-                    contentAlignment = Alignment.Center,
-                ) {
-                    CommentBox(
-                        uiModel = uiState.commentUiModel,
-                        onCommentChanged = onCommentChanged,
-                        onFocusChanged = onFocusChanged,
-                    )
-                }
+                )
             }
         }
     }
