@@ -210,11 +210,11 @@ fun TaskCertificationDetailScreen(
             }
         }
 
-//        ReactionSection(
-//            visible = uiState.canReaction,
-//            reaction = uiState.photoLogs.partnerPhotologs.reaction,
-//            onClickReaction = onClickReaction,
-//        )
+        ReactionSection(
+            visible = uiState.canReaction,
+            reaction = uiState.currentGoal.partnerPhotolog?.reaction,
+            onClickReaction = onClickReaction,
+        )
     }
 }
 
@@ -224,31 +224,30 @@ private fun ReactionSection(
     reaction: GoalReactionType? = null,
     onClickReaction: (GoalReactionType) -> Unit,
 ) {
-    if (visible) {
-        var effectTarget by remember { mutableStateOf<ReactionUiModel?>(null) }
+    if (!visible) return
+    var effectTarget by remember { mutableStateOf<ReactionUiModel?>(null) }
 
-        Box(modifier = Modifier.fillMaxSize()) {
-            Column(
-                verticalArrangement = Arrangement.Bottom,
-            ) {
-                Spacer(Modifier.height(85.dp))
-                ReactionBar(
-                    selectedReaction = reaction,
-                    onSelectReaction = { type ->
-                        onClickReaction(type)
-                        effectTarget = ReactionUiModel.find(type)
-                    },
-                    modifier =
-                        Modifier
-                            .padding(horizontal = 20.dp),
-                )
-            }
-
-            ReactionEffect(
-                targetReaction = effectTarget,
-                modifier = Modifier.padding(bottom = 100.dp),
+    Box(modifier = Modifier.fillMaxSize()) {
+        Column(
+            verticalArrangement = Arrangement.Bottom,
+        ) {
+            Spacer(Modifier.height(85.dp))
+            ReactionBar(
+                selectedReaction = reaction,
+                onSelectReaction = { type ->
+                    onClickReaction(type)
+                    effectTarget = ReactionUiModel.find(type)
+                },
+                modifier =
+                    Modifier
+                        .padding(horizontal = 20.dp),
             )
         }
+
+        ReactionEffect(
+            targetReaction = effectTarget,
+            modifier = Modifier.padding(bottom = 100.dp),
+        )
     }
 }
 
