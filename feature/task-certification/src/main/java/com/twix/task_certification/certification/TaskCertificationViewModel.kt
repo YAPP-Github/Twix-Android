@@ -117,12 +117,7 @@ class TaskCertificationViewModel(
             },
             onSuccess = { fileName -> uploadPhotoLog(fileName) },
             onError = {
-                emitSideEffect(
-                    TaskCertificationSideEffect.ShowToast(
-                        R.string.task_certification_upload_fail,
-                        ToastType.ERROR,
-                    ),
-                )
+                showToast(R.string.task_certification_upload_fail, ToastType.ERROR)
             },
         )
     }
@@ -148,16 +143,19 @@ class TaskCertificationViewModel(
                 tryEmitSideEffect(TaskCertificationSideEffect.NavigateToDetail)
             },
             onError = {
-                emitSideEffect(
-                    TaskCertificationSideEffect.ShowToast(
-                        R.string.task_certification_upload_fail,
-                        ToastType.ERROR,
-                    ),
-                )
+                showToast(R.string.task_certification_upload_fail, ToastType.ERROR)
             },
         )
     }
 
+    private fun showToast(
+        message: Int,
+        type: ToastType,
+    ) {
+        viewModelScope.launch {
+            emitSideEffect(TaskCertificationSideEffect.ShowToast(message, type))
+        }
+    }
     companion object {
         private const val ERROR_DISPLAY_DURATION_MS = 1500L
         private const val GOAL_ID_NOT_FOUND = "Goal Id Argument Not Found"
