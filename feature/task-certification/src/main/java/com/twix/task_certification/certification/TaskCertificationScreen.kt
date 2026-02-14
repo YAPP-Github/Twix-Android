@@ -62,6 +62,7 @@ fun TaskCertificationRoute(
     camera: Camera = koinInject(),
     viewModel: TaskCertificationViewModel = koinViewModel(),
     navigateToBack: () -> Unit,
+    navigateToDetail: () -> Unit,
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val cameraPreview by camera.surfaceRequests.collectAsStateWithLifecycle()
@@ -120,6 +121,7 @@ fun TaskCertificationRoute(
             }
 
             TaskCertificationSideEffect.NavigateToBack -> navigateToBack()
+            TaskCertificationSideEffect.NavigateToDetail -> navigateToDetail()
         }
     }
 

@@ -13,13 +13,13 @@ import com.twix.task_certification.editor.model.TaskCertificationEditorIntent
 import com.twix.task_certification.editor.model.TaskCertificationEditorSideEffect
 import com.twix.task_certification.editor.model.TaskCertificationEditorUiState
 import com.twix.ui.base.BaseViewModel
-import com.twix.util.bus.TaskCertificationRefreshBus
+import com.twix.util.bus.TaskCertificationDetailRefreshBus
 import kotlinx.coroutines.launch
 import kotlinx.serialization.json.Json
 
 class TaskCertificationEditorViewModel(
     private val photologRepository: PhotoLogRepository,
-    private val detailRefreshBus: TaskCertificationRefreshBus,
+    private val detailRefreshBus: TaskCertificationDetailRefreshBus,
     savedStateHandle: SavedStateHandle,
 ) : BaseViewModel<TaskCertificationEditorUiState, TaskCertificationEditorIntent, TaskCertificationEditorSideEffect>(
         TaskCertificationEditorUiState(),

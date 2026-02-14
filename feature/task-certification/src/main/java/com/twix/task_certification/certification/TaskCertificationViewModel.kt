@@ -14,26 +14,36 @@ import com.twix.task_certification.certification.model.TaskCertificationSideEffe
 import com.twix.task_certification.certification.model.TaskCertificationUiState
 import com.twix.ui.base.BaseViewModel
 import com.twix.util.bus.GoalRefreshBus
-import com.twix.util.bus.TaskCertificationRefreshBus
+import com.twix.util.bus.TaskCertificationDetailRefreshBus
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.time.LocalDate
 
 class TaskCertificationViewModel(
     private val photologRepository: PhotoLogRepository,
-    private val taskCertificationRefreshBus: TaskCertificationRefreshBus,
+    private val detailRefreshBus: TaskCertificationDetailRefreshBus,
     private val goalRefreshBus: GoalRefreshBus,
     saveStateHandle: SavedStateHandle,
 ) : BaseViewModel<TaskCertificationUiState, TaskCertificationIntent, TaskCertificationSideEffect>(
         TaskCertificationUiState(),
     ) {
-    private val goalId: Long =
-        saveStateHandle[NavRoutes.TaskCertificationRoute.ARG_GOAL_ID]
-            ?: error(GOAL_ID_NOT_FOUND)
+    private val argGoalId: Long =
+        requireNotNull(saveStateHandle[NavRoutes.TaskCertificationRoute.ARG_GOAL_ID]) { GOAL_ID_NOT_FOUND }
 
-    private val from: String =
-        saveStateHandle[NavRoutes.TaskCertificationRoute.ARG_FROM]
-            ?: error(FROM_NOT_FOUND)
+    private val argFrom: String =
+        requireNotNull(saveStateHandle[NavRoutes.TaskCertificationRoute.ARG_FROM]) { FROM_NOT_FOUND }
+
+    private val argPhotologId: Long =
+        requireNotNull(saveStateHandle[NavRoutes.TaskCertificationRoute.ARG_PHOTOLOG_ID]) { PHOTOLOG_ID_NOT_FOUND }
+
+    private val argComment: String =
+        requireNotNull(saveStateHandle[NavRoutes.TaskCertificationRoute.ARG_COMMENT]) { COMMENT_NOT_FOUND }
+
+    init {
+        if (argFrom == NavRoutes.TaskCertificationRoute.NAME_EDITOR && argComment.isNotEmpty()) {
+            reduceComment(argComment)
+        }
+    }
 
     override suspend fun handleIntent(intent: TaskCertificationIntent) {
         when (intent) {
@@ -113,19 +123,27 @@ class TaskCertificationViewModel(
                     contentType = "image/jpeg",
                 )
             },
-            onSuccess = { fileName -> uploadPhotoLog(fileName) },
+            onSuccess = { fileName ->
+                when (argFrom) {
+                    NavRoutes.TaskCertificationRoute.NAME_DETAIL,
+                    NavRoutes.TaskCertificationRoute.NAME_HOME,
+                    -> uploadPhotolog(fileName)
+
+                    NavRoutes.TaskCertificationRoute.NAME_EDITOR -> modifyPhotolog(fileName)
+                }
+            },
             onError = {
                 showToast(R.string.task_certification_upload_fail, ToastType.ERROR)
             },
         )
     }
 
-    private fun uploadPhotoLog(fileName: String) {
+    private fun uploadPhotolog(fileName: String) {
         launchResult(
             block = {
                 photologRepository.uploadPhotolog(
                     PhotologParam(
-                        goalId = goalId,
+                        goalId = argGoalId,
                         fileName = fileName,
                         comment = currentState.comment.value,
                         verificationDate = LocalDate.now(),
@@ -133,15 +151,33 @@ class TaskCertificationViewModel(
                 )
             },
             onSuccess = {
-                when (NavRoutes.TaskCertificationRoute.From.valueOf(from)) {
-                    NavRoutes.TaskCertificationRoute.From.EDITOR -> Unit
-                    NavRoutes.TaskCertificationRoute.From.DETAIL -> taskCertificationRefreshBus.notifyChanged()
-                    NavRoutes.TaskCertificationRoute.From.HOME -> goalRefreshBus.notifyGoalListChanged()
+                when (argFrom) {
+                    NavRoutes.TaskCertificationRoute.NAME_DETAIL -> detailRefreshBus.notifyChanged()
+                    NavRoutes.TaskCertificationRoute.NAME_HOME -> goalRefreshBus.notifyGoalListChanged()
                 }
                 tryEmitSideEffect(TaskCertificationSideEffect.NavigateToBack)
             },
             onError = {
                 showToast(R.string.task_certification_upload_fail, ToastType.ERROR)
+            },
+        )
+    }
+
+    private fun modifyPhotolog(fileName: String) {
+        launchResult(
+            block = {
+                photologRepository.modifyPhotolog(
+                    photologId = argPhotologId,
+                    fileName = fileName,
+                    comment = currentState.comment.value,
+                )
+            },
+            onSuccess = {
+                detailRefreshBus.notifyChanged()
+                tryEmitSideEffect(TaskCertificationSideEffect.NavigateToDetail)
+            },
+            onError = {
+                showToast(R.string.task_certification_modify_fail, ToastType.ERROR)
             },
         )
     }
@@ -154,9 +190,12 @@ class TaskCertificationViewModel(
             emitSideEffect(TaskCertificationSideEffect.ShowToast(message, type))
         }
     }
+
     companion object {
         private const val ERROR_DISPLAY_DURATION_MS = 1500L
         private const val GOAL_ID_NOT_FOUND = "Goal Id Argument Not Found"
         private const val FROM_NOT_FOUND = "From Argument Not Found"
+        private const val PHOTOLOG_ID_NOT_FOUND = "Photolog Id Argument Not Found"
+        private const val COMMENT_NOT_FOUND = "Comment Argument Not Found"
     }
 }

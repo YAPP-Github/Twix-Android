@@ -15,4 +15,6 @@ sealed interface TaskCertificationSideEffect : SideEffect {
     ) : TaskCertificationSideEffect
 
     data object NavigateToBack : TaskCertificationSideEffect
+
+    data object NavigateToDetail : TaskCertificationSideEffect
 }

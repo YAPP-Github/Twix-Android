@@ -59,7 +59,7 @@ import com.twix.designsystem.R as DesR
 @Composable
 fun TaskCertificationEditorRoute(
     navigateToBack: () -> Unit,
-    navigateToCertification: () -> Unit,
+    navigateToCertification: (Long, Long, String) -> Unit,
     toastManager: ToastManager = koinInject(),
     viewModel: TaskCertificationEditorViewModel = koinViewModel(),
 ) {
@@ -86,7 +86,7 @@ fun TaskCertificationEditorRoute(
         ) { granted ->
 
             if (granted) {
-                navigateToCertification()
+                navigateToCertification(uiState.goalId, uiState.photologId, uiState.comment.value)
                 return@rememberLauncherForActivityResult
             }
             val activity = currentContext.findActivity() ?: return@rememberLauncherForActivityResult
@@ -119,7 +119,7 @@ fun TaskCertificationEditorRoute(
         onCommentChanged = { viewModel.dispatch(TaskCertificationEditorIntent.ModifyComment(it)) },
         onClickRetake = {
             if (currentContext.hasCameraPermission()) {
-                navigateToCertification()
+                navigateToCertification(uiState.goalId, uiState.photologId, uiState.comment.value)
             } else {
                 permissionLauncher.launch(Manifest.permission.CAMERA)
             }
