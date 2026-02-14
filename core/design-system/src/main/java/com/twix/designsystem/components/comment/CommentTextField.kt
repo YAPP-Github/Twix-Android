@@ -24,7 +24,9 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -52,7 +54,15 @@ fun CommentTextField(
     val focusRequester = remember { FocusRequester() }
     val keyboardState by keyboardAsState()
 
-    var internalValue by rememberSaveable(uiModel.comment) { mutableStateOf(uiModel.comment) }
+    var internalValue by rememberSaveable(stateSaver = TextFieldValue.Saver) {
+        mutableStateOf(
+            TextFieldValue(
+                text = uiModel.comment,
+                selection = TextRange(uiModel.comment.length),
+            ),
+        )
+    }
+
     var isInitialized by remember { mutableStateOf(false) }
 
     LaunchedEffect(keyboardState) {
@@ -62,7 +72,7 @@ fun CommentTextField(
             when (keyboardState) {
                 Keyboard.Opened -> Unit
                 Keyboard.Closed -> {
-                    onCommitComment(internalValue.trim())
+                    onCommitComment(internalValue.text.trim())
                     focusManager.clearFocus()
                 }
             }
@@ -87,8 +97,11 @@ fun CommentTextField(
         TextField(
             value = internalValue,
             onValueChange = { newValue ->
-                if (newValue.length <= CommentUiModel.COMMENT_COUNT) {
-                    internalValue = newValue
+                if (newValue.text.length <= CommentUiModel.COMMENT_COUNT) {
+                    internalValue =
+                        newValue.copy(
+                            selection = TextRange(newValue.text.length),
+                        )
                 }
             },
             enabled = enabled,
@@ -128,16 +141,16 @@ fun CommentTextField(
         ) {
             repeat(CommentUiModel.COMMENT_COUNT) { index ->
                 val char =
-                    if (uiModel.isFocused || internalValue.isNotEmpty()) {
-                        internalValue.getOrNull(index)?.toString()
+                    if (uiModel.isFocused || internalValue.text.isNotEmpty()) {
+                        internalValue.text.getOrNull(index)?.toString()
                     } else {
                         stringResource(R.string.comment_text_field_placeholder)[index].toString()
                     }.orEmpty()
 
                 CommentCircle(
                     text = char,
-                    showPlaceholder = !uiModel.isFocused && internalValue.isEmpty(),
-                    showCursor = uiModel.isFocused && index == internalValue.length,
+                    showPlaceholder = !uiModel.isFocused && internalValue.text.isEmpty(),
+                    showCursor = uiModel.isFocused && index == internalValue.text.length,
                     modifier =
                         Modifier.noRippleClickable {
                             focusRequester.requestFocus()
