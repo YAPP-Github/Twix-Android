@@ -26,12 +26,35 @@ class TaskCertificationDetailViewModel(
     ) {
     private val goalId: Long =
         savedStateHandle[NavRoutes.TaskCertificationDetailRoute.ARG_GOAL_ID]
-            ?: throw IllegalArgumentException(GOAL_ID_NOT_FOUND)
+            ?: error(GOAL_ID_NOT_FOUND)
+
+    private val targetDate: String =
+        savedStateHandle[NavRoutes.TaskCertificationDetailRoute.ARG_DATE]
+            ?: error(TARGET_DATE_NOT_FOUND)
 
     init {
+        reduceGoalId()
         fetchPhotolog()
-
         collectEventBus()
+    }
+
+    private fun reduceGoalId() = reduce { copy(currentGoalId = goalId) }
+
+    private fun fetchPhotolog() {
+        launchResult(
+            block = { photologRepository.fetchPhotoLogs(targetDate) },
+            onSuccess = {
+                reduce { copy(photoLogs = it.toUiModel()) }
+            },
+            onError = {
+                emitSideEffect(
+                    TaskCertificationDetailSideEffect.ShowToast(
+                        R.string.task_certification_detail_fetch_photolog_fail,
+                        ToastType.ERROR,
+                    ),
+                )
+            },
+        )
     }
 
     private fun collectEventBus() {
@@ -51,23 +74,6 @@ class TaskCertificationDetailViewModel(
         }
     }
 
-    private fun fetchPhotolog() {
-        launchResult(
-            block = { photologRepository.fetchPhotoLogs(goalId) },
-            onSuccess = {
-                reduce { copy(photoLogs = it.toUiModel()) }
-            },
-            onError = {
-                emitSideEffect(
-                    TaskCertificationDetailSideEffect.ShowToast(
-                        R.string.task_certification_detail_fetch_photolog_fail,
-                        ToastType.ERROR,
-                    ),
-                )
-            },
-        )
-    }
-
     private fun reduceReaction(reaction: GoalReactionType) {
         reduce { updatePartnerReaction(reaction) }
     }
@@ -78,5 +84,6 @@ class TaskCertificationDetailViewModel(
 
     companion object {
         private const val GOAL_ID_NOT_FOUND = "Goal Id Argument Not Found"
+        private const val TARGET_DATE_NOT_FOUND = "Target Date Argument Not Found"
     }
 }
