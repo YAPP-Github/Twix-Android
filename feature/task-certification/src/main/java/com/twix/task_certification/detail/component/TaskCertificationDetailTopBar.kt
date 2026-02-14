@@ -34,8 +34,8 @@ fun TaskCertificationDetailTopBar(
     goalTitle: String,
     onBack: () -> Unit,
     modifier: Modifier = Modifier,
-    actionTitle: String? = null,
-    onClickModify: (() -> Unit)? = null,
+    actionTitle: String?,
+    onClickModify: (() -> Unit)?,
 ) {
     Column(
         modifier =
@@ -114,11 +114,14 @@ fun TaskCertificationDetailTopBarPreview() {
                 actionTitle = "수정",
                 goalTitle = "목표 타이틀",
                 onBack = {},
+                onClickModify = {},
             )
 
             TaskCertificationDetailTopBar(
                 goalTitle = "목표 타이틀",
                 onBack = {},
+                actionTitle = null,
+                onClickModify = null,
             )
         }
     }
