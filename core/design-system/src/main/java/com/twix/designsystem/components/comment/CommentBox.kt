@@ -33,13 +33,14 @@ fun CommentBox(
         )
 
         Spacer(modifier = Modifier.height(8.dp))
+
         CommentTextField(
             uiModel = uiModel,
             onCommitComment = onCommentChanged,
             onFocusChanged = onFocusChanged,
             modifier =
                 Modifier
-                    .padding(bottom = 20.dp),
+                    .padding(bottom = 24.dp),
         )
     }
 }
