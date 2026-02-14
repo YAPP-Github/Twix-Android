@@ -50,6 +50,7 @@ object TaskCertificationGraph : NavGraphContributor {
                             )
                         navController.navigate(destination)
                     },
+                    navigateToEditor = { },
                 )
             }
 

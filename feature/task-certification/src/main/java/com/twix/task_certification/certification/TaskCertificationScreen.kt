@@ -203,6 +203,23 @@ private fun TaskCertificationScreen(
     val density = LocalDensity.current
     val imeBottom = WindowInsets.ime.getBottom(density)
 
+    /**
+     * Comment Circle UI의 높이
+     * */
+    val commentBoxHeight = with(density) { CIRCLE_SIZE.toPx() }
+
+    /**
+     * [기본 위치 설정]
+     * 프리뷰 박스 하단(previewBoxBottom)을 기준으로 배치
+     * circlePx * 2 만큼 위로 올리고 패딩(+20f)
+     */
+    val defaultY = previewBoxBottom - (commentBoxHeight * 2) + 20f
+
+    /**
+     * 키보드가 올라왔을 때 CommentBox와 키보드 사이의 최소 간격
+     */
+    val keyboardPadding = 60f
+
     Box(
         modifier =
             Modifier
@@ -264,23 +281,6 @@ private fun TaskCertificationScreen(
                  * */
                 val screenHeight = constraints.maxHeight.toFloat()
                 val keyboardTop = screenHeight - imeBottom
-
-                /**
-                 * Comment Circle UI의 크기 계산 (밀도 반영)
-                 * */
-                val commentBoxHeight = with(density) { CIRCLE_SIZE.toPx() }
-
-                /**
-                 * [기본 위치 설정]
-                 * 프리뷰 박스 하단(previewBoxBottom)을 기준으로 배치합니다.
-                 * circlePx * 2 만큼 위로 올리고 패딩(+20f)을 줍니다.
-                 */
-                val defaultY = previewBoxBottom - (commentBoxHeight * 2) + 20f
-
-                /**
-                 * 키보드가 올라왔을 때 CommentBox와 키보드 사이의 최소 간격
-                 */
-                val keyboardPadding = 60f
 
                 /**
                  * Dimmed 배경 레이어

@@ -21,20 +21,21 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.twix.designsystem.R
 import com.twix.designsystem.components.text.AppText
+import com.twix.designsystem.theme.CommonColor
 import com.twix.designsystem.theme.GrayColor
 import com.twix.designsystem.theme.TwixTheme
 import com.twix.domain.model.enums.AppTextStyle
 import com.twix.ui.extension.noRippleClickable
+import com.twix.designsystem.R as DesR
 
 @Composable
 fun TaskCertificationDetailTopBar(
-    showModify: Boolean,
     goalTitle: String,
     onBack: () -> Unit,
+    actionTitle: String?,
+    onClickModify: (() -> Unit)?,
     modifier: Modifier = Modifier,
-    onClickModify: (() -> Unit)? = null,
 ) {
     Column(
         modifier =
@@ -59,7 +60,7 @@ fun TaskCertificationDetailTopBar(
                 contentAlignment = Alignment.Center,
             ) {
                 Image(
-                    painter = painterResource(R.drawable.ic_arrow3_left),
+                    painter = painterResource(DesR.drawable.ic_arrow3_left),
                     contentDescription = "back",
                     modifier = Modifier.size(24.dp),
                 )
@@ -82,18 +83,21 @@ fun TaskCertificationDetailTopBar(
                     Modifier
                         .width(60.dp)
                         .fillMaxHeight()
-                        .then(
-                            if (showModify) Modifier.background(GrayColor.C100) else Modifier,
+                        .background(
+                            if (actionTitle == null) {
+                                CommonColor.White
+                            } else {
+                                GrayColor.C100
+                            },
                         ).noRippleClickable { onClickModify?.invoke() },
                 contentAlignment = Alignment.Center,
             ) {
-                if (showModify) {
-//                   TODO("수정 기능 구현")
-//                    AppText(
-//                        text = stringResource(DesR.string.word_modify),
-//                        style = AppTextStyle.T2,
-//                        color = GrayColor.C500,
-//                    )
+                actionTitle?.let {
+                    AppText(
+                        text = it,
+                        style = AppTextStyle.T2,
+                        color = GrayColor.C500,
+                    )
                 }
             }
         }
@@ -107,15 +111,17 @@ fun TaskCertificationDetailTopBarPreview() {
     TwixTheme {
         Column(verticalArrangement = Arrangement.SpaceEvenly) {
             TaskCertificationDetailTopBar(
-                showModify = true,
+                actionTitle = "수정",
                 goalTitle = "목표 타이틀",
                 onBack = {},
+                onClickModify = {},
             )
 
             TaskCertificationDetailTopBar(
-                showModify = false,
                 goalTitle = "목표 타이틀",
                 onBack = {},
+                actionTitle = null,
+                onClickModify = null,
             )
         }
     }
