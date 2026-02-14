@@ -9,15 +9,15 @@ import com.twix.result.AppResult
 interface PhotoLogRepository {
     suspend fun getUploadUrl(goalId: Long): AppResult<PhotoLogUploadInfo>
 
-    suspend fun uploadPhotoLog(photologParam: PhotologParam): AppResult<Unit>
+    suspend fun uploadPhotolog(photologParam: PhotologParam): AppResult<Unit>
 
-    suspend fun uploadPhotoLogImage(
+    suspend fun uploadPhotologImage(
         goalId: Long,
         bytes: ByteArray,
         contentType: String,
     ): AppResult<String>
 
-    suspend fun fetchPhotoLogs(targetDate: String): AppResult<PhotoLogs>
+    suspend fun fetchPhotologs(targetDate: String): AppResult<PhotoLogs>
 
     suspend fun reactToPhotolog(
         photologId: Long,

@@ -21,10 +21,10 @@ class DefaultPhotoLogRepository(
 ) : PhotoLogRepository {
     override suspend fun getUploadUrl(goalId: Long): AppResult<PhotoLogUploadInfo> = safeApiCall { service.getUploadUrl(goalId).toDomain() }
 
-    override suspend fun uploadPhotoLog(photologParam: PhotologParam): AppResult<Unit> =
+    override suspend fun uploadPhotolog(photologParam: PhotologParam): AppResult<Unit> =
         safeApiCall { service.uploadPhotoLog(photologParam.toRequest()) }
 
-    override suspend fun uploadPhotoLogImage(
+    override suspend fun uploadPhotologImage(
         goalId: Long,
         bytes: ByteArray,
         contentType: String,
@@ -50,7 +50,7 @@ class DefaultPhotoLogRepository(
         return AppResult.Success(info.fileName)
     }
 
-    override suspend fun fetchPhotoLogs(targetDate: String): AppResult<PhotoLogs> =
+    override suspend fun fetchPhotologs(targetDate: String): AppResult<PhotoLogs> =
         safeApiCall {
             service.fetchPhotoLogs(targetDate).toDomain()
         }

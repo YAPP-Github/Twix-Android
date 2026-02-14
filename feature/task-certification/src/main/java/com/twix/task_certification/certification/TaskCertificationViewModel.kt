@@ -109,8 +109,8 @@ class TaskCertificationViewModel(
     private fun upload(image: ByteArray) {
         launchResult(
             block = {
-                photologRepository.uploadPhotoLogImage(
-                    goalId = goalId,
+                photologRepository.uploadPhotologImage(
+                    goalId = argGoalId,
                     bytes = image,
                     contentType = "image/jpeg",
                 )
@@ -130,7 +130,7 @@ class TaskCertificationViewModel(
     private fun uploadPhotoLog(fileName: String) {
         launchResult(
             block = {
-                photologRepository.uploadPhotoLog(
+                photologRepository.uploadPhotolog(
                     PhotologParam(
                         goalId = goalId,
                         fileName = fileName,

@@ -100,7 +100,7 @@ class TaskCertificationDetailViewModel(
 
     private fun fetchPhotolog() {
         launchResult(
-            block = { photologRepository.fetchPhotoLogs(targetDate) },
+            block = { photologRepository.fetchPhotologs(targetDate) },
             onSuccess = {
                 reduce { copy(photoLogs = it.toUiModel()) }
             },
