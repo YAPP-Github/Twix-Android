@@ -47,22 +47,44 @@ sealed class NavRoutes(
         ) = "task_certification_detail/$goalId/$date/$betweenUs"
     }
 
-    object TaskCertificationRoute : NavRoutes("task_certification/{goalId}/{from}") {
+    object TaskCertificationRoute :
+        NavRoutes("task_certification/{goalId}/{from}/{photologId}/{comment}") {
         const val ARG_GOAL_ID = "goalId"
         const val ARG_FROM = "from"
+        const val ARG_PHOTOLOG_ID = "photologId"
+        const val ARG_COMMENT = "comment"
 
-        private const val NOT_NEED_GOAL_ID = -1L
+        const val NAME_HOME = "HOME"
+        const val NAME_DETAIL = "DETAIL"
+        const val NAME_EDITOR = "EDITOR"
 
-        enum class From {
-            HOME,
-            DETAIL,
-            EDITOR,
+        private const val NOT_NEED_PHOTOLOG_ID = -1L
+        private const val NOT_NEED_COMMENT = -1L
+
+        sealed class From(
+            val name: String,
+        ) {
+            data class Home(
+                val goalId: Long,
+            ) : From(NAME_HOME)
+
+            data class Detail(
+                val goalId: Long,
+            ) : From(NAME_DETAIL)
+
+            data class Editor(
+                val goalId: Long,
+                val photologId: Long,
+                val comment: String,
+            ) : From(NAME_EDITOR)
         }
 
-        fun createRoute(
-            goalId: Long = NOT_NEED_GOAL_ID,
-            from: From,
-        ) = "task_certification/$goalId/${from.name}"
+        fun createRoute(from: From): String =
+            when (from) {
+                is From.Home -> "task_certification/${from.goalId}/${from.name}/$NOT_NEED_PHOTOLOG_ID/$NOT_NEED_COMMENT"
+                is From.Detail -> "task_certification/${from.goalId}/${from.name}/$NOT_NEED_PHOTOLOG_ID/$NOT_NEED_COMMENT"
+                is From.Editor -> "task_certification/${from.goalId}/${from.name}/${from.photologId}/${from.comment}"
+            }
     }
 
     object TaskCertificationEditorRoute :
