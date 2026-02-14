@@ -39,6 +39,7 @@ class TaskCertificationEditorViewModel(
         when (intent) {
             is TaskCertificationEditorIntent.CommentFocusChanged -> reduceCommentFocus(intent.isFocused)
             is TaskCertificationEditorIntent.ModifyComment -> reduceComment(intent.value)
+            TaskCertificationEditorIntent.Save -> TODO("인증샷 수정 API 연동")
         }
     }
 

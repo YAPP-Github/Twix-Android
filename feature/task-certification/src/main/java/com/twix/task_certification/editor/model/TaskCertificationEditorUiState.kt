@@ -12,6 +12,7 @@ data class TaskCertificationEditorUiState(
     val photologId: Long = -1,
     val imageUrl: String = "",
     val comment: CommentUiModel = CommentUiModel(),
+    val isImageChanged: Boolean = false,
 ) : State {
     fun updateCommentFocus(isFocus: Boolean) = copy(comment = comment.updateFocus(isFocus))
 

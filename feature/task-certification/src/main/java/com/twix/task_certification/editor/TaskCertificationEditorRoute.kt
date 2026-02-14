@@ -100,7 +100,7 @@ fun TaskCertificationEditorRoute(
     TaskCertificationEditorScreen(
         uiState = uiState,
         onBack = navigateToBack,
-        onClickSave = { },
+        onClickSave = { viewModel.dispatch(TaskCertificationEditorIntent.Save) },
         onFocusChanged = { viewModel.dispatch(TaskCertificationEditorIntent.CommentFocusChanged(it)) },
         onCommentChanged = { viewModel.dispatch(TaskCertificationEditorIntent.ModifyComment(it)) },
         onClickRetake = {
