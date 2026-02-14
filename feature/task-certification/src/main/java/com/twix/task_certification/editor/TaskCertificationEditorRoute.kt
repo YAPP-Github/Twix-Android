@@ -34,6 +34,7 @@ import coil3.request.ImageRequest
 import coil3.request.crossfade
 import com.twix.designsystem.components.button.AppRoundButton
 import com.twix.designsystem.components.comment.CommentAnchorFrame
+import com.twix.designsystem.components.photolog.PhotologCard
 import com.twix.designsystem.components.toast.ToastManager
 import com.twix.designsystem.components.toast.model.ToastData
 import com.twix.designsystem.components.toast.model.ToastType
@@ -42,7 +43,6 @@ import com.twix.designsystem.theme.CommonColor
 import com.twix.designsystem.theme.GrayColor
 import com.twix.designsystem.theme.TwixTheme
 import com.twix.task_certification.R
-import com.twix.task_certification.detail.component.PhotologCard
 import com.twix.task_certification.detail.component.TaskCertificationDetailTopBar
 import com.twix.task_certification.editor.model.TaskCertificationEditorIntent
 import com.twix.task_certification.editor.model.TaskCertificationEditorUiState
@@ -101,7 +101,8 @@ fun TaskCertificationEditorRoute(
         uiState = uiState,
         onBack = navigateToBack,
         onClickSave = { },
-        onFocusChanged = { viewModel.dispatch(TaskCertificationEditorIntent.CommentModify(it)) },
+        onFocusChanged = { viewModel.dispatch(TaskCertificationEditorIntent.CommentFocusChanged(it)) },
+        onCommentChanged = { viewModel.dispatch(TaskCertificationEditorIntent.ModifyComment(it)) },
         onClickRetake = {
             if (currentContext.hasCameraPermission()) {
                 navigateToCertification()
@@ -117,6 +118,7 @@ fun TaskCertificationEditorScreen(
     uiState: TaskCertificationEditorUiState,
     onBack: () -> Unit,
     onClickSave: () -> Unit,
+    onCommentChanged: (String) -> Unit,
     onFocusChanged: (Boolean) -> Unit,
     onClickRetake: () -> Unit,
 ) {
@@ -180,8 +182,8 @@ fun TaskCertificationEditorScreen(
         CommentAnchorFrame(
             uiModel = uiState.comment,
             anchorBottom = photologBottom,
-            onCommentChanged = { },
-            onFocusChanged = { onFocusChanged(it) },
+            onCommentChanged = onCommentChanged,
+            onFocusChanged = onFocusChanged,
         )
     }
 }
@@ -200,6 +202,7 @@ private fun TaskCertificationEditorScreenPreview() {
             onClickSave = {},
             onFocusChanged = {},
             onClickRetake = {},
+            onCommentChanged = {},
         )
     }
 }

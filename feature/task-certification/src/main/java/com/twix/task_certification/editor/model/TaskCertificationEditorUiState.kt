@@ -13,6 +13,10 @@ data class TaskCertificationEditorUiState(
     val imageUrl: String = "",
     val comment: CommentUiModel = CommentUiModel(),
 ) : State {
+    fun updateCommentFocus(isFocus: Boolean) = copy(comment = comment.updateFocus(isFocus))
+
+    fun updateComment(value: String) = copy(comment = comment.updateComment(value))
+
     fun updateInitialState(serializer: TaskCertificationSerializer) =
         copy(
             nickname = serializer.nickname,

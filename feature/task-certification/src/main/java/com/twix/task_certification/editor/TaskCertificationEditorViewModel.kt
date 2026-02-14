@@ -19,10 +19,12 @@ class TaskCertificationEditorViewModel(
     ) {
     val serializer =
         requireNotNull(
-            savedStateHandle.get<String>(NavRoutes.TaskCertificationEditorRoute.ARG_DATA)?.let { encoded ->
-                val json = Uri.decode(encoded)
-                Json.decodeFromString<TaskCertificationSerializer>(json)
-            },
+            savedStateHandle
+                .get<String>(NavRoutes.TaskCertificationEditorRoute.ARG_DATA)
+                ?.let { encoded ->
+                    val json = Uri.decode(encoded)
+                    Json.decodeFromString<TaskCertificationSerializer>(json)
+                },
         ) { SERIALIZER_NOT_FOUND }
 
     init {
@@ -34,6 +36,18 @@ class TaskCertificationEditorViewModel(
     }
 
     override suspend fun handleIntent(intent: TaskCertificationEditorIntent) {
+        when (intent) {
+            is TaskCertificationEditorIntent.CommentFocusChanged -> reduceCommentFocus(intent.isFocused)
+            is TaskCertificationEditorIntent.ModifyComment -> reduceComment(intent.value)
+        }
+    }
+
+    private fun reduceCommentFocus(isFocused: Boolean) {
+        reduce { updateCommentFocus(isFocused) }
+    }
+
+    private fun reduceComment(comment: String) {
+        reduce { updateComment(comment) }
     }
 
     companion object {

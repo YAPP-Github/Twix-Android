@@ -2,4 +2,12 @@ package com.twix.task_certification.editor.model
 
 import com.twix.ui.base.Intent
 
-sealed interface TaskCertificationEditorIntent : Intent
+sealed interface TaskCertificationEditorIntent : Intent {
+    data class CommentFocusChanged(
+        val isFocused: Boolean,
+    ) : TaskCertificationEditorIntent
+
+    data class ModifyComment(
+        val value: String,
+    ) : TaskCertificationEditorIntent
+}
