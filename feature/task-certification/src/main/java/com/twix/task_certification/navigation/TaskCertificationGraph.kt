@@ -35,6 +35,9 @@ object TaskCertificationGraph : NavGraphContributor {
                         navArgument(NavRoutes.TaskCertificationDetailRoute.ARG_BETWEEN_US) {
                             type = NavType.StringType
                         },
+                        navArgument(NavRoutes.TaskCertificationDetailRoute.ARG_DATE) {
+                            type = NavType.StringType
+                        },
                     ),
             ) {
                 TaskCertificationDetailRoute(

@@ -122,6 +122,7 @@ fun HomeRoute(
         onShowCalendarBottomSheet = onShowCalendarBottomSheet,
         onAddNewGoal = navigateToGoalEditor,
         onEditClick = { navigateToGoalManage(uiState.selectedDate) },
+
         onVerificationClick = { goalId, goalCheckState ->
             when (goalCheckState) {
                 GoalCheckState.ONLY_ME,

@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -59,6 +60,7 @@ import com.twix.designsystem.R as DesR
 fun TaskCertificationDetailRoute(
     navigateToBack: () -> Unit,
     navigateToUpload: (Long) -> Unit,
+    navigateToEditor: (TaskCertificationDetailUiState) -> Unit,
     toastManager: ToastManager = koinInject(),
     viewModel: TaskCertificationDetailViewModel = koinViewModel(),
 ) {
@@ -111,7 +113,7 @@ fun TaskCertificationDetailRoute(
     TaskCertificationDetailScreen(
         uiState = uiState,
         onBack = navigateToBack,
-        onClickModify = { },
+        onClickModify = { navigateToEditor(uiState) },
         onClickReaction = { viewModel.dispatch(TaskCertificationDetailIntent.Reaction(it)) },
         onClickUpload = {
             if (currentContext.hasCameraPermission()) {
@@ -134,71 +136,78 @@ fun TaskCertificationDetailScreen(
     onClickUpload: () -> Unit,
     onClickSting: () -> Unit,
     onSwipe: () -> Unit,
-    modifier: Modifier = Modifier,
 ) {
-    Column(
-        modifier
-            .fillMaxSize()
-            .background(color = CommonColor.White),
-    ) {
-        TaskCertificationDetailTopBar(
-            showModify = uiState.canModify,
-            goalTitle = uiState.currentGoal.goalName,
-            onBack = onBack,
-            onClickModify = onClickModify,
-        )
-
-        Spacer(Modifier.height(103.dp))
-
-        Box(Modifier.fillMaxWidth()) {
-            BackgroundCard(
-                isCertificated = uiState.isDisplayedGoalCertificated,
-                uploadedAt = uiState.displayedGoalUpdateAt,
-                buttonTitle =
-                    when (uiState.currentShow) {
-                        BetweenUs.ME -> stringResource(R.string.task_certification_take_picture)
-                        BetweenUs.PARTNER -> stringResource(R.string.task_certification_detail_partner_sting)
-                    },
-                rotation =
-                    when (uiState.currentShow) {
-                        BetweenUs.ME -> -8f
-                        BetweenUs.PARTNER -> 0f
-                    },
-                onClick =
-                    when (uiState.currentShow) {
-                        BetweenUs.ME -> onClickUpload
-                        BetweenUs.PARTNER -> onClickSting
-                    },
+    Scaffold(
+        topBar = {
+            TaskCertificationDetailTopBar(
+                goalTitle = uiState.currentGoal.goalName,
+                onBack = onBack,
+                actionTitle = if (uiState.canModify) stringResource(DesR.string.word_modify) else null,
+                onClickModify = if (uiState.canModify) onClickModify else null,
+                modifier =
+                    Modifier
+                        .background(color = CommonColor.White),
             )
+        },
+    ) { innerPadding ->
+        Column(
+            Modifier
+                .padding(innerPadding)
+                .fillMaxSize()
+                .background(color = CommonColor.White),
+        ) {
+            Spacer(Modifier.height(103.dp))
 
-            SwipeableCard(
-                onSwipe = onSwipe,
-                modifier = Modifier.fillMaxWidth(),
-            ) {
-                ForegroundCard(
+            Box(Modifier.fillMaxWidth()) {
+                BackgroundCard(
                     isCertificated = uiState.isDisplayedGoalCertificated,
-                    nickName =
+                    uploadedAt = uiState.displayedGoalUpdateAt,
+                    buttonTitle =
                         when (uiState.currentShow) {
-                            BetweenUs.ME -> uiState.photoLogs.myNickname
-                            BetweenUs.PARTNER -> uiState.photoLogs.partnerNickname
+                            BetweenUs.ME -> stringResource(R.string.task_certification_take_picture)
+                            BetweenUs.PARTNER -> stringResource(R.string.task_certification_detail_partner_sting)
                         },
-                    imageUrl = uiState.displayedGoalImageUrl,
-                    comment = uiState.displayedGoalComment,
-                    currentShow = uiState.currentShow,
                     rotation =
                         when (uiState.currentShow) {
-                            BetweenUs.ME -> 0f
-                            BetweenUs.PARTNER -> -8f
+                            BetweenUs.ME -> -8f
+                            BetweenUs.PARTNER -> 0f
+                        },
+                    onClick =
+                        when (uiState.currentShow) {
+                            BetweenUs.ME -> onClickUpload
+                            BetweenUs.PARTNER -> onClickSting
                         },
                 )
-            }
-        }
 
-        ReactionSection(
-            visible = uiState.canReaction,
-            reaction = uiState.currentGoal.partnerPhotolog?.reaction,
-            onClickReaction = onClickReaction,
-        )
+                SwipeableCard(
+                    onSwipe = onSwipe,
+                    modifier = Modifier.fillMaxWidth(),
+                ) {
+                    ForegroundCard(
+                        isCertificated = uiState.isDisplayedGoalCertificated,
+                        nickName =
+                            when (uiState.currentShow) {
+                                BetweenUs.ME -> uiState.photoLogs.myNickname
+                                BetweenUs.PARTNER -> uiState.photoLogs.partnerNickname
+                            },
+                        imageUrl = uiState.displayedGoalImageUrl,
+                        comment = uiState.displayedGoalComment,
+                        currentShow = uiState.currentShow,
+                        rotation =
+                            when (uiState.currentShow) {
+                                BetweenUs.ME -> 0f
+                                BetweenUs.PARTNER -> -8f
+                            },
+                    )
+                }
+            }
+
+            ReactionSection(
+                visible = uiState.canReaction,
+                reaction = uiState.currentGoal.partnerPhotolog?.reaction,
+                onClickReaction = onClickReaction,
+            )
+        }
     }
 }
 
