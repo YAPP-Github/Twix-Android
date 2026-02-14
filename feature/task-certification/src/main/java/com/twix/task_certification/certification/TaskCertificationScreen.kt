@@ -92,15 +92,6 @@ fun TaskCertificationRoute(
     val imageCaptureFailMessage = stringResource(R.string.task_certification_image_capture_fail)
     ObserveAsEvents(viewModel.sideEffect) { event ->
         when (event) {
-            TaskCertificationSideEffect.ShowImageCaptureFailToast -> {
-                toastManager.tryShow(
-                    ToastData(
-                        message = imageCaptureFailMessage,
-                        type = ToastType.ERROR,
-                    ),
-                )
-            }
-
             is TaskCertificationSideEffect.ShowToast -> {
                 toastManager.tryShow(
                     ToastData(
@@ -128,7 +119,7 @@ fun TaskCertificationRoute(
                 }
             }
 
-            TaskCertificationSideEffect.NavigateToDetail -> navigateToBack()
+            TaskCertificationSideEffect.NavigateToBack -> navigateToBack()
         }
     }
 

@@ -51,9 +51,7 @@ class TaskCertificationViewModel(
 
     private fun takePicture(uri: Uri?) {
         uri?.let { reducePicture(it) } ?: viewModelScope.launch {
-            emitSideEffect(
-                TaskCertificationSideEffect.ShowImageCaptureFailToast,
-            )
+            showToast(R.string.task_certification_image_capture_fail, ToastType.ERROR)
         }
     }
 
@@ -140,7 +138,7 @@ class TaskCertificationViewModel(
                     NavRoutes.TaskCertificationRoute.From.DETAIL -> taskCertificationRefreshBus.notifyChanged()
                     NavRoutes.TaskCertificationRoute.From.HOME -> goalRefreshBus.notifyGoalListChanged()
                 }
-                tryEmitSideEffect(TaskCertificationSideEffect.NavigateToDetail)
+                tryEmitSideEffect(TaskCertificationSideEffect.NavigateToBack)
             },
             onError = {
                 showToast(R.string.task_certification_upload_fail, ToastType.ERROR)
