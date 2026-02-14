@@ -14,7 +14,7 @@ import com.twix.task_certification.detail.model.TaskCertificationDetailUiState
 import com.twix.task_certification.detail.model.toUiModel
 import com.twix.ui.base.BaseViewModel
 import com.twix.util.bus.GoalRefreshBus
-import com.twix.util.bus.TaskCertificationRefreshBus
+import com.twix.util.bus.TaskCertificationDetailRefreshBus
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -24,7 +24,7 @@ import kotlinx.coroutines.launch
 
 class TaskCertificationDetailViewModel(
     private val photologRepository: PhotoLogRepository,
-    private val taskCertificationRefreshBus: TaskCertificationRefreshBus,
+    private val detailRefreshBus: TaskCertificationDetailRefreshBus,
     private val goalRefreshBus: GoalRefreshBus,
     savedStateHandle: SavedStateHandle,
 ) : BaseViewModel<TaskCertificationDetailUiState, TaskCertificationDetailIntent, TaskCertificationDetailSideEffect>(
@@ -83,7 +83,7 @@ class TaskCertificationDetailViewModel(
 
     private fun collectEventBus() {
         viewModelScope.launch {
-            taskCertificationRefreshBus.events.collect {
+            detailRefreshBus.events.collect {
                 fetchPhotolog()
                 goalRefreshBus.notifyGoalListChanged()
             }
