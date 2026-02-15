@@ -2,7 +2,7 @@ package com.twix.task_certification.editor.model
 
 import androidx.compose.runtime.Immutable
 import com.twix.designsystem.components.comment.model.CommentUiModel
-import com.twix.navigation.serializer.TaskCertificationSerializer
+import com.twix.navigation.serializer.EditorSerializer
 import com.twix.ui.base.State
 
 @Immutable
@@ -25,7 +25,7 @@ data class TaskCertificationEditorUiState(
     val imageName: String
         get() = imageUrl.split(IMAGE_NAME_SEPARATOR).last()
 
-    fun updateInitialState(serializer: TaskCertificationSerializer) =
+    fun updateInitialState(serializer: EditorSerializer) =
         copy(
             goalId = serializer.goalId,
             nickname = serializer.nickname,

@@ -6,20 +6,20 @@ import androidx.lifecycle.viewModelScope
 import com.twix.designsystem.components.toast.model.ToastType
 import com.twix.domain.repository.PhotoLogRepository
 import com.twix.navigation.NavRoutes
-import com.twix.navigation.serializer.TaskCertificationSerializer
+import com.twix.navigation.serializer.EditorSerializer
 import com.twix.result.AppResult
 import com.twix.task_certification.R
 import com.twix.task_certification.editor.model.TaskCertificationEditorIntent
 import com.twix.task_certification.editor.model.TaskCertificationEditorSideEffect
 import com.twix.task_certification.editor.model.TaskCertificationEditorUiState
 import com.twix.ui.base.BaseViewModel
-import com.twix.util.bus.TaskCertificationDetailRefreshBus
+import com.twix.util.bus.TaskCertificationRefreshBus
 import kotlinx.coroutines.launch
 import kotlinx.serialization.json.Json
 
 class TaskCertificationEditorViewModel(
     private val photologRepository: PhotoLogRepository,
-    private val detailRefreshBus: TaskCertificationDetailRefreshBus,
+    private val detailRefreshBus: TaskCertificationRefreshBus,
     savedStateHandle: SavedStateHandle,
 ) : BaseViewModel<TaskCertificationEditorUiState, TaskCertificationEditorIntent, TaskCertificationEditorSideEffect>(
         TaskCertificationEditorUiState(),
@@ -30,7 +30,7 @@ class TaskCertificationEditorViewModel(
                 .get<String>(NavRoutes.TaskCertificationEditorRoute.ARG_DATA)
                 ?.let { encoded ->
                     val json = Uri.decode(encoded)
-                    Json.decodeFromString<TaskCertificationSerializer>(json)
+                    Json.decodeFromString<EditorSerializer>(json)
                 },
         ) { SERIALIZER_NOT_FOUND }
 
@@ -67,7 +67,7 @@ class TaskCertificationEditorViewModel(
             launchResult(
                 block = { launchModifyComment() },
                 onSuccess = {
-                    detailRefreshBus.notifyChanged()
+                    detailRefreshBus.notifyChanged(TaskCertificationRefreshBus.Publisher.EDITOR)
                     showToast(R.string.task_certification_editor_modify_success, ToastType.SUCCESS)
                 },
                 onError = {
