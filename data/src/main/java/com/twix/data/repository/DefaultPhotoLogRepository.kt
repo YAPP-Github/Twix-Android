@@ -14,6 +14,7 @@ import com.twix.network.model.response.photolog.mapper.toDomain
 import com.twix.network.service.PhotoLogService
 import com.twix.network.upload.PresignedUploader
 import com.twix.result.AppResult
+import java.time.LocalDate
 
 class DefaultPhotoLogRepository(
     private val service: PhotoLogService,
@@ -50,7 +51,7 @@ class DefaultPhotoLogRepository(
         return AppResult.Success(info.fileName)
     }
 
-    override suspend fun fetchPhotologs(targetDate: String): AppResult<PhotoLogs> =
+    override suspend fun fetchPhotologs(targetDate: LocalDate): AppResult<PhotoLogs> =
         safeApiCall {
             service.fetchPhotoLogs(targetDate).toDomain()
         }

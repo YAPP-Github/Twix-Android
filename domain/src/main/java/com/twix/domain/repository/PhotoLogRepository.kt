@@ -5,6 +5,7 @@ import com.twix.domain.model.photo.PhotoLogUploadInfo
 import com.twix.domain.model.photo.PhotologParam
 import com.twix.domain.model.photolog.PhotoLogs
 import com.twix.result.AppResult
+import java.time.LocalDate
 
 interface PhotoLogRepository {
     suspend fun getUploadUrl(goalId: Long): AppResult<PhotoLogUploadInfo>
@@ -17,7 +18,7 @@ interface PhotoLogRepository {
         contentType: String,
     ): AppResult<String>
 
-    suspend fun fetchPhotologs(targetDate: String): AppResult<PhotoLogs>
+    suspend fun fetchPhotologs(targetDate: LocalDate): AppResult<PhotoLogs>
 
     suspend fun reactToPhotolog(
         photologId: Long,

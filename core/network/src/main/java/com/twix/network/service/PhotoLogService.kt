@@ -11,6 +11,7 @@ import de.jensklingenberg.ktorfit.http.POST
 import de.jensklingenberg.ktorfit.http.PUT
 import de.jensklingenberg.ktorfit.http.Path
 import de.jensklingenberg.ktorfit.http.Query
+import java.time.LocalDate
 
 interface PhotoLogService {
     @GET("api/v1/photologs/upload-url")
@@ -25,7 +26,7 @@ interface PhotoLogService {
 
     @GET("api/v1/photologs")
     suspend fun fetchPhotoLogs(
-        @Query("targetDate") request: String,
+        @Query("targetDate") request: LocalDate,
     ): PhotoLogsResponse
 
     @PUT("api/v1/photologs/{photologId}/reaction")
