@@ -28,6 +28,8 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.core.app.ActivityCompat
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.twix.designsystem.components.photolog.BackgroundCard
+import com.twix.designsystem.components.photolog.ForegroundCard
 import com.twix.designsystem.components.toast.ToastManager
 import com.twix.designsystem.components.toast.model.ToastData
 import com.twix.designsystem.components.toast.model.ToastType
@@ -37,8 +39,6 @@ import com.twix.designsystem.theme.TwixTheme
 import com.twix.domain.model.enums.BetweenUs
 import com.twix.domain.model.enums.GoalReactionType
 import com.twix.task_certification.R
-import com.twix.task_certification.detail.component.BackgroundCard
-import com.twix.task_certification.detail.component.ForegroundCard
 import com.twix.task_certification.detail.component.TaskCertificationDetailTopBar
 import com.twix.task_certification.detail.model.TaskCertificationDetailIntent
 import com.twix.task_certification.detail.model.TaskCertificationDetailSideEffect
@@ -54,13 +54,14 @@ import com.twix.ui.extension.hasCameraPermission
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 import org.koin.compose.koinInject
+import java.time.LocalDate
 import com.twix.designsystem.R as DesR
 
 @Composable
 fun TaskCertificationDetailRoute(
     navigateToBack: () -> Unit,
-    navigateToUpload: (Long) -> Unit,
-    navigateToEditor: () -> Unit,
+    navigateToCertification: (Long, LocalDate) -> Unit,
+    navigateToEditor: (TaskCertificationDetailUiState) -> Unit,
     toastManager: ToastManager = koinInject(),
     viewModel: TaskCertificationDetailViewModel = koinViewModel(),
 ) {
@@ -85,7 +86,7 @@ fun TaskCertificationDetailRoute(
         ) { granted ->
 
             if (granted) {
-                navigateToUpload(uiState.currentGoalId)
+                navigateToCertification(uiState.currentGoalId, uiState.selectedDate)
                 return@rememberLauncherForActivityResult
             }
             val activity = currentContext.findActivity() ?: return@rememberLauncherForActivityResult
@@ -113,11 +114,11 @@ fun TaskCertificationDetailRoute(
     TaskCertificationDetailScreen(
         uiState = uiState,
         onBack = navigateToBack,
-        onClickModify = { navigateToEditor() },
+        onClickModify = { navigateToEditor(uiState) },
         onClickReaction = { viewModel.dispatch(TaskCertificationDetailIntent.Reaction(it)) },
         onClickUpload = {
             if (currentContext.hasCameraPermission()) {
-                navigateToUpload(uiState.currentGoalId)
+                navigateToCertification(uiState.currentGoalId, uiState.selectedDate)
             } else {
                 permissionLauncher.launch(Manifest.permission.CAMERA)
             }
@@ -165,7 +166,7 @@ fun TaskCertificationDetailScreen(
                     buttonTitle =
                         when (uiState.currentShow) {
                             BetweenUs.ME -> stringResource(R.string.task_certification_take_picture)
-                            BetweenUs.PARTNER -> stringResource(R.string.task_certification_detail_partner_sting)
+                            BetweenUs.PARTNER -> stringResource(DesR.string.word_sting)
                         },
                     rotation =
                         when (uiState.currentShow) {

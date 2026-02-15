@@ -3,12 +3,15 @@ package com.twix.task_certification.detail.model
 import androidx.compose.runtime.Immutable
 import com.twix.domain.model.enums.BetweenUs
 import com.twix.domain.model.enums.GoalReactionType
+import com.twix.navigation.serializer.EditorSerializer
 import com.twix.ui.base.State
+import java.time.LocalDate
 
 @Immutable
 data class TaskCertificationDetailUiState(
     val currentGoalId: Long = -1L,
     val currentShow: BetweenUs = BetweenUs.PARTNER,
+    val selectedDate: LocalDate = LocalDate.now(),
     val photoLogs: PhotoLogsUiModel = PhotoLogsUiModel(),
 ) : State {
     val currentGoal: GoalPhotologUiModel
@@ -60,4 +63,24 @@ data class TaskCertificationDetailUiState(
         )
 
     fun updatePartnerReaction(type: GoalReactionType) = copy(photoLogs = photoLogs.updatePartnerReaction(currentGoalId, type))
+
+    fun setupInitialState(
+        goalId: Long,
+        selectedDate: LocalDate,
+        currentShow: String,
+    ) = copy(
+        currentGoalId = goalId,
+        selectedDate = selectedDate,
+        currentShow = BetweenUs.valueOf(currentShow),
+    )
+
+    fun toSerializer() =
+        EditorSerializer(
+            goalId = currentGoal.goalId,
+            nickname = photoLogs.myNickname,
+            goalName = currentGoal.goalName,
+            photologId = currentGoal.myPhotolog?.photologId ?: -1,
+            imageUrl = currentGoal.myPhotolog?.imageUrl ?: "",
+            comment = currentGoal.myPhotolog?.comment,
+        )
 }

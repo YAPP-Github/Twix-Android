@@ -1,4 +1,4 @@
-package com.twix.task_certification.detail.component
+package com.twix.designsystem.components.photolog
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -18,7 +18,7 @@ import com.twix.designsystem.components.comment.model.CommentUiModel
 import com.twix.designsystem.theme.TwixTheme
 
 @Composable
-internal fun CertificatedCard(
+fun CertificatedCard(
     imageUrl: String?,
     comment: String?,
 ) {

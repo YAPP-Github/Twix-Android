@@ -1,4 +1,4 @@
-package com.twix.task_certification.detail.component
+package com.twix.designsystem.components.photolog
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -16,13 +16,15 @@ import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.twix.designsystem.theme.CommonColor
+import com.twix.designsystem.theme.GrayColor
 import com.twix.designsystem.theme.TwixTheme
 
 @Composable
-internal fun PhotologCard(
-    background: Color,
-    borderColor: Color,
+fun PhotologCard(
     modifier: Modifier = Modifier,
+    borderColor: Color = GrayColor.C500,
+    background: Color = CommonColor.White,
     rotation: Float = 0f,
     content: @Composable BoxScope.() -> Unit = {},
 ) {

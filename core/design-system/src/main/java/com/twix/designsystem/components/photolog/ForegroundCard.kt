@@ -1,19 +1,18 @@
-package com.twix.task_certification.detail.component
+package com.twix.designsystem.components.photolog
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import com.twix.designsystem.R
 import com.twix.designsystem.components.text.AppText
 import com.twix.designsystem.theme.CommonColor
 import com.twix.designsystem.theme.GrayColor
 import com.twix.designsystem.theme.TwixTheme
 import com.twix.domain.model.enums.AppTextStyle
 import com.twix.domain.model.enums.BetweenUs
-import com.twix.task_certification.R
-import com.twix.designsystem.R as DesR
 
 @Composable
-internal fun ForegroundCard(
+fun ForegroundCard(
     isCertificated: Boolean,
     nickName: String,
     imageUrl: String?,
@@ -32,9 +31,11 @@ internal fun ForegroundCard(
             AppText(
                 text =
                     when (currentShow) {
-                        BetweenUs.ME -> stringResource(DesR.string.keep_it_up)
+                        BetweenUs.ME -> stringResource(R.string.keep_it_up)
                         BetweenUs.PARTNER ->
-                            stringResource(R.string.task_certification_detail_partner_not_task_certification).format(nickName)
+                            stringResource(R.string.partner_not_task_certification).format(
+                                nickName,
+                            )
                     },
                 style = AppTextStyle.H2,
                 color = GrayColor.C500,

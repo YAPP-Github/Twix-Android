@@ -33,9 +33,9 @@ import com.twix.designsystem.R as DesR
 fun TaskCertificationDetailTopBar(
     goalTitle: String,
     onBack: () -> Unit,
+    modifier: Modifier = Modifier,
     actionTitle: String?,
     onClickModify: (() -> Unit)?,
-    modifier: Modifier = Modifier,
 ) {
     Column(
         modifier =
