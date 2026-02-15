@@ -8,6 +8,7 @@ import androidx.navigation.navArgument
 import androidx.navigation.navigation
 import com.twix.navigation.NavRoutes
 import com.twix.navigation.base.NavGraphContributor
+import com.twix.navigation.serializer.DetailSerializer
 import com.twix.task_certification.certification.TaskCertificationRoute
 import com.twix.task_certification.detail.TaskCertificationDetailRoute
 import com.twix.task_certification.editor.TaskCertificationEditorRoute
@@ -40,17 +41,24 @@ object TaskCertificationGraph : NavGraphContributor {
             ) {
                 TaskCertificationDetailRoute(
                     navigateToBack = navController::popBackStack,
-                    navigateToUpload = {
+                    navigateToCertification = { goalId, date ->
                         val destination =
                             NavRoutes.TaskCertificationRoute.createRoute(
-                                goalId = it,
-                                from = NavRoutes.TaskCertificationRoute.From.DETAIL,
+                                DetailSerializer(
+                                    goalId = goalId,
+                                    from = NavRoutes.TaskCertificationRoute.From.DETAIL,
+                                    selectedDate = date.toString(),
+                                ),
                             )
                         navController.navigate(destination)
                     },
                     navigateToEditor = { uiState ->
                         val serializer = uiState.toSerializer()
-                        navController.navigate(NavRoutes.TaskCertificationEditorRoute.createRoute(serializer))
+                        navController.navigate(
+                            NavRoutes.TaskCertificationEditorRoute.createRoute(
+                                serializer,
+                            ),
+                        )
                     },
                 )
             }
@@ -66,12 +74,17 @@ object TaskCertificationGraph : NavGraphContributor {
             ) {
                 TaskCertificationEditorRoute(
                     navigateToBack = navController::popBackStack,
-                    navigateToCertification = {
-                        navController.navigate(
+                    navigateToCertification = { goalId, photologId, comment ->
+                        val destination =
                             NavRoutes.TaskCertificationRoute.createRoute(
-                                from = NavRoutes.TaskCertificationRoute.From.EDITOR,
-                            ),
-                        )
+                                DetailSerializer(
+                                    goalId = goalId,
+                                    from = NavRoutes.TaskCertificationRoute.From.EDITOR,
+                                    photologId = photologId,
+                                    comment = comment,
+                                ),
+                            )
+                        navController.navigate(destination)
                     },
                 )
             }
@@ -80,16 +93,19 @@ object TaskCertificationGraph : NavGraphContributor {
                 route = NavRoutes.TaskCertificationRoute.route,
                 arguments =
                     listOf(
-                        navArgument(NavRoutes.TaskCertificationRoute.ARG_GOAL_ID) {
-                            type = NavType.LongType
-                        },
-                        navArgument(NavRoutes.TaskCertificationRoute.ARG_FROM) {
+                        navArgument(NavRoutes.TaskCertificationRoute.ARG_DATA) {
                             type = NavType.StringType
                         },
                     ),
             ) {
                 TaskCertificationRoute(
                     navigateToBack = navController::popBackStack,
+                    navigateToDetail = {
+                        navController.popBackStack(
+                            route = NavRoutes.TaskCertificationDetailRoute.route,
+                            inclusive = false,
+                        )
+                    },
                 )
             }
         }

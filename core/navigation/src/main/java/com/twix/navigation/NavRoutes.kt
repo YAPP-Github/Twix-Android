@@ -1,7 +1,8 @@
 package com.twix.navigation
 
 import android.net.Uri
-import com.twix.navigation.serializer.TaskCertificationSerializer
+import com.twix.navigation.serializer.DetailSerializer
+import com.twix.navigation.serializer.EditorSerializer
 import kotlinx.serialization.json.Json
 import java.time.LocalDate
 
@@ -47,11 +48,8 @@ sealed class NavRoutes(
         ) = "task_certification_detail/$goalId/$date/$betweenUs"
     }
 
-    object TaskCertificationRoute : NavRoutes("task_certification/{goalId}/{from}") {
-        const val ARG_GOAL_ID = "goalId"
-        const val ARG_FROM = "from"
-
-        private const val NOT_NEED_GOAL_ID = -1L
+    object TaskCertificationRoute : NavRoutes("task_certification/{data}") {
+        const val ARG_DATA = "data"
 
         enum class From {
             HOME,
@@ -59,17 +57,18 @@ sealed class NavRoutes(
             EDITOR,
         }
 
-        fun createRoute(
-            goalId: Long = NOT_NEED_GOAL_ID,
-            from: From,
-        ) = "task_certification/$goalId/${from.name}"
+        fun createRoute(data: DetailSerializer): String {
+            val json = Json.encodeToString(data)
+            val encoded = Uri.encode(json)
+            return "task_certification/$encoded"
+        }
     }
 
     object TaskCertificationEditorRoute :
         NavRoutes("task_certification_editor/{data}") {
         const val ARG_DATA = "data"
 
-        fun createRoute(data: TaskCertificationSerializer): String {
+        fun createRoute(data: EditorSerializer): String {
             val json = Json.encodeToString(data)
             val encoded = Uri.encode(json)
             return "task_certification_editor/$encoded"

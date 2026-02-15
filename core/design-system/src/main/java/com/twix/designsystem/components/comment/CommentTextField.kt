@@ -57,8 +57,8 @@ fun CommentTextField(
     var internalValue by rememberSaveable(stateSaver = TextFieldValue.Saver) {
         mutableStateOf(
             TextFieldValue(
-                text = uiModel.comment,
-                selection = TextRange(uiModel.comment.length),
+                text = uiModel.value,
+                selection = TextRange(uiModel.value.length),
             ),
         )
     }

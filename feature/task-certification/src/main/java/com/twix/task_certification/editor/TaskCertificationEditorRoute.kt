@@ -45,7 +45,9 @@ import com.twix.designsystem.theme.TwixTheme
 import com.twix.task_certification.R
 import com.twix.task_certification.detail.component.TaskCertificationDetailTopBar
 import com.twix.task_certification.editor.model.TaskCertificationEditorIntent
+import com.twix.task_certification.editor.model.TaskCertificationEditorSideEffect
 import com.twix.task_certification.editor.model.TaskCertificationEditorUiState
+import com.twix.ui.base.ObserveAsEvents
 import com.twix.ui.extension.findActivity
 import com.twix.ui.extension.hasCameraPermission
 import com.twix.ui.extension.noRippleClickable
@@ -57,7 +59,7 @@ import com.twix.designsystem.R as DesR
 @Composable
 fun TaskCertificationEditorRoute(
     navigateToBack: () -> Unit,
-    navigateToCertification: () -> Unit,
+    navigateToCertification: (Long, Long, String) -> Unit,
     toastManager: ToastManager = koinInject(),
     viewModel: TaskCertificationEditorViewModel = koinViewModel(),
 ) {
@@ -66,13 +68,25 @@ fun TaskCertificationEditorRoute(
     val coroutineScope = rememberCoroutineScope()
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
+    ObserveAsEvents(viewModel.sideEffect) { sideEffect ->
+        when (sideEffect) {
+            is TaskCertificationEditorSideEffect.ShowToast ->
+                toastManager.tryShow(
+                    ToastData(
+                        currentContext.getString(sideEffect.message),
+                        sideEffect.type,
+                    ),
+                )
+        }
+    }
+
     val permissionLauncher =
         rememberLauncherForActivityResult(
             ActivityResultContracts.RequestPermission(),
         ) { granted ->
 
             if (granted) {
-                navigateToCertification()
+                navigateToCertification(uiState.goalId, uiState.photologId, uiState.comment.value)
                 return@rememberLauncherForActivityResult
             }
             val activity = currentContext.findActivity() ?: return@rememberLauncherForActivityResult
@@ -105,7 +119,7 @@ fun TaskCertificationEditorRoute(
         onCommentChanged = { viewModel.dispatch(TaskCertificationEditorIntent.ModifyComment(it)) },
         onClickRetake = {
             if (currentContext.hasCameraPermission()) {
-                navigateToCertification()
+                navigateToCertification(uiState.goalId, uiState.photologId, uiState.comment.value)
             } else {
                 permissionLauncher.launch(Manifest.permission.CAMERA)
             }

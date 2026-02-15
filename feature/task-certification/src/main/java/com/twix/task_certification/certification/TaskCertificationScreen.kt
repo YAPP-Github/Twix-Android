@@ -62,6 +62,7 @@ fun TaskCertificationRoute(
     camera: Camera = koinInject(),
     viewModel: TaskCertificationViewModel = koinViewModel(),
     navigateToBack: () -> Unit,
+    navigateToDetail: () -> Unit,
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val cameraPreview by camera.surfaceRequests.collectAsStateWithLifecycle()
@@ -92,15 +93,6 @@ fun TaskCertificationRoute(
     val imageCaptureFailMessage = stringResource(R.string.task_certification_image_capture_fail)
     ObserveAsEvents(viewModel.sideEffect) { event ->
         when (event) {
-            TaskCertificationSideEffect.ShowImageCaptureFailToast -> {
-                toastManager.tryShow(
-                    ToastData(
-                        message = imageCaptureFailMessage,
-                        type = ToastType.ERROR,
-                    ),
-                )
-            }
-
             is TaskCertificationSideEffect.ShowToast -> {
                 toastManager.tryShow(
                     ToastData(
@@ -128,7 +120,8 @@ fun TaskCertificationRoute(
                 }
             }
 
-            TaskCertificationSideEffect.NavigateToDetail -> navigateToBack()
+            TaskCertificationSideEffect.NavigateToBack -> navigateToBack()
+            TaskCertificationSideEffect.NavigateToDetail -> navigateToDetail()
         }
     }
 
