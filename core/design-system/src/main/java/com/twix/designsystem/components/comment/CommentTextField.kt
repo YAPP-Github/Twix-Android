@@ -63,6 +63,16 @@ fun CommentTextField(
         )
     }
 
+    LaunchedEffect(uiModel.value) {
+        if (uiModel.value != internalValue.text) {
+            internalValue =
+                TextFieldValue(
+                    text = uiModel.value,
+                    selection = TextRange(uiModel.value.length),
+                )
+        }
+    }
+
     var isInitialized by remember { mutableStateOf(false) }
 
     LaunchedEffect(keyboardState) {
