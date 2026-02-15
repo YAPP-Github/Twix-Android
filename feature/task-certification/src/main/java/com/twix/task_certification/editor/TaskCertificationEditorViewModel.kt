@@ -24,7 +24,7 @@ class TaskCertificationEditorViewModel(
 ) : BaseViewModel<TaskCertificationEditorUiState, TaskCertificationEditorIntent, TaskCertificationEditorSideEffect>(
         TaskCertificationEditorUiState(),
     ) {
-    val serializer =
+    private val serializer =
         requireNotNull(
             savedStateHandle
                 .get<String>(NavRoutes.TaskCertificationEditorRoute.ARG_DATA)
