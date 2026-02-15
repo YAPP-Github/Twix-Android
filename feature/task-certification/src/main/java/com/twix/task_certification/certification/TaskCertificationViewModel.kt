@@ -159,11 +159,12 @@ class TaskCertificationViewModel(
 
     private fun handleUploadPhotologSuccess() {
         when (serializer.from) {
-            NavRoutes.TaskCertificationRoute.From.EDITOR ->
-                detailRefreshBus.notifyChanged(TaskCertificationRefreshBus.Publisher.EDITOR)
             NavRoutes.TaskCertificationRoute.From.HOME ->
                 goalRefreshBus.notifyGoalListChanged()
-            NavRoutes.TaskCertificationRoute.From.DETAIL -> Unit
+            NavRoutes.TaskCertificationRoute.From.DETAIL ->
+                detailRefreshBus.notifyChanged(TaskCertificationRefreshBus.Publisher.PHOTOLOG)
+            NavRoutes.TaskCertificationRoute.From.EDITOR -> Unit
+
         }
         tryEmitSideEffect(TaskCertificationSideEffect.NavigateToBack)
     }
