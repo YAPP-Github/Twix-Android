@@ -85,7 +85,7 @@ fun BackgroundCard(
 fun PreviewBackgroundCard() {
     TwixTheme {
         BackgroundCard(
-            buttonTitle = stringResource(R.string.partner_sting),
+            buttonTitle = stringResource(R.string.word_sting),
             uploadedAt = "2023.10.31 23:59",
             onClick = {},
             isCertificated = true,

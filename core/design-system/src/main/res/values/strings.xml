@@ -20,6 +20,7 @@
     <string name="word_account">계정</string>
     <string name="word_information">정보</string>
     <string name="word_logout">로그아웃</string>
+    <string name="word_sting">찌르기</string>
 
     <string name="word_daily">매일</string>
     <string name="word_weekly">매주</string>
@@ -51,7 +52,6 @@
 
     <!-- 인증샷 화면 -->
     <string name="partner_not_task_certification">%s님은\n아직…</string>
-    <string name="partner_sting">찌르기</string>
 
     <!-- 목표 생성, 편집 화면 -->
     <string name="goal_editor_title">목표 직접 만들기</string>
