@@ -164,7 +164,6 @@ class TaskCertificationViewModel(
             NavRoutes.TaskCertificationRoute.From.DETAIL ->
                 detailRefreshBus.notifyChanged(TaskCertificationRefreshBus.Publisher.PHOTOLOG)
             NavRoutes.TaskCertificationRoute.From.EDITOR -> Unit
-
         }
         tryEmitSideEffect(TaskCertificationSideEffect.NavigateToBack)
     }
