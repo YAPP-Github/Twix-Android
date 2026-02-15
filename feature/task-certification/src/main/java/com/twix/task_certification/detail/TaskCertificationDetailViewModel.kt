@@ -3,7 +3,6 @@ package com.twix.task_certification.detail
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.twix.designsystem.components.toast.model.ToastType
-import com.twix.domain.model.enums.BetweenUs
 import com.twix.domain.model.enums.GoalReactionType
 import com.twix.domain.repository.PhotoLogRepository
 import com.twix.navigation.NavRoutes
@@ -14,17 +13,18 @@ import com.twix.task_certification.detail.model.TaskCertificationDetailUiState
 import com.twix.task_certification.detail.model.toUiModel
 import com.twix.ui.base.BaseViewModel
 import com.twix.util.bus.GoalRefreshBus
-import com.twix.util.bus.TaskCertificationDetailRefreshBus
+import com.twix.util.bus.TaskCertificationRefreshBus
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
+import java.time.LocalDate
 
 class TaskCertificationDetailViewModel(
     private val photologRepository: PhotoLogRepository,
-    private val detailRefreshBus: TaskCertificationDetailRefreshBus,
+    private val detailRefreshBus: TaskCertificationRefreshBus,
     private val goalRefreshBus: GoalRefreshBus,
     savedStateHandle: SavedStateHandle,
 ) : BaseViewModel<TaskCertificationDetailUiState, TaskCertificationDetailIntent, TaskCertificationDetailSideEffect>(
@@ -34,9 +34,11 @@ class TaskCertificationDetailViewModel(
         savedStateHandle[NavRoutes.TaskCertificationDetailRoute.ARG_GOAL_ID]
             ?: error(GOAL_ID_NOT_FOUND)
 
-    private val targetDate: String =
-        savedStateHandle[NavRoutes.TaskCertificationDetailRoute.ARG_DATE]
-            ?: error(TARGET_DATE_NOT_FOUND)
+    private val selectedDate: LocalDate =
+        LocalDate.parse(
+            savedStateHandle[NavRoutes.TaskCertificationDetailRoute.ARG_DATE]
+                ?: error(TARGET_DATE_NOT_FOUND),
+        )
 
     private val betweenUs: String =
         savedStateHandle[NavRoutes.TaskCertificationDetailRoute.ARG_BETWEEN_US]
@@ -78,14 +80,24 @@ class TaskCertificationDetailViewModel(
 
     private fun reduceInitialState() =
         reduce {
-            copy(currentGoalId = goalId, currentShow = BetweenUs.valueOf(betweenUs))
+            setupInitialState(
+                goalId,
+                this@TaskCertificationDetailViewModel.selectedDate,
+                betweenUs,
+            )
         }
 
     private fun collectEventBus() {
         viewModelScope.launch {
-            detailRefreshBus.events.collect {
-                fetchPhotolog()
-                goalRefreshBus.notifyGoalListChanged()
+            detailRefreshBus.events.collect { publisher ->
+                when (publisher) {
+                    TaskCertificationRefreshBus.Publisher.PHOTOLOG -> {
+                        fetchPhotolog()
+                        goalRefreshBus.notifyGoalListChanged()
+                    }
+
+                    TaskCertificationRefreshBus.Publisher.EDITOR -> fetchPhotolog()
+                }
             }
         }
     }
@@ -100,7 +112,7 @@ class TaskCertificationDetailViewModel(
 
     private fun fetchPhotolog() {
         launchResult(
-            block = { photologRepository.fetchPhotologs(targetDate) },
+            block = { photologRepository.fetchPhotologs(selectedDate) },
             onSuccess = {
                 reduce { copy(photoLogs = it.toUiModel()) }
             },

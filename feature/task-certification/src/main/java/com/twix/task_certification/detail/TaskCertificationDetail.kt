@@ -54,12 +54,13 @@ import com.twix.ui.extension.hasCameraPermission
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 import org.koin.compose.koinInject
+import java.time.LocalDate
 import com.twix.designsystem.R as DesR
 
 @Composable
 fun TaskCertificationDetailRoute(
     navigateToBack: () -> Unit,
-    navigateToUpload: (Long) -> Unit,
+    navigateToCertification: (Long, LocalDate) -> Unit,
     navigateToEditor: (TaskCertificationDetailUiState) -> Unit,
     toastManager: ToastManager = koinInject(),
     viewModel: TaskCertificationDetailViewModel = koinViewModel(),
@@ -85,7 +86,7 @@ fun TaskCertificationDetailRoute(
         ) { granted ->
 
             if (granted) {
-                navigateToUpload(uiState.currentGoalId)
+                navigateToCertification(uiState.currentGoalId, uiState.selectedDate)
                 return@rememberLauncherForActivityResult
             }
             val activity = currentContext.findActivity() ?: return@rememberLauncherForActivityResult
@@ -117,7 +118,7 @@ fun TaskCertificationDetailRoute(
         onClickReaction = { viewModel.dispatch(TaskCertificationDetailIntent.Reaction(it)) },
         onClickUpload = {
             if (currentContext.hasCameraPermission()) {
-                navigateToUpload(uiState.currentGoalId)
+                navigateToCertification(uiState.currentGoalId, uiState.selectedDate)
             } else {
                 permissionLauncher.launch(Manifest.permission.CAMERA)
             }

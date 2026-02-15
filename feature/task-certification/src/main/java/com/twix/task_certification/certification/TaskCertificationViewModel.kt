@@ -7,6 +7,7 @@ import com.twix.designsystem.components.toast.model.ToastType
 import com.twix.domain.model.photo.PhotologParam
 import com.twix.domain.repository.PhotoLogRepository
 import com.twix.navigation.NavRoutes
+import com.twix.navigation.serializer.DetailSerializer
 import com.twix.task_certification.R
 import com.twix.task_certification.certification.model.CaptureStatus
 import com.twix.task_certification.certification.model.TaskCertificationIntent
@@ -14,34 +15,33 @@ import com.twix.task_certification.certification.model.TaskCertificationSideEffe
 import com.twix.task_certification.certification.model.TaskCertificationUiState
 import com.twix.ui.base.BaseViewModel
 import com.twix.util.bus.GoalRefreshBus
-import com.twix.util.bus.TaskCertificationDetailRefreshBus
+import com.twix.util.bus.TaskCertificationRefreshBus
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlinx.serialization.json.Json
 import java.time.LocalDate
 
 class TaskCertificationViewModel(
     private val photologRepository: PhotoLogRepository,
-    private val detailRefreshBus: TaskCertificationDetailRefreshBus,
+    private val detailRefreshBus: TaskCertificationRefreshBus,
     private val goalRefreshBus: GoalRefreshBus,
-    saveStateHandle: SavedStateHandle,
+    savedStateHandle: SavedStateHandle,
 ) : BaseViewModel<TaskCertificationUiState, TaskCertificationIntent, TaskCertificationSideEffect>(
         TaskCertificationUiState(),
     ) {
-    private val argGoalId: Long =
-        requireNotNull(saveStateHandle[NavRoutes.TaskCertificationRoute.ARG_GOAL_ID]) { GOAL_ID_NOT_FOUND }
-
-    private val argFrom: String =
-        requireNotNull(saveStateHandle[NavRoutes.TaskCertificationRoute.ARG_FROM]) { FROM_NOT_FOUND }
-
-    private val argPhotologId: Long =
-        requireNotNull(saveStateHandle[NavRoutes.TaskCertificationRoute.ARG_PHOTOLOG_ID]) { PHOTOLOG_ID_NOT_FOUND }
-
-    private val argComment: String =
-        requireNotNull(saveStateHandle[NavRoutes.TaskCertificationRoute.ARG_COMMENT]) { COMMENT_NOT_FOUND }
+    private val serializer: DetailSerializer =
+        requireNotNull(
+            savedStateHandle
+                .get<String>(NavRoutes.TaskCertificationRoute.ARG_DATA)
+                ?.let { encoded ->
+                    val json = Uri.decode(encoded)
+                    Json.decodeFromString<DetailSerializer>(json)
+                },
+        ) { SERIALIZER_NOT_FOUND }
 
     init {
-        if (argFrom == NavRoutes.TaskCertificationRoute.NAME_EDITOR && argComment.isNotEmpty()) {
-            reduceComment(argComment)
+        if (serializer.from == NavRoutes.TaskCertificationRoute.From.EDITOR) {
+            reduceComment(serializer.comment)
         }
     }
 
@@ -118,18 +118,18 @@ class TaskCertificationViewModel(
         launchResult(
             block = {
                 photologRepository.uploadPhotologImage(
-                    goalId = argGoalId,
+                    goalId = serializer.goalId,
                     bytes = image,
                     contentType = "image/jpeg",
                 )
             },
             onSuccess = { fileName ->
-                when (argFrom) {
-                    NavRoutes.TaskCertificationRoute.NAME_DETAIL,
-                    NavRoutes.TaskCertificationRoute.NAME_HOME,
+                when (serializer.from) {
+                    NavRoutes.TaskCertificationRoute.From.DETAIL,
+                    NavRoutes.TaskCertificationRoute.From.HOME,
                     -> uploadPhotolog(fileName)
 
-                    NavRoutes.TaskCertificationRoute.NAME_EDITOR -> modifyPhotolog(fileName)
+                    NavRoutes.TaskCertificationRoute.From.EDITOR -> modifyPhotolog(fileName)
                 }
             },
             onError = {
@@ -143,37 +143,45 @@ class TaskCertificationViewModel(
             block = {
                 photologRepository.uploadPhotolog(
                     PhotologParam(
-                        goalId = argGoalId,
+                        goalId = serializer.goalId,
                         fileName = fileName,
                         comment = currentState.comment.value,
-                        verificationDate = LocalDate.now(),
+                        verificationDate = LocalDate.parse(serializer.selectedDate),
                     ),
                 )
             },
-            onSuccess = {
-                when (argFrom) {
-                    NavRoutes.TaskCertificationRoute.NAME_DETAIL -> detailRefreshBus.notifyChanged()
-                    NavRoutes.TaskCertificationRoute.NAME_HOME -> goalRefreshBus.notifyGoalListChanged()
-                }
-                tryEmitSideEffect(TaskCertificationSideEffect.NavigateToBack)
-            },
+            onSuccess = { handleUploadPhotologSuccess() },
             onError = {
                 showToast(R.string.task_certification_upload_fail, ToastType.ERROR)
             },
         )
     }
 
+    private fun handleUploadPhotologSuccess() {
+        when (serializer.from) {
+            NavRoutes.TaskCertificationRoute.From.EDITOR ->
+                detailRefreshBus.notifyChanged(TaskCertificationRefreshBus.Publisher.EDITOR)
+
+            NavRoutes.TaskCertificationRoute.From.DETAIL ->
+                detailRefreshBus.notifyChanged(TaskCertificationRefreshBus.Publisher.PHOTOLOG)
+
+            NavRoutes.TaskCertificationRoute.From.HOME ->
+                goalRefreshBus.notifyGoalListChanged()
+        }
+        tryEmitSideEffect(TaskCertificationSideEffect.NavigateToBack)
+    }
+
     private fun modifyPhotolog(fileName: String) {
         launchResult(
             block = {
                 photologRepository.modifyPhotolog(
-                    photologId = argPhotologId,
+                    photologId = serializer.photologId,
                     fileName = fileName,
                     comment = currentState.comment.value,
                 )
             },
             onSuccess = {
-                detailRefreshBus.notifyChanged()
+                detailRefreshBus.notifyChanged(TaskCertificationRefreshBus.Publisher.PHOTOLOG)
                 tryEmitSideEffect(TaskCertificationSideEffect.NavigateToDetail)
             },
             onError = {
@@ -193,9 +201,6 @@ class TaskCertificationViewModel(
 
     companion object {
         private const val ERROR_DISPLAY_DURATION_MS = 1500L
-        private const val GOAL_ID_NOT_FOUND = "Goal Id Argument Not Found"
-        private const val FROM_NOT_FOUND = "From Argument Not Found"
-        private const val PHOTOLOG_ID_NOT_FOUND = "Photolog Id Argument Not Found"
-        private const val COMMENT_NOT_FOUND = "Comment Argument Not Found"
+        private const val SERIALIZER_NOT_FOUND = "Serializer Not Found"
     }
 }
