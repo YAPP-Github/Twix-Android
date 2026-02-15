@@ -7,6 +7,7 @@ import androidx.navigation.navigation
 import com.twix.main.MainRoute
 import com.twix.navigation.NavRoutes
 import com.twix.navigation.base.NavGraphContributor
+import com.twix.navigation.serializer.DetailSerializer
 
 object MainNavGraph : NavGraphContributor {
     override val graphRoute: NavRoutes
@@ -36,11 +37,13 @@ object MainNavGraph : NavGraphContributor {
                             launchSingleTop = true
                         }
                     },
-                    navigateToCertification = { goalId ->
+                    navigateToCertification = { goalId, date ->
                         val destination =
                             NavRoutes.TaskCertificationRoute.createRoute(
-                                NavRoutes.TaskCertificationRoute.From.Home(
-                                    goalId,
+                                DetailSerializer(
+                                    goalId = goalId,
+                                    from = NavRoutes.TaskCertificationRoute.From.HOME,
+                                    selectedDate = date.toString(),
                                 ),
                             )
                         navController.navigate(destination) {
@@ -48,13 +51,13 @@ object MainNavGraph : NavGraphContributor {
                         }
                     },
                     navigateToCertificationDetail = { goalId, date, betweenUs ->
-                        navController.navigate(
+                        val destination =
                             NavRoutes.TaskCertificationDetailRoute.createRoute(
                                 goalId,
                                 date,
                                 betweenUs.name,
-                            ),
-                        ) {
+                            )
+                        navController.navigate(destination) {
                             launchSingleTop = true
                         }
                     },

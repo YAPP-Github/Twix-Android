@@ -71,7 +71,7 @@ fun HomeRoute(
     navigateToGoalEditor: () -> Unit,
     navigateToGoalManage: (LocalDate) -> Unit,
     navigateToSettings: () -> Unit,
-    navigateToCertification: (Long) -> Unit,
+    navigateToCertification: (Long, LocalDate) -> Unit,
     navigateToCertificationDetail: (Long, LocalDate, BetweenUs) -> Unit,
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -85,7 +85,7 @@ fun HomeRoute(
             ActivityResultContracts.RequestPermission(),
         ) { granted ->
             if (granted) {
-                pendingGoalId?.let { navigateToCertification(it) }
+                pendingGoalId?.let { navigateToCertification(it, uiState.selectedDate) }
                 return@rememberLauncherForActivityResult
             }
 

@@ -1,7 +1,8 @@
 package com.twix.navigation
 
 import android.net.Uri
-import com.twix.navigation.serializer.TaskCertificationSerializer
+import com.twix.navigation.serializer.DetailSerializer
+import com.twix.navigation.serializer.EditorSerializer
 import kotlinx.serialization.json.Json
 import java.time.LocalDate
 
@@ -47,51 +48,27 @@ sealed class NavRoutes(
         ) = "task_certification_detail/$goalId/$date/$betweenUs"
     }
 
-    object TaskCertificationRoute :
-        NavRoutes("task_certification/{goalId}/{from}/{photologId}/{comment}") {
-        const val ARG_GOAL_ID = "goalId"
-        const val ARG_FROM = "from"
-        const val ARG_PHOTOLOG_ID = "photologId"
-        const val ARG_COMMENT = "comment"
+    object TaskCertificationRoute : NavRoutes("task_certification/{data}") {
+        const val ARG_DATA = "data"
 
-        const val NAME_HOME = "HOME"
-        const val NAME_DETAIL = "DETAIL"
-        const val NAME_EDITOR = "EDITOR"
-
-        private const val NOT_NEED_PHOTOLOG_ID = -1L
-        private const val NOT_NEED_COMMENT = -1L
-
-        sealed class From(
-            val name: String,
-        ) {
-            data class Home(
-                val goalId: Long,
-            ) : From(NAME_HOME)
-
-            data class Detail(
-                val goalId: Long,
-            ) : From(NAME_DETAIL)
-
-            data class Editor(
-                val goalId: Long,
-                val photologId: Long,
-                val comment: String,
-            ) : From(NAME_EDITOR)
+        enum class From {
+            HOME,
+            DETAIL,
+            EDITOR,
         }
 
-        fun createRoute(from: From): String =
-            when (from) {
-                is From.Home -> "task_certification/${from.goalId}/${from.name}/$NOT_NEED_PHOTOLOG_ID/$NOT_NEED_COMMENT"
-                is From.Detail -> "task_certification/${from.goalId}/${from.name}/$NOT_NEED_PHOTOLOG_ID/$NOT_NEED_COMMENT"
-                is From.Editor -> "task_certification/${from.goalId}/${from.name}/${from.photologId}/${from.comment}"
-            }
+        fun createRoute(data: DetailSerializer): String {
+            val json = Json.encodeToString(data)
+            val encoded = Uri.encode(json)
+            return "task_certification/$encoded"
+        }
     }
 
     object TaskCertificationEditorRoute :
         NavRoutes("task_certification_editor/{data}") {
         const val ARG_DATA = "data"
 
-        fun createRoute(data: TaskCertificationSerializer): String {
+        fun createRoute(data: EditorSerializer): String {
             val json = Json.encodeToString(data)
             val encoded = Uri.encode(json)
             return "task_certification_editor/$encoded"

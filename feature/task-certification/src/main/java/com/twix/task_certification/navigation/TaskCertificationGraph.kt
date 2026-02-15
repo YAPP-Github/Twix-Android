@@ -8,6 +8,7 @@ import androidx.navigation.navArgument
 import androidx.navigation.navigation
 import com.twix.navigation.NavRoutes
 import com.twix.navigation.base.NavGraphContributor
+import com.twix.navigation.serializer.DetailSerializer
 import com.twix.task_certification.certification.TaskCertificationRoute
 import com.twix.task_certification.detail.TaskCertificationDetailRoute
 import com.twix.task_certification.editor.TaskCertificationEditorRoute
@@ -40,10 +41,14 @@ object TaskCertificationGraph : NavGraphContributor {
             ) {
                 TaskCertificationDetailRoute(
                     navigateToBack = navController::popBackStack,
-                    navigateToUpload = {
+                    navigateToCertification = { goalId, date ->
                         val destination =
                             NavRoutes.TaskCertificationRoute.createRoute(
-                                NavRoutes.TaskCertificationRoute.From.Detail(it),
+                                DetailSerializer(
+                                    goalId = goalId,
+                                    from = NavRoutes.TaskCertificationRoute.From.DETAIL,
+                                    selectedDate = date.toString(),
+                                ),
                             )
                         navController.navigate(destination)
                     },
@@ -70,16 +75,16 @@ object TaskCertificationGraph : NavGraphContributor {
                 TaskCertificationEditorRoute(
                     navigateToBack = navController::popBackStack,
                     navigateToCertification = { goalId, photologId, comment ->
-                        navController.navigate(
+                        val destination =
                             NavRoutes.TaskCertificationRoute.createRoute(
-                                from =
-                                    NavRoutes.TaskCertificationRoute.From.Editor(
-                                        goalId,
-                                        photologId,
-                                        comment,
-                                    ),
-                            ),
-                        )
+                                DetailSerializer(
+                                    goalId = goalId,
+                                    from = NavRoutes.TaskCertificationRoute.From.EDITOR,
+                                    photologId = photologId,
+                                    comment = comment,
+                                ),
+                            )
+                        navController.navigate(destination)
                     },
                 )
             }
@@ -88,16 +93,7 @@ object TaskCertificationGraph : NavGraphContributor {
                 route = NavRoutes.TaskCertificationRoute.route,
                 arguments =
                     listOf(
-                        navArgument(NavRoutes.TaskCertificationRoute.ARG_GOAL_ID) {
-                            type = NavType.LongType
-                        },
-                        navArgument(NavRoutes.TaskCertificationRoute.ARG_FROM) {
-                            type = NavType.StringType
-                        },
-                        navArgument(NavRoutes.TaskCertificationRoute.ARG_PHOTOLOG_ID) {
-                            type = NavType.LongType
-                        },
-                        navArgument(NavRoutes.TaskCertificationRoute.ARG_COMMENT) {
+                        navArgument(NavRoutes.TaskCertificationRoute.ARG_DATA) {
                             type = NavType.StringType
                         },
                     ),
